@@ -99,7 +99,7 @@ None of the above?
 When a response incorporates fetched data, cite the source inline so the user can verify. Two acceptable formats:
 
 - **Inline:** "Bows can roll up to T1 175–200% increased physical damage at iLvl 82 (poe2db)."
-- **Footer:** "Sources consulted: craftofexile.com (mod weightings), poe2db.tw/us/Bow (tier ranges)."
+- **Footer:** "Sources consulted: craftofexile.com/?game=poe2 (mod weightings), poe2db.tw/us/Bow (tier ranges)."
 
 Pricing always cites the trade site URL **and** the time of fetch, since temp-league prices move:
 
@@ -110,7 +110,7 @@ Pricing always cites the trade site URL **and** the time of fetch, since temp-le
 ## 6. What never to do
 
 - **Never fetch a source not listed here** without surfacing it to the user first.
-- **Never aggregate data silently across sources.** If craftofexile says one thing and poe2db says another, surface the conflict; don't pick one and hide the disagreement.
+- **Never aggregate data silently across sources.** If craftofexile.com/?game=poe2 says one thing and poe2db says another, surface the conflict; don't pick one and hide the disagreement.
 - **Never cache prices.** Each price-bearing output must come from a fresh trade-site fetch in the same response.
 - **Never bypass the patch-detection step** when a user mentions a new patch — confirm it from the official news forum before treating any new mechanic as real.
 

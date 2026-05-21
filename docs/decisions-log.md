@@ -113,6 +113,16 @@ Format: `## YYYY-MM-DD — [Decision title]`
 
 ---
 
+## 2026-05-21 — Enforce PoE2-only data: mandatory ?game=poe2 parameter
+
+**Decision:** All references to craftofexile.com throughout docs, code, and the Oracle system prompt must use the full URL `https://www.craftofexile.com/?game=poe2`. The `?game=poe2` query parameter is mandatory — omitting it loads PoE1 data. The system prompt now contains an explicit CRITICAL block forbidding PoE1 mod pools, PoE1 currency names, and any PoE1 mechanics from appearing in Oracle responses.
+
+**Rationale:** During Phase 8 testing the Oracle was observed drawing on PoE1 knowledge (mod names, currency names, mechanics that don't exist in PoE2). The root cause was that short-form `craftofexile.com` references in the docs and system prompt did not include `?game=poe2`, allowing the model to default to its PoE1 training data.
+
+**Implication:** The system prompt now explicitly labels the `?game=poe2` parameter as mandatory and warns that PoE1 data must never substitute for PoE2 data.
+
+---
+
 ## Open questions (unresolved as of 2026-05-21)
 
 These need answers before the relevant phase of `docs/build-plan.md` can complete.

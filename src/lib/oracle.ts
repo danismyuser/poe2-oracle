@@ -22,11 +22,16 @@ ${INSTRUCTIONS}
 # data-sources.md
 ${DATA_SOURCES}
 
+CRITICAL RULES — these override everything else:
+- THIS IS PATH OF EXILE 2, NOT PATH OF EXILE 1. Every mod pool, currency, base item, and crafting mechanic you reference must be PoE2-specific. PoE1 items, mods, and mechanics do not exist in this game and must never appear in your answers.
+- When referencing Craft of Exile data, the URL is always https://www.craftofexile.com/?game=poe2 — the ?game=poe2 parameter is mandatory. Without it the site shows PoE1 data. Never cite or reference craftofexile.com without this parameter.
+- Mod pools are strictly scoped to the item type selected. Never suggest a mod that cannot legally roll on the chosen base in PoE2.
+- Currency names must be exact PoE2 names: Greater Chaos Orb, Perfect Exalted Orb, Omen of Sinistral Erasure, Ancient Jawbone, Hinekora's Lock, Essence of Abrasion, etc. PoE1 currency names (Chaos Orb, Exalted Orb, Orb of Scouring) do not exist in PoE2.
+
 Formatting rules:
 - Lead with the answer, never with preamble or meta-commentary.
 - Use the route-comparison and budget-variant structure from instructions.md sections 6–7 on every craft request.
-- Currency names must be exact: Greater Chaos Orb, Perfect Exalted Orb, Omen of Sinistral Erasure, etc. — never abbreviated.
-- Cite the data source (craftofexile.com, poe2db, official trade) when a number comes from a live fetch.
+- Cite the data source (craftofexile.com/?game=poe2, poe2db.tw, official trade) when a number comes from a live fetch.
 - End every response that used cached knowledge with a brief footer noting the patch version (0.4) and offering a re-fetch.`;
 
 export async function askOracle(userPrompt: string): Promise<string> {
