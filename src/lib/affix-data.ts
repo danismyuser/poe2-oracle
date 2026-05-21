@@ -1,11 +1,15 @@
-// PoE2 Affix Data — verified against fextralife PoE2 wiki, poe2db.tw, and craftofexile.com/?game=poe2
+// PoE2 Affix Data — verified against poe2db.tw and craftofexile.com/?game=poe2
 // Last updated: 2026-05-21 (patch 0.4 "The Last of the Druids")
 //
-// IMPORTANT: These are PATH OF EXILE 2 mod names. Key differences from PoE1:
+// BASE ITEMS: All base item names sourced directly from poe2db.tw.
+//   Every name is the exact PoE2 in-game name. No PoE1 bases appear here.
+//
+// MOD NAMES: All mod names are PoE2-specific. Key differences from PoE1:
 //   - "Critical Hit Chance" (not "Critical Strike Chance")
 //   - "Critical Damage Bonus" (not "Critical Strike Multiplier")
 //   - "Bow Attacks fire an additional Arrow" (exact in-game text)
 //   - "+X to Level of all Projectile Skills" (bow suffix)
+//   - Focus is a caster off-hand item (NOT a shield)
 //   - No Orb of Scouring, no PoE1-only crafting
 
 export interface AffixDef {
@@ -45,29 +49,493 @@ export const ITEM_CLASSES = [
 
 export type ItemClass = (typeof ITEM_CLASSES)[number];
 
+// Base items sourced from poe2db.tw — patch 0.4 ("The Last of the Druids")
+// All names are exact PoE2 in-game names. PoE1 bases do not exist here.
 export const BASES: Record<ItemClass, string[]> = {
-  Bow: ["Crude Bow", "Short Bow", "Long Bow", "Composite Bow", "Recurve Bow", "Expert Recurve Bow", "Spine Bow", "Expert Spine Bow", "Decimation Bow", "Expert Decimation Bow"],
-  Crossbow: ["Crude Crossbow", "Crossbow", "Arbalest", "Expert Arbalest", "Siege Crossbow", "Expert Siege Crossbow"],
-  Quiver: ["Serrated Arrow Quiver", "Broadhead Arrow Quiver", "Penetrating Arrow Quiver", "Blunt Arrow Quiver", "Conductive Arrow Quiver"],
-  "One-Handed Sword": ["Rusted Sword", "Corroded Blade", "Antique Sword", "Sabre", "Cutlass", "Expert Cutlass", "Gemstone Sword", "Expert Gemstone Sword"],
-  "Two-Handed Sword": ["Rusted Greatsword", "Corroded Greatsword", "Antique Greatsword", "Claymore", "Expert Claymore", "Reaver Sword", "Expert Reaver Sword"],
-  "One-Handed Axe": ["Rusted Hatchet", "Hatchet", "Cleaver", "Axe", "Expert Axe", "Gemstone Axe", "Expert Gemstone Axe"],
-  "Two-Handed Axe": ["Rusted Greataxe", "Greataxe", "Felling Axe", "Expert Felling Axe", "Vaal Axe", "Expert Vaal Axe"],
-  "One-Handed Mace": ["Driftwood Club", "Stone Hammer", "Mace", "War Hammer", "Expert War Hammer", "Gavel", "Expert Gavel"],
-  "Two-Handed Mace": ["Driftwood Maul", "Maul", "Great Mace", "Expert Great Mace", "Piledriver", "Expert Piledriver"],
-  Spear: ["Crude Spear", "Spear", "War Spear", "Expert War Spear", "Glaive", "Expert Glaive"],
-  Quarterstaff: ["Gnarled Branch", "Quarterstaff", "Expert Quarterstaff", "Rune Quarterstaff", "Expert Rune Quarterstaff"],
-  Wand: ["Driftwood Wand", "Wand", "Expert Wand", "Carved Wand", "Expert Carved Wand", "Imbued Wand", "Expert Imbued Wand"],
-  Sceptre: ["Driftwood Sceptre", "Sceptre", "Expert Sceptre", "Sekhem", "Expert Sekhem", "Void Sceptre", "Expert Void Sceptre"],
-  Focus: ["Twig Spirit Shield", "Spirit Shield", "Expert Spirit Shield", "Mosaic Kite Shield", "Expert Mosaic Kite Shield"],
-  Helmet: ["Rusted Helm", "Iron Hat", "Leather Cap", "Battered Helm", "Soldier Helmet", "Expert Soldier Helmet", "Close Helmet", "Expert Close Helmet", "Sallet", "Expert Sallet"],
-  "Body Armour": ["Crude Vest", "Scale Vest", "Scale Doublet", "Full Plate", "Expert Full Plate", "Sadist Garb", "Expert Sadist Garb", "Occultist Vestments", "Expert Occultist Vestments"],
-  Gloves: ["Rawhide Gloves", "Leather Gloves", "Fishscale Gauntlets", "Antique Gauntlets", "Expert Antique Gauntlets", "Slink Gloves", "Expert Slink Gloves"],
-  Boots: ["Rawhide Boots", "Leather Boots", "Iron Greaves", "Antique Greaves", "Expert Antique Greaves", "Slink Boots", "Expert Slink Boots"],
-  Shield: ["Splintered Tower Shield", "Tower Shield", "Expert Tower Shield", "Kite Shield", "Expert Kite Shield", "Mosaic Kite Shield", "Expert Mosaic Kite Shield"],
-  Amulet: ["Crimson Amulet", "Azure Amulet", "Amber Amulet", "Jade Amulet", "Lapis Amulet", "Lunar Amulet", "Bloodstone Amulet", "Stellar Amulet", "Solar Amulet", "Gold Amulet"],
-  Ring: ["Iron Ring", "Lazuli Ring", "Ruby Ring", "Sapphire Ring", "Topaz Ring", "Amethyst Ring", "Emerald Ring", "Pearl Ring", "Prismatic Ring", "Gold Ring", "Unset Ring", "Golden Hoop"],
-  Belt: ["Rawhide Belt", "Linen Belt", "Wide Belt", "Long Belt", "Plate Belt", "Ornate Belt", "Mail Belt", "Double Belt", "Heavy Belt", "Utility Belt", "Fine Belt", "Golden Obi"],
+
+  // ── RANGED WEAPONS ────────────────────────────────────────────────────────
+  // Source: poe2db.tw/us/Bows (26 bases)
+  Bow: [
+    "Crude Bow",
+    "Shortbow",
+    "Warden Bow",
+    "Recurve Bow",
+    "Composite Bow",
+    "Dualstring Bow",
+    "Cultist Bow",
+    "Zealot Bow",
+    "Artillery Bow",
+    "Tribal Bow",
+    "Greatbow",
+    "Double Limb Bow",
+    "Heavy Bow",
+    "Snakewood Shortbow",
+    "Protector Bow",
+    "Rider Bow",
+    "Twin Bow",
+    "Adherent Bow",
+    "Militant Bow",
+    "Ironwood Shortbow",
+    "Cavalry Bow",
+    "Guardian Bow",
+    "Gemini Bow",
+    "Fanatic Bow",
+    "Warmonger Bow",
+    "Obliterator Bow",
+  ],
+
+  // Source: poe2db.tw/us/Crossbows (26 bases)
+  Crossbow: [
+    "Makeshift Crossbow",
+    "Tense Crossbow",
+    "Sturdy Crossbow",
+    "Varnished Crossbow",
+    "Dyad Crossbow",
+    "Alloy Crossbow",
+    "Bombard Crossbow",
+    "Construct Crossbow",
+    "Blackfire Crossbow",
+    "Piercing Crossbow",
+    "Cumbrous Crossbow",
+    "Dedalian Crossbow",
+    "Esoteric Crossbow",
+    "Taut Crossbow",
+    "Robust Crossbow",
+    "Painted Crossbow",
+    "Twin Crossbow",
+    "Cannonade Crossbow",
+    "Bleak Crossbow",
+    "Stout Crossbow",
+    "Engraved Crossbow",
+    "Flexed Crossbow",
+    "Gemini Crossbow",
+    "Siege Crossbow",
+    "Desolate Crossbow",
+    "Elegant Crossbow",
+  ],
+
+  // Source: poe2db.tw/us/Quivers (11 bases)
+  Quiver: [
+    "Broadhead Quiver",
+    "Fire Quiver",
+    "Sacral Quiver",
+    "Two-Point Quiver",
+    "Blunt Quiver",
+    "Toxic Quiver",
+    "Serrated Quiver",
+    "Primed Quiver",
+    "Penetrating Quiver",
+    "Volant Quiver",
+    "Visceral Quiver",
+  ],
+
+  // ── SWORDS ────────────────────────────────────────────────────────────────
+  // Source: poe2db.tw/us/One_Hand_Swords (13 bases)
+  "One-Handed Sword": [
+    "Shortsword",
+    "Broadsword",
+    "Vampiric Blade",
+    "Scimitar",
+    "Charred Shortsword",
+    "Sickle Sword",
+    "Falchion",
+    "Treasured Blade",
+    "Cutlass",
+    "Runic Shortsword",
+    "Messer",
+    "Commander Sword",
+    "Dark Blade",
+  ],
+
+  // Source: poe2db.tw/us/Two_Hand_Swords (13 bases)
+  "Two-Handed Sword": [
+    "Corroded Longsword",
+    "Iron Greatsword",
+    "Blessed Claymore",
+    "Broad Greatsword",
+    "Rippled Greatsword",
+    "Arced Longsword",
+    "Stone Greatsword",
+    "Obsidian Greatsword",
+    "Keen Greatsword",
+    "Ancient Greatblade",
+    "Flanged Greatblade",
+    "Regalia Longsword",
+    "Ultra Greatsword",
+  ],
+
+  // ── AXES ─────────────────────────────────────────────────────────────────
+  // Source: poe2db.tw/us/One_Hand_Axes (13 bases)
+  "One-Handed Axe": [
+    "Dull Hatchet",
+    "Hook Axe",
+    "Bearded Axe",
+    "Extended Cleaver",
+    "Bandit Hatchet",
+    "Crescent Axe",
+    "Carving Hatchet",
+    "Sacrificial Axe",
+    "Boarding Hatchet",
+    "Fury Cleaver",
+    "Battle Axe",
+    "Profane Cleaver",
+    "Dread Hatchet",
+  ],
+
+  // Source: poe2db.tw/us/Two_Hand_Axes (13 bases)
+  "Two-Handed Axe": [
+    "Splitting Greataxe",
+    "Light Halberd",
+    "Executioner Greataxe",
+    "Arched Greataxe",
+    "Elegant Glaive",
+    "Savage Greataxe",
+    "Rending Halberd",
+    "Jagged Greataxe",
+    "Reaver Glaive",
+    "Ember Greataxe",
+    "Ceremonial Halberd",
+    "Monument Greataxe",
+    "Vile Greataxe",
+  ],
+
+  // ── MACES ────────────────────────────────────────────────────────────────
+  // Source: poe2db.tw/us/One_Hand_Maces (27 bases)
+  "One-Handed Mace": [
+    "Wooden Club",
+    "Smithing Hammer",
+    "Slim Mace",
+    "Spiked Club",
+    "Warpick",
+    "Plated Mace",
+    "Brigand Mace",
+    "Construct Hammer",
+    "Morning Star",
+    "Jade Club",
+    "Lumen Mace",
+    "Execratus Hammer",
+    "Torment Club",
+    "Kalguuran Forgehammer",
+    "Calescent Hammer",
+    "Flared Mace",
+    "Battle Pick",
+    "Marching Mace",
+    "Bandit Mace",
+    "Structured Hammer",
+    "Flanged Mace",
+    "Crown Mace",
+    "Molten Hammer",
+    "Strife Pick",
+    "Fortified Hammer",
+    "Marauding Mace",
+    "Akoyan Club",
+  ],
+
+  // Source: poe2db.tw/us/Two_Hand_Maces (26 bases)
+  "Two-Handed Mace": [
+    "Felled Greatclub",
+    "Oak Greathammer",
+    "Forge Maul",
+    "Studded Greatclub",
+    "Cultist Greathammer",
+    "Temple Maul",
+    "Leaden Greathammer",
+    "Crumbling Maul",
+    "Pointed Maul",
+    "Totemic Greatclub",
+    "Greatmace",
+    "Precise Greathammer",
+    "Giant Maul",
+    "Snakewood Greathammer",
+    "Blacksmith Maul",
+    "Zealot Greathammer",
+    "Solemn Maul",
+    "Heavy Greathammer",
+    "Disintegrating Maul",
+    "Anvil Maul",
+    "Sacred Maul",
+    "Ironwood Greathammer",
+    "Fanatic Greathammer",
+    "Ruination Maul",
+    "Massive Greathammer",
+    "Tawhoan Greatclub",
+  ],
+
+  // ── SPEARS ───────────────────────────────────────────────────────────────
+  // Source: poe2db.tw/us/Spears (28 bases)
+  Spear: [
+    "Hardwood Spear",
+    "Ironhead Spear",
+    "Hunting Spear",
+    "Winged Spear",
+    "War Spear",
+    "Forked Spear",
+    "Barbed Spear",
+    "Broad Spear",
+    "Crossblade Spear",
+    "Seaglass Spear",
+    "Sword Spear",
+    "Striking Spear",
+    "Helix Spear",
+    "Steelhead Spear",
+    "Coursing Spear",
+    "Swift Spear",
+    "Branched Spear",
+    "Jagged Spear",
+    "Massive Spear",
+    "Orichalcum Spear",
+    "Soaring Spear",
+    "Pronged Spear",
+    "Stalking Spear",
+    "Flying Spear",
+    "Grand Spear",
+    "Spiked Spear",
+    "Guardian Spear",
+    "Akoyan Spear",
+  ],
+
+  // ── QUARTERSTAVES ────────────────────────────────────────────────────────
+  // Source: poe2db.tw/us/Quarterstaves (27 bases)
+  Quarterstaff: [
+    "Wrapped Quarterstaff",
+    "Long Quarterstaff",
+    "Gothic Quarterstaff",
+    "Crackling Quarterstaff",
+    "Crescent Quarterstaff",
+    "Steelpoint Quarterstaff",
+    "Slicing Quarterstaff",
+    "Barrier Quarterstaff",
+    "Hefty Quarterstaff",
+    "Smooth Quarterstaff",
+    "Anima Quarterstaff",
+    "Graceful Quarterstaff",
+    "Wyrm Quarterstaff",
+    "Reaching Quarterstaff",
+    "Barbarous Quarterstaff",
+    "Arcing Quarterstaff",
+    "Waxing Quarterstaff",
+    "Bladed Quarterstaff",
+    "Guardian Quarterstaff",
+    "Sinister Quarterstaff",
+    "Lunar Quarterstaff",
+    "Striking Quarterstaff",
+    "Bolting Quarterstaff",
+    "Aegis Quarterstaff",
+    "Razor Quarterstaff",
+    "Skullcrusher Quarterstaff",
+    "Dreaming Quarterstaff",
+  ],
+
+  // ── CASTER WEAPONS ───────────────────────────────────────────────────────
+  // Source: poe2db.tw/us/Wands (13 bases)
+  Wand: [
+    "Withered Wand",
+    "Bone Wand",
+    "Attuned Wand",
+    "Siphoning Wand",
+    "Volatile Wand",
+    "Galvanic Wand",
+    "Acrid Wand",
+    "Offering Wand",
+    "Frigid Wand",
+    "Torture Wand",
+    "Critical Wand",
+    "Primordial Wand",
+    "Dueling Wand",
+  ],
+
+  // Source: poe2db.tw/us/Sceptres (13 bases)
+  Sceptre: [
+    "Rattling Sceptre",
+    "Stoic Sceptre",
+    "Lupine Sceptre",
+    "Omen Sceptre",
+    "Ochre Sceptre",
+    "Shrine Sceptre",
+    "Devouring Sceptre",
+    "Clasped Sceptre",
+    "Devotional Sceptre",
+    "Wrath Sceptre",
+    "Aromatic Sceptre",
+    "Pious Sceptre",
+    "Hallowed Sceptre",
+  ],
+
+  // Source: poe2db.tw/us/Foci (23 bases)
+  // NOTE: Focus is a caster off-hand — NOT a shield. Previous data was wrong.
+  Focus: [
+    "Twig Focus",
+    "Woven Focus",
+    "Antler Focus",
+    "Engraved Focus",
+    "Tonal Focus",
+    "Crystal Focus",
+    "Voodoo Focus",
+    "Plumed Focus",
+    "Runed Focus",
+    "Whorl Focus",
+    "Elegant Focus",
+    "Attuned Focus",
+    "Magus Focus",
+    "Wreath Focus",
+    "Staghorn Focus",
+    "Jingling Focus",
+    "Arrayed Focus",
+    "Cultist Focus",
+    "Hallowed Focus",
+    "Druidic Focus",
+    "Leyline Focus",
+    "Sacred Focus",
+    "Tasalian Focus",
+  ],
+
+  // ── ARMOUR ───────────────────────────────────────────────────────────────
+  // Source: poe2db.tw/us/Helmets — representative selection by type
+  Helmet: [
+    // Strength (Greathelms)
+    "Rusted Greathelm", "Soldier Greathelm", "Warrior Greathelm", "Commander Greathelm",
+    "Sentinel Greathelm", "Goliath Greathelm", "Guardian Greathelm",
+    // Dexterity (Hoods/Caps)
+    "Shabby Hood", "Felt Cap", "Hunter Hood", "Corsair Cap",
+    "Leatherbound Hood", "Velvet Cap", "Covert Hood",
+    // Intelligence (Circlets/Tiaras)
+    "Twig Circlet", "Beaded Circlet", "Gold Circlet",
+    "Feathered Tiara", "Noble Circlet", "Magus Tiara",
+    // Hybrid (Helms/Crowns/Masks)
+    "Brimmed Helm", "Visored Helm", "Closed Helm", "Gallant Helm",
+    "Iron Crown", "Cultist Crown", "Spiritbone Crown", "Archon Crown",
+    "Hewn Mask", "Tribal Mask", "Death Mask", "Grand Visage",
+  ],
+
+  // Source: poe2db.tw/us/Body_Armours — representative selection by type
+  "Body Armour": [
+    // Strength (Cuirass/Plate)
+    "Rusted Cuirass", "Iron Cuirass", "Steel Plate", "Full Plate",
+    "Glorious Plate", "Conqueror Plate", "Golden Plate",
+    // Dexterity (Vest/Coat)
+    "Leather Vest", "Studded Vest", "Scout's Vest", "Serpentscale Coat",
+    "Exquisite Vest", "Armoured Vest", "Wyrmscale Coat",
+    // Intelligence (Robe/Raiment)
+    "Tattered Robe", "Silk Robe", "Elementalist Robe",
+    "Imperial Robe", "Arcane Raiment", "Luxurious Robe",
+    // Hybrid Str/Dex
+    "Chain Mail", "Scale Mail", "Knight Armour", "Tournament Mail",
+    // Hybrid Str/Int
+    "Pilgrim Vestments", "Mail Vestments", "Templar Vestments",
+    // Hybrid Dex/Int
+    "Hermit Garb", "Ascetic Garb", "Monastic Garb",
+    // Tri-hybrid
+    "Grand Regalia",
+  ],
+
+  // Source: poe2db.tw/us/Gloves — representative selection by type
+  Gloves: [
+    // Strength (Mitts)
+    "Stocky Mitts", "Riveted Mitts", "Tempered Mitts",
+    "Plated Mitts", "Knightly Mitts", "Ornate Mitts",
+    // Dexterity (Bracers)
+    "Suede Bracers", "Firm Bracers", "Sectioned Bracers",
+    "Hunting Bracers", "Swift Bracers", "Stalking Bracers",
+    // Intelligence (Gloves)
+    "Torn Gloves", "Stitched Gloves", "Jewelled Gloves",
+    "Intricate Gloves", "Embroidered Gloves", "Gold Gloves",
+    // Hybrid (Gauntlets/Cuffs/Wraps)
+    "Ringmail Gauntlets", "Plate Gauntlets", "Burnished Gauntlets",
+    "Rope Cuffs", "Goldcast Cuffs", "Righteous Cuffs",
+    "Gauze Wraps", "Buckled Wraps", "Utility Wraps",
+  ],
+
+  // Source: poe2db.tw/us/Boots — representative selection by type
+  Boots: [
+    // Strength (Greaves)
+    "Rough Greaves", "Iron Greaves", "Stone Greaves",
+    "Golden Greaves", "Plated Greaves", "Vaal Greaves",
+    // Dexterity (Boots)
+    "Rawhide Boots", "Laced Boots", "Embossed Boots",
+    "Leatherplate Boots", "Cavalry Boots", "Dragonscale Boots",
+    // Intelligence (Sandals/Slippers)
+    "Straw Sandals", "Wrapped Sandals", "Silk Slippers",
+    "Feathered Sandals", "Elegant Slippers", "Luxurious Slippers",
+    // Hybrid (Sabatons/Leggings/Shoes)
+    "Mail Sabatons", "Stacked Sabatons", "Noble Sabatons",
+    "Padded Leggings", "Gilt Leggings", "Apostle Leggings",
+    "Frayed Shoes", "Wanderer Shoes", "Quickslip Shoes",
+  ],
+
+  // Source: poe2db.tw/us/Shields — representative selection by type
+  Shield: [
+    // Tower Shields (Strength)
+    "Splintered Tower Shield", "Painted Tower Shield", "Barricade Tower Shield",
+    "Rampart Tower Shield", "Stone Tower Shield", "Phalanx Tower Shield",
+    "Blacksteel Tower Shield", "Royal Tower Shield", "Vaal Tower Shield",
+    // Targes (Str/Dex)
+    "Hardwood Targe", "Studded Targe", "Feathered Targe",
+    "Carved Targe", "Mosaic Targe", "Grand Targe",
+    "Polished Targe", "Baroque Targe", "Golden Targe",
+    // Crest Shields (Str/Int)
+    "Blazon Crest Shield", "Sigil Crest Shield", "Sectarian Crest Shield",
+    "Seer Crest Shield", "Stoic Crest Shield", "Deified Crest Shield",
+    "Quartered Crest Shield", "Vaal Crest Shield",
+  ],
+
+  // ── JEWELLERY ────────────────────────────────────────────────────────────
+  // Source: poe2db.tw/us/Amulets (16 bases)
+  Amulet: [
+    "Crimson Amulet",
+    "Azure Amulet",
+    "Amber Amulet",
+    "Jade Amulet",
+    "Lapis Amulet",
+    "Lunar Amulet",
+    "Bloodstone Amulet",
+    "Stellar Amulet",
+    "Solar Amulet",
+    "Gold Amulet",
+    "Pearlescent Amulet",
+    "Dusk Amulet",
+    "Gloam Amulet",
+    "Penumbra Amulet",
+    "Tenebrous Amulet",
+    "Distorted Amulet",
+  ],
+
+  // Source: poe2db.tw/us/Rings (18 bases, excluding the bare "Ring" placeholder)
+  Ring: [
+    "Golden Hoop",
+    "Iron Ring",
+    "Lazuli Ring",
+    "Ruby Ring",
+    "Sapphire Ring",
+    "Topaz Ring",
+    "Amethyst Ring",
+    "Emerald Ring",
+    "Pearl Ring",
+    "Prismatic Ring",
+    "Gold Ring",
+    "Unset Ring",
+    "Abyssal Signet",
+    "Dusk Ring",
+    "Gloam Ring",
+    "Penumbra Ring",
+    "Tenebrous Ring",
+    "Breach Ring",
+  ],
+
+  // Source: poe2db.tw/us/Belts (12 bases)
+  Belt: [
+    "Rawhide Belt",
+    "Linen Belt",
+    "Wide Belt",
+    "Long Belt",
+    "Plate Belt",
+    "Ornate Belt",
+    "Mail Belt",
+    "Double Belt",
+    "Heavy Belt",
+    "Utility Belt",
+    "Fine Belt",
+    "Golden Obi",
+  ],
 };
 
 // ─── Shared affix definitions (PoE2-correct names) ───────────────────────────
