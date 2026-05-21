@@ -84,64 +84,89 @@ export default function SavedTab() {
     setTimeout(() => setAttemptMsg(""), 3000);
   }
 
-  if (loading) return <LoadingSpinner text="Loading saved crafts…" />;
+  if (loading) return <LoadingSpinner />;
 
   if (crafts.length === 0) {
     return (
-      <div className="text-center py-16 text-zinc-600">
-        <p className="text-2xl mb-2">📋</p>
-        <p>No saved crafts yet.</p>
-        <p className="text-sm mt-1">Use Ask or Configure tabs to generate your first guide.</p>
+      <div className="flex flex-col items-center justify-center py-20 gap-4" style={{ color: "var(--text-dim)" }}>
+        <span style={{ fontSize: "2rem", opacity: 0.4 }}>◈</span>
+        <p style={{ fontFamily: "var(--font-display)", fontSize: "0.75rem", letterSpacing: "0.2em" }}>
+          NO SAVED CRAFTS YET
+        </p>
+        <p style={{ fontSize: "0.9rem", color: "var(--text-dim)", fontStyle: "italic" }}>
+          Ask the Oracle or use Configure &amp; Simulate to create your first guide.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 max-w-3xl">
       {attemptMsg && (
-        <div className="bg-green-900/30 border border-green-700 text-green-300 text-sm px-4 py-2 rounded-lg">
+        <div
+          className="px-4 py-2 rounded-lg text-sm"
+          style={{
+            background: "rgba(45, 212, 191, 0.08)",
+            border: "1px solid rgba(45, 212, 191, 0.3)",
+            color: "var(--teal)",
+          }}
+        >
           {attemptMsg}
         </div>
       )}
 
       {crafts.map((craft) => (
-        <div key={craft.id} className="border border-zinc-700 rounded-xl overflow-hidden">
+        <div
+          key={craft.id}
+          className="arcane-card overflow-hidden"
+        >
           {/* Summary row */}
-          <div className="flex items-center justify-between px-4 py-3 bg-zinc-800/40">
+          <div
+            className="flex items-center justify-between px-4 py-3"
+            style={{ background: "rgba(10,8,6,0.4)" }}
+          >
             <button
               onClick={() => expand(craft.id)}
               className="flex-1 text-left flex gap-3 items-center"
             >
-              <span className="text-sm font-medium text-zinc-200">
+              <span style={{ color: "var(--gold)", opacity: 0.5, fontSize: "0.8rem" }}>
+                {expandedId === craft.id ? "▾" : "▸"}
+              </span>
+              <span style={{ fontSize: "0.9rem", color: "var(--text-primary)", lineHeight: 1.4 }}>
                 {craft.itemType === "free-form"
-                  ? (craft.question?.slice(0, 60) ?? "Free-form question") + "…"
+                  ? (craft.question?.slice(0, 70) ?? "Free-form question") + "…"
                   : `${craft.base} · ${craft.itemType}`}
               </span>
-              <span className="text-xs text-zinc-600 shrink-0">
+              <span style={{ fontSize: "0.72rem", color: "var(--text-dim)", flexShrink: 0, fontStyle: "italic" }}>
                 {craft.budget} · patch {craft.patchVersion} · {new Date(craft.createdAt).toLocaleDateString()}
               </span>
             </button>
             <div className="flex gap-2 ml-4 shrink-0">
               <button
                 onClick={() => { setAttemptCraftId(craft.id); setAttemptMsg(""); }}
-                className="text-xs border border-zinc-700 hover:border-amber-500 text-zinc-500 hover:text-amber-400 px-2 py-1 rounded transition-colors"
+                className="btn-ghost px-2 py-1"
+                style={{ fontSize: "0.7rem", letterSpacing: "0.08em", fontFamily: "var(--font-display)" }}
               >
-                Log attempt
+                LOG
               </button>
               <button
                 onClick={() => deleteCraft(craft.id)}
-                className="text-xs border border-zinc-700 hover:border-red-600 text-zinc-500 hover:text-red-400 px-2 py-1 rounded transition-colors"
+                className="btn-ghost px-2 py-1"
+                style={{ fontSize: "0.7rem", letterSpacing: "0.08em", fontFamily: "var(--font-display)", color: "var(--red-accent)" }}
               >
-                Delete
+                DEL
               </button>
             </div>
           </div>
 
           {/* Expanded response */}
           {expandedId === craft.id && (
-            <div className="px-5 py-4 border-t border-zinc-700">
+            <div
+              className="px-5 py-4 animate-shimmer"
+              style={{ borderTop: "1px solid var(--border-dim)" }}
+            >
               {expandLoading
-                ? <LoadingSpinner text="Loading response…" />
+                ? <LoadingSpinner />
                 : fullCraft && <MarkdownRenderer content={fullCraft.response} />
               }
             </div>
@@ -149,47 +174,63 @@ export default function SavedTab() {
 
           {/* Log attempt form */}
           {attemptCraftId === craft.id && (
-            <form onSubmit={logAttempt} className="px-4 py-3 border-t border-zinc-700 bg-zinc-900/40 flex flex-col gap-3">
-              <p className="text-xs text-zinc-400 font-medium">Log a real-world craft attempt</p>
+            <form
+              onSubmit={logAttempt}
+              className="px-4 py-4 flex flex-col gap-3"
+              style={{ borderTop: "1px solid var(--border-dim)", background: "rgba(10,8,6,0.3)" }}
+            >
+              <p
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.2em",
+                  color: "var(--text-dim)",
+                }}
+              >
+                ◈ &nbsp; LOG REAL-WORLD ATTEMPT
+              </p>
               <div className="flex gap-4 items-center">
-                <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: "var(--teal)" }}>
                   <input
                     type="radio" name="success" checked={attemptForm.success}
                     onChange={() => setAttemptForm((f) => ({ ...f, success: true }))}
                   />
-                  <span className="text-green-400">Success</span>
+                  Success
                 </label>
-                <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: "var(--red-accent)" }}>
                   <input
                     type="radio" name="success" checked={!attemptForm.success}
                     onChange={() => setAttemptForm((f) => ({ ...f, success: false }))}
                   />
-                  <span className="text-red-400">Failed</span>
+                  Failed
                 </label>
               </div>
               <input
-                required placeholder="Currency spent (e.g. 8 div)"
+                required
+                placeholder="Currency spent (e.g. 8 div)"
                 value={attemptForm.currencySpent}
                 onChange={(e) => setAttemptForm((f) => ({ ...f, currencySpent: e.target.value }))}
-                className="bg-zinc-800 border border-zinc-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-amber-500"
+                className="arcane-input px-3 py-2 w-full text-sm"
               />
               <input
                 placeholder="Notes (optional)"
                 value={attemptForm.notes}
                 onChange={(e) => setAttemptForm((f) => ({ ...f, notes: e.target.value }))}
-                className="bg-zinc-800 border border-zinc-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-amber-500"
+                className="arcane-input px-3 py-2 w-full text-sm"
               />
               <div className="flex gap-2">
                 <button
-                  type="submit" disabled={attemptSaving}
-                  className="bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-black font-semibold px-4 py-1.5 rounded text-sm"
+                  type="submit"
+                  disabled={attemptSaving}
+                  className="btn-gold px-4 py-1.5"
+                  style={{ fontSize: "0.75rem", letterSpacing: "0.1em" }}
                 >
-                  {attemptSaving ? "Saving…" : "Save attempt"}
+                  {attemptSaving ? "SAVING…" : "SAVE ATTEMPT"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setAttemptCraftId(null)}
-                  className="text-zinc-500 hover:text-zinc-300 text-sm px-3"
+                  className="btn-ghost px-3 py-1.5 text-xs"
                 >
                   Cancel
                 </button>

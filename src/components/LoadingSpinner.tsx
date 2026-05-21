@@ -1,11 +1,42 @@
-export default function LoadingSpinner({ text = "Oracle is thinking…" }: { text?: string }) {
+export default function LoadingSpinner() {
   return (
-    <div className="flex items-center gap-3 text-zinc-400 py-8">
-      <svg className="animate-spin h-5 w-5 text-amber-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-      </svg>
-      <span>{text}</span>
+    <div className="flex flex-col items-center gap-4 py-8">
+      {/* Spinning rune ring */}
+      <div
+        style={{
+          width: 48,
+          height: 48,
+          borderRadius: "50%",
+          border: "2px solid var(--border-dim)",
+          borderTopColor: "var(--gold)",
+          animation: "spin-rune 1s linear infinite",
+          position: "relative",
+        }}
+      >
+        {/* Inner glow dot */}
+        <div
+          style={{
+            position: "absolute",
+            inset: "30%",
+            borderRadius: "50%",
+            background: "var(--gold)",
+            opacity: 0.4,
+            animation: "ember-pulse 1.5s ease-in-out infinite",
+          }}
+        />
+      </div>
+
+      <p
+        style={{
+          fontFamily: "var(--font-display)",
+          fontSize: "0.65rem",
+          letterSpacing: "0.3em",
+          color: "var(--text-dim)",
+          animation: "ember-pulse 2s ease-in-out infinite",
+        }}
+      >
+        THE ORACLE CONSULTS…
+      </p>
     </div>
   );
 }

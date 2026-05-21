@@ -192,7 +192,7 @@ export default function SimulateTab() {
       </form>
 
       {error && <p className="text-red-400 text-sm">{error}</p>}
-      {loading && <LoadingSpinner text="Building your crafting guide…" />}
+      {loading && <LoadingSpinner />}
 
       {response && !loading && (
         <div className="bg-zinc-800/40 border border-zinc-700 rounded-xl p-5">
