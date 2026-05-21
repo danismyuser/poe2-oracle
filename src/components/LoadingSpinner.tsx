@@ -1,42 +1,26 @@
 export default function LoadingSpinner() {
   return (
-    <div className="flex flex-col items-center gap-4 py-8">
-      {/* Spinning rune ring */}
+    <div className="flex items-center gap-3 py-6" style={{ color: "var(--text-tertiary)" }}>
+      {/* Spinning ring */}
       <div
         style={{
-          width: 48,
-          height: 48,
+          width: 20,
+          height: 20,
           borderRadius: "50%",
-          border: "2px solid var(--border-dim)",
+          border: "2px solid var(--border-light)",
           borderTopColor: "var(--gold)",
-          animation: "spin-rune 1s linear infinite",
-          position: "relative",
+          animation: "spin-rune 0.8s linear infinite",
+          flexShrink: 0,
         }}
-      >
-        {/* Inner glow dot */}
-        <div
-          style={{
-            position: "absolute",
-            inset: "30%",
-            borderRadius: "50%",
-            background: "var(--gold)",
-            opacity: 0.4,
-            animation: "ember-pulse 1.5s ease-in-out infinite",
-          }}
-        />
-      </div>
-
-      <p
-        style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "0.65rem",
-          letterSpacing: "0.3em",
-          color: "var(--text-dim)",
-          animation: "ember-pulse 2s ease-in-out infinite",
-        }}
-      >
+      />
+      <span style={{
+        fontFamily: "var(--font-display)",
+        fontSize: "0.68rem",
+        letterSpacing: "0.15em",
+        color: "var(--text-tertiary)",
+      }}>
         THE ORACLE CONSULTS…
-      </p>
+      </span>
     </div>
   );
 }

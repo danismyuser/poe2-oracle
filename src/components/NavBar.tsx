@@ -14,7 +14,7 @@ export default function NavBar() {
       .then((u) => setEmail(u?.email ?? null))
       .catch(() => setEmail(null));
 
-    const onScroll = () => setScrolled(window.scrollY > 10);
+    const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -28,106 +28,84 @@ export default function NavBar() {
 
   return (
     <nav
-      className="sticky top-0 z-50 px-6 py-3 flex items-center justify-between transition-all duration-300"
+      className="sticky top-0 z-50 transition-all duration-200"
       style={{
-        background: scrolled
-          ? "rgba(10, 8, 6, 0.92)"
-          : "rgba(10, 8, 6, 0.6)",
-        backdropFilter: "blur(12px)",
-        borderBottom: scrolled
-          ? "1px solid rgba(180, 140, 50, 0.2)"
-          : "1px solid transparent",
+        background: scrolled ? "rgba(250, 248, 244, 0.95)" : "var(--bg-base)",
+        borderBottom: `1px solid ${scrolled ? "var(--border-light)" : "transparent"}`,
+        backdropFilter: scrolled ? "blur(8px)" : "none",
       }}
     >
-      {/* Wordmark */}
-      <Link
-        href="/"
-        className="flex items-center gap-2.5 no-underline group"
-        style={{ textDecoration: "none" }}
-      >
-        {/* Rune icon */}
-        <span
-          className="text-sm select-none"
-          style={{ color: "var(--gold)", opacity: 0.8 }}
-        >
-          ◈
-        </span>
-        <span
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "1.05rem",
-            fontWeight: 700,
-            letterSpacing: "0.12em",
-            color: "var(--gold)",
-            textShadow: "0 0 20px rgba(212, 168, 67, 0.35)",
-            transition: "text-shadow 0.2s",
-          }}
-          className="group-hover:brightness-110 transition-all"
-        >
-          POE2 ORACLE
-        </span>
-      </Link>
+      <div className="container-lg flex items-center justify-between py-3">
+        {/* Logo */}
+        <Link href="/" style={{ textDecoration: "none" }} className="flex items-center gap-2">
+          <span style={{ color: "var(--gold)", fontSize: "0.8rem", lineHeight: 1 }}>◈</span>
+          <span
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "0.85rem",
+              fontWeight: 700,
+              letterSpacing: "0.14em",
+              color: "var(--text-primary)",
+            }}
+          >
+            POE2 ORACLE
+          </span>
+        </Link>
 
-      {/* Nav links */}
-      <div className="flex gap-5 items-center">
-        {email ? (
-          <>
-            <Link
-              href="/dashboard"
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "0.75rem",
-                letterSpacing: "0.1em",
-                color: "var(--text-secondary)",
-                textDecoration: "none",
-                transition: "color 0.2s",
-              }}
-              className="hover:text-parchment"
-            >
-              DASHBOARD
-            </Link>
-            <button
-              onClick={logout}
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "0.7rem",
-                letterSpacing: "0.1em",
-                color: "var(--text-dim)",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                transition: "color 0.2s",
-              }}
-              className="hover:text-stone"
-            >
-              LOGOUT
-            </button>
-          </>
-        ) : (
-          <>
-            <Link
-              href="/login"
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "0.75rem",
-                letterSpacing: "0.1em",
-                color: "var(--text-secondary)",
-                textDecoration: "none",
-                transition: "color 0.2s",
-              }}
-              className="hover:text-parchment"
-            >
-              LOG IN
-            </Link>
-            <Link
-              href="/signup"
-              className="btn-gold px-4 py-1.5 text-xs"
-              style={{ fontFamily: "var(--font-display)", letterSpacing: "0.1em", textDecoration: "none" }}
-            >
-              CONSULT FREE
-            </Link>
-          </>
-        )}
+        {/* Nav */}
+        <div className="flex items-center gap-5">
+          {email ? (
+            <>
+              <Link
+                href="/dashboard"
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: "0.875rem",
+                  color: "var(--text-secondary)",
+                  textDecoration: "none",
+                  transition: "color 0.15s",
+                }}
+                className="hover:text-ink"
+              >
+                Dashboard
+              </Link>
+              <button
+                onClick={logout}
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: "0.875rem",
+                  color: "var(--text-tertiary)",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "color 0.15s",
+                }}
+                className="hover:text-ink-2"
+              >
+                Log out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: "0.875rem",
+                  color: "var(--text-secondary)",
+                  textDecoration: "none",
+                  transition: "color 0.15s",
+                }}
+                className="hover:text-ink"
+              >
+                Log in
+              </Link>
+              <Link href="/signup" className="btn-primary" style={{ fontSize: "0.72rem" }}>
+                Get Started
+              </Link>
+            </>
+          )}
+        </div>
       </div>
     </nav>
   );

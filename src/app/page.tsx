@@ -18,73 +18,47 @@ export default async function Home() {
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <section
-        className="hero-glow relative flex flex-col items-center justify-center text-center px-6 py-32 gap-8 overflow-hidden"
-        style={{ minHeight: "80vh" }}
+        className="flex flex-col items-center text-center px-6 py-24"
+        style={{ borderBottom: "1px solid var(--border-light)" }}
       >
-        {/* Decorative top border */}
+        {/* Patch pill */}
         <div
-          className="absolute top-0 left-0 right-0 h-px"
-          style={{ background: "linear-gradient(90deg, transparent, rgba(212,168,67,0.4), transparent)" }}
-        />
-
-        {/* Patch badge */}
-        <div
-          className="animate-fade-up inline-flex items-center gap-2 px-4 py-1.5 rounded-full"
+          className="animate-fade-up inline-flex items-center gap-2 px-3 py-1 rounded-full mb-6"
           style={{
-            background: "rgba(180, 120, 20, 0.08)",
-            border: "1px solid rgba(180, 140, 50, 0.3)",
+            background: "var(--gold-bg)",
+            border: "1px solid var(--border-gold)",
             fontFamily: "var(--font-display)",
-            fontSize: "0.7rem",
+            fontSize: "0.62rem",
             letterSpacing: "0.15em",
-            color: "var(--gold)",
+            color: "var(--text-gold)",
           }}
         >
-          <span
-            style={{
-              width: 6, height: 6, borderRadius: "50%",
-              background: "var(--gold)",
-              display: "inline-block",
-              animation: "ember-pulse 2s ease-in-out infinite",
-            }}
-          />
+          <span style={{
+            width: 5, height: 5, borderRadius: "50%",
+            background: "var(--gold)",
+            display: "inline-block",
+            animation: "dot-pulse 2.5s ease-in-out infinite",
+          }} />
           PATCH {patch} · THE LAST OF THE DRUIDS
         </div>
 
         {/* Heading */}
-        <div className="animate-fade-up delay-100 flex flex-col items-center gap-2">
-          <p
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "0.75rem",
-              letterSpacing: "0.35em",
-              color: "var(--text-dim)",
-              marginBottom: "0.5rem",
-            }}
-          >
-            ◈ &nbsp; PATH OF EXILE 2 &nbsp; ◈
-          </p>
-          <h1
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(2.5rem, 7vw, 5rem)",
-              fontWeight: 700,
-              letterSpacing: "0.06em",
-              lineHeight: 1.1,
-              color: "var(--text-primary)",
-              maxWidth: 700,
-            }}
-          >
-            The Crafting{" "}
-            <span
-              style={{
-                color: "var(--gold)",
-                textShadow: "0 0 40px rgba(212,168,67,0.4)",
-              }}
-            >
-              Oracle
-            </span>
-          </h1>
-        </div>
+        <h1
+          className="animate-fade-up delay-100"
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(2rem, 5.5vw, 3.75rem)",
+            fontWeight: 700,
+            letterSpacing: "0.04em",
+            lineHeight: 1.15,
+            color: "var(--text-primary)",
+            maxWidth: 680,
+            marginBottom: "1.25rem",
+          }}
+        >
+          The PoE2 Crafting{" "}
+          <span style={{ color: "var(--gold)" }}>Oracle</span>
+        </h1>
 
         {/* Subtitle */}
         <p
@@ -92,121 +66,68 @@ export default async function Home() {
           style={{
             color: "var(--text-secondary)",
             fontSize: "1.1rem",
-            maxWidth: 520,
+            maxWidth: 500,
             lineHeight: 1.7,
-            fontStyle: "italic",
+            marginBottom: "2rem",
           }}
         >
-          Describe any item. Receive the optimal crafting route, three budget
-          variants, and patch-accurate advice — drawn from authoritative game
-          data, not guesswork.
+          Describe any item. Get the optimal crafting route, three budget
+          variants, and patch-accurate advice — drawn from real game data,
+          not guesswork.
         </p>
 
-        {/* CTA buttons */}
-        <div className="animate-fade-up delay-300 flex gap-3 mt-2">
-          <Link href="/signup" className="btn-gold px-8 py-3 text-sm" style={{ textDecoration: "none" }}>
-            Consult the Oracle
+        {/* CTAs */}
+        <div className="animate-fade-up delay-300 flex gap-3 justify-center flex-wrap">
+          <Link href="/signup" className="btn-primary px-8 py-3">
+            Start Crafting Free
           </Link>
-          <Link
-            href="/login"
-            className="btn-ghost px-6 py-3 text-sm"
-            style={{ textDecoration: "none", fontFamily: "var(--font-display)", letterSpacing: "0.08em" }}
-          >
+          <Link href="/login" className="btn-secondary px-6 py-3">
             Log In
           </Link>
         </div>
-
-        {/* Decorative rune row */}
-        <p
-          className="animate-fade-up delay-400"
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "0.65rem",
-            letterSpacing: "0.4em",
-            color: "var(--text-dim)",
-            marginTop: "2rem",
-          }}
-        >
-          ◆ &nbsp; CRAFT &nbsp;·&nbsp; SIMULATE &nbsp;·&nbsp; OPTIMISE &nbsp; ◆
-        </p>
-
-        {/* Bottom fade */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
-          style={{ background: "linear-gradient(to bottom, transparent, var(--bg-base))" }}
-        />
       </section>
 
       {/* ── Feature cards ─────────────────────────────────────────────────── */}
-      <section className="max-w-5xl mx-auto w-full px-6 pb-6">
-        <div
-          className="rune-divider mb-12"
-          style={{ fontFamily: "var(--font-display)", fontSize: "0.65rem", letterSpacing: "0.25em" }}
-        >
-          WHAT THE ORACLE DOES
-        </div>
-
+      <section className="container-lg py-16">
+        <p className="section-label text-center mb-10">What the Oracle does</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <FeatureCard
-            glyph="⚗"
-            title="Ask Anything"
-            desc="Describe your target item in plain language. The Oracle extracts your intent and generates a full crafting plan with ranked route comparison."
-            delay="delay-100"
-          />
-          <FeatureCard
-            glyph="⚙"
-            title="Configure & Simulate"
-            desc="Select your base, item level, and target affixes. Get every viable route ranked by efficiency and determinism across three budget variants."
-            delay="delay-200"
-          />
-          <FeatureCard
-            glyph="◉"
-            title="Always Patch-Aware"
-            desc="Consults craftofexile.com and poe2db.tw in real-time. Flags stale data. Never gives advice about mechanics that no longer exist."
-            delay="delay-300"
-          />
-        </div>
-      </section>
-
-      {/* ── How it works ──────────────────────────────────────────────────── */}
-      <section className="max-w-5xl mx-auto w-full px-6 py-16">
-        <div
-          className="rune-divider mb-12"
-          style={{ fontFamily: "var(--font-display)", fontSize: "0.65rem", letterSpacing: "0.25em" }}
-        >
-          HOW IT WORKS
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { step: "I", title: "Describe your goal", body: "Tell the Oracle what you're trying to craft — a physical damage bow, a caster helmet, a life-stacked belt. No form required." },
-            { step: "II", title: "Receive your plan", body: "The Oracle compares every viable route — essence slams, chaos spam, omen combos, jawbone paths — and ranks them by efficiency." },
-            { step: "III", title: "Choose your budget", body: "Three variants every time: League Start (1–5 div), Mid-tier (5–20 div), and High-end / BIS (20 div+)." },
-          ].map(({ step, title, body }) => (
-            <div key={step} className="flex flex-col gap-3">
-              <span
+            {
+              icon: "⚗",
+              title: "Ask Anything",
+              body: "Describe your target item in plain language. The Oracle extracts your intent and generates a full crafting plan with route comparison.",
+              delay: "delay-100",
+            },
+            {
+              icon: "⚙",
+              title: "Configure & Simulate",
+              body: "Select your base, item level, and target affixes. Every viable route ranked by efficiency and determinism across three budget tiers.",
+              delay: "delay-200",
+            },
+            {
+              icon: "◉",
+              title: "Always Patch-Aware",
+              body: "Pulls live data from craftofexile.com and poe2db.tw. Flags when advice is based on cached data and offers a one-click refresh.",
+              delay: "delay-300",
+            },
+          ].map(({ icon, title, body, delay }) => (
+            <div
+              key={title}
+              className={`card animate-fade-up ${delay} p-6 flex flex-col gap-3`}
+            >
+              <span style={{ fontSize: "1.4rem", color: "var(--gold)" }}>{icon}</span>
+              <h2
                 style={{
                   fontFamily: "var(--font-display)",
-                  fontSize: "2rem",
-                  fontWeight: 900,
-                  color: "var(--border-dim)",
-                  lineHeight: 1,
-                }}
-              >
-                {step}
-              </span>
-              <h3
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "0.9rem",
-                  letterSpacing: "0.08em",
-                  color: "var(--gold)",
+                  fontSize: "0.78rem",
+                  letterSpacing: "0.1em",
                   fontWeight: 600,
+                  color: "var(--text-primary)",
                 }}
               >
-                {title}
-              </h3>
-              <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: 1.7 }}>
+                {title.toUpperCase()}
+              </h2>
+              <p style={{ color: "var(--text-secondary)", fontSize: "0.93rem", lineHeight: 1.65 }}>
                 {body}
               </p>
             </div>
@@ -214,82 +135,84 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Final CTA ─────────────────────────────────────────────────────── */}
-      <section className="max-w-5xl mx-auto w-full px-6 pb-24">
-        <div
-          className="arcane-card text-center py-14 px-8 flex flex-col items-center gap-5"
-          style={{ background: "var(--bg-card)" }}
-        >
-          <p
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "0.7rem",
-              letterSpacing: "0.3em",
-              color: "var(--gold-dim)",
-            }}
-          >
-            ◈ &nbsp; FREE TO USE &nbsp; ◈
-          </p>
-          <h2
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(1.4rem, 3vw, 2rem)",
-              letterSpacing: "0.06em",
-              color: "var(--text-primary)",
-              maxWidth: 500,
-              lineHeight: 1.25,
-            }}
-          >
-            Stop guessing. Start crafting with precision.
-          </h2>
-          <Link href="/signup" className="btn-gold px-10 py-3 mt-2" style={{ textDecoration: "none", fontSize: "0.85rem" }}>
-            Create Free Account
-          </Link>
+      {/* ── Budget tiers ──────────────────────────────────────────────────── */}
+      <section style={{ background: "var(--bg-subtle)", borderTop: "1px solid var(--border-light)", borderBottom: "1px solid var(--border-light)" }}>
+        <div className="container-lg py-16">
+          <p className="section-label text-center mb-10">Every response includes three budget variants</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { label: "League Start", range: "1–5 div", desc: "Affordable and functional. One or two tier drops to keep it reachable at day one prices." },
+              { label: "Mid-tier", range: "5–20 div", desc: "The solid finished version. 2–3 T1/T2 affixes, the rest T2/T3. Best bang for your investment." },
+              { label: "High-end / BIS", range: "20–50 div+", desc: "Best in slot. All T1, with Defiled or corruption layered on top where it fits." },
+            ].map(({ label, range, desc }) => (
+              <div key={label} className="card-gold p-5 flex flex-col gap-2">
+                <div className="flex items-baseline justify-between">
+                  <span
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      fontSize: "0.72rem",
+                      letterSpacing: "0.1em",
+                      color: "var(--text-gold)",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {label.toUpperCase()}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "0.8rem",
+                      color: "var(--gold)",
+                      background: "var(--gold-bg)",
+                      padding: "0.1rem 0.5rem",
+                      borderRadius: 4,
+                      border: "1px solid var(--border-gold)",
+                    }}
+                  >
+                    {range}
+                  </span>
+                </div>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.88rem", lineHeight: 1.6 }}>
+                  {desc}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
+      {/* ── Final CTA ─────────────────────────────────────────────────────── */}
+      <section className="container-md py-20 text-center">
+        <p className="section-label mb-4">Free to use</p>
+        <h2
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(1.3rem, 3vw, 1.9rem)",
+            letterSpacing: "0.05em",
+            color: "var(--text-primary)",
+            lineHeight: 1.3,
+            marginBottom: "1.5rem",
+          }}
+        >
+          Stop guessing. Start crafting with precision.
+        </h2>
+        <Link href="/signup" className="btn-primary px-10 py-3">
+          Consult the Oracle — Free
+        </Link>
+      </section>
+
       {/* ── Footer ────────────────────────────────────────────────────────── */}
-      <footer
-        className="border-t py-5 text-center"
-        style={{
-          borderColor: "var(--border-dim)",
-          fontFamily: "var(--font-display)",
-          fontSize: "0.65rem",
-          letterSpacing: "0.15em",
-          color: "var(--text-dim)",
-        }}
-      >
-        POE2 CRAFTING ORACLE &nbsp;·&nbsp; PATCH {patch} &nbsp;·&nbsp; NOT AFFILIATED WITH GRINDING GEAR GAMES
+      <footer style={{ borderTop: "1px solid var(--border-light)" }}>
+        <div
+          className="container-lg py-5 flex items-center justify-between flex-wrap gap-2"
+          style={{ fontSize: "0.78rem", color: "var(--text-tertiary)" }}
+        >
+          <span style={{ fontFamily: "var(--font-display)", fontSize: "0.65rem", letterSpacing: "0.12em" }}>
+            ◈ &nbsp;POE2 CRAFTING ORACLE
+          </span>
+          <span>Patch {patch} · Not affiliated with Grinding Gear Games</span>
+        </div>
       </footer>
     </main>
-  );
-}
-
-function FeatureCard({
-  glyph, title, desc, delay,
-}: {
-  glyph: string;
-  title: string;
-  desc: string;
-  delay: string;
-}) {
-  return (
-    <div className={`arcane-card animate-fade-up ${delay} p-6 flex flex-col gap-4`}>
-      <span style={{ fontSize: "1.5rem", color: "var(--gold)", opacity: 0.7 }}>{glyph}</span>
-      <h2
-        style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "0.8rem",
-          letterSpacing: "0.1em",
-          fontWeight: 600,
-          color: "var(--text-primary)",
-        }}
-      >
-        {title.toUpperCase()}
-      </h2>
-      <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: 1.7 }}>
-        {desc}
-      </p>
-    </div>
   );
 }

@@ -29,30 +29,19 @@ export default function AskTab() {
     });
     const data = await res.json();
     setLoading(false);
-
     if (!res.ok) { setError(data.error ?? "Something went wrong"); return; }
     setResponse(data.response);
     setSavedId(data.id);
   }
 
   return (
-    <div className="flex flex-col gap-6 max-w-3xl">
+    <div className="flex flex-col gap-5 max-w-3xl">
 
-      {/* Invocation box */}
-      <div className="arcane-card p-6 flex flex-col gap-4">
+      {/* Input card */}
+      <div className="card p-5 flex flex-col gap-4">
         <div>
-          <p
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "0.65rem",
-              letterSpacing: "0.25em",
-              color: "var(--text-dim)",
-              marginBottom: "0.5rem",
-            }}
-          >
-            ◈ &nbsp; INVOKE THE ORACLE
-          </p>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", fontStyle: "italic" }}>
+          <p className="section-label mb-1">Ask the Oracle</p>
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.88rem" }}>
             Describe your target item or ask any PoE2 crafting question.
           </p>
         </div>
@@ -63,8 +52,7 @@ export default function AskTab() {
             onChange={(e) => setQuestion(e.target.value)}
             rows={5}
             placeholder="e.g. How do I craft a high physical damage bow on a mid-tier budget? What essences should I use?"
-            className="arcane-input px-4 py-3 w-full resize-none"
-            style={{ fontSize: "1rem", lineHeight: 1.6 }}
+            className="field px-3.5 py-3 resize-none"
             onKeyDown={(e) => {
               if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
                 submit(e as unknown as React.FormEvent);
@@ -76,10 +64,9 @@ export default function AskTab() {
             <button
               type="submit"
               disabled={loading || !question.trim()}
-              className="btn-gold px-6 py-2"
-              style={{ fontSize: "0.78rem", letterSpacing: "0.12em" }}
+              className="btn-primary px-6 py-2"
             >
-              {loading ? "CONSULTING…" : "CONSULT ORACLE"}
+              {loading ? "Consulting…" : "Ask Oracle"}
             </button>
 
             {response && !loading && (
@@ -87,22 +74,15 @@ export default function AskTab() {
                 type="button"
                 onClick={(e) => submit(e as unknown as React.FormEvent, true)}
                 disabled={loading}
-                className="btn-ghost px-4 py-2 text-xs"
-                style={{ letterSpacing: "0.08em", fontFamily: "var(--font-display)" }}
+                className="btn-secondary px-4 py-2"
+                style={{ fontSize: "0.82rem" }}
               >
-                ↻ &nbsp; REFRESH PATCH DATA
+                ↻ Refresh patch data
               </button>
             )}
 
-            <span
-              style={{
-                fontSize: "0.75rem",
-                color: "var(--text-dim)",
-                fontStyle: "italic",
-                marginLeft: "auto",
-              }}
-            >
-              {navigator.platform.includes("Mac") ? "⌘" : "Ctrl"}+Enter to submit
+            <span style={{ fontSize: "0.75rem", color: "var(--text-tertiary)", marginLeft: "auto" }}>
+              Ctrl+Enter to submit
             </span>
           </div>
         </form>
@@ -110,10 +90,7 @@ export default function AskTab() {
 
       {/* Error */}
       {error && (
-        <p
-          className="animate-fade-in"
-          style={{ color: "var(--red-accent)", fontSize: "0.9rem", fontStyle: "italic", padding: "0 0.25rem" }}
-        >
+        <p className="animate-fade-in" style={{ color: "var(--red)", fontSize: "0.88rem" }}>
           {error}
         </p>
       )}
@@ -123,17 +100,14 @@ export default function AskTab() {
 
       {/* Response */}
       {response && !loading && (
-        <div className="animate-shimmer flex flex-col gap-3">
+        <div className="animate-fade-in flex flex-col gap-2">
           {savedId && (
-            <div
-              className="flex items-center gap-2"
-              style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}
-            >
-              <span style={{ color: "var(--teal)" }}>◆</span>
-              Saved to craft history &nbsp;·&nbsp; ID {savedId.slice(0, 8)}…
-            </div>
+            <p style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}>
+              <span style={{ color: "var(--green)" }}>✓</span>{" "}
+              Saved to craft history · {savedId.slice(0, 8)}…
+            </p>
           )}
-          <div className="arcane-card p-6">
+          <div className="card p-6">
             <MarkdownRenderer content={response} />
           </div>
         </div>

@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
-import { Cinzel, Crimson_Pro, JetBrains_Mono } from "next/font/google";
+import { Cinzel, Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
 
 const cinzel = Cinzel({
   variable: "--font-cinzel",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "900"],
+  weight: ["400", "600", "700"],
   display: "swap",
 });
 
-const crimsonPro = Crimson_Pro({
-  variable: "--font-crimson",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
-  weight: ["400", "600"],
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
@@ -34,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${cinzel.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${cinzel.variable} ${outfit.variable} ${jetbrainsMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col" style={{ background: "var(--bg-base)", color: "var(--text-primary)" }}>
         <NavBar />
