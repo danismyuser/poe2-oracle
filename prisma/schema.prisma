@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  passwordHash String
+  createdAt    DateTime       @default(now())
+  savedCrafts  SavedCraft[]
+  attempts     CraftAttempt[]
+}
+
+model SavedCraft {
+  id           String         @id @default(cuid())
+  userId       String
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  itemType     String
+  base         String
+  ilvl         Int
+  affixes      Json
+  budget       String
+  question     String?
+  response     String
+  routeChosen  String?
+  costEstimate String?
+  patchVersion String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  attempts     CraftAttempt[]
+
+  @@index([userId, createdAt])
+}
+
+model CraftAttempt {
+  id            String     @id @default(cuid())
+  userId        String
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  craftId       String
+  craft         SavedCraft @relation(fields: [craftId], references: [id], onDelete: Cascade)
+  success       Boolean
+  currencySpent String
+  notes         String?
+  createdAt     DateTime   @default(now())
+
+  @@index([craftId])
+}
+
+model PatchCache {
+  version     String   @id
+  lastChecked DateTime @default(now())
+  modPools    Json
+  notes       String?
+}
