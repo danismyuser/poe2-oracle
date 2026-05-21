@@ -1,10 +1,11 @@
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 
-const JWT_SECRET = process.env.JWT_SECRET!;
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET ?? "");
 const COOKIE_NAME = "auth-token";
+const EXPIRES_IN = 60 * 60 * 24 * 30; // 30 days in seconds
 
 export async function hashPassword(plain: string): Promise<string> {
   return bcrypt.hash(plain, 12);
@@ -14,14 +15,17 @@ export async function verifyPassword(plain: string, hash: string): Promise<boole
   return bcrypt.compare(plain, hash);
 }
 
-export function signToken(userId: string): string {
-  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "30d" });
+export async function signToken(userId: string): Promise<string> {
+  return new SignJWT({ userId })
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime(`${EXPIRES_IN}s`)
+    .sign(JWT_SECRET);
 }
 
-export function verifyToken(token: string): { userId: string } | null {
+export async function verifyToken(token: string): Promise<{ userId: string } | null> {
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as { userId: string };
-    return { userId: payload.userId };
+    const { payload } = await jwtVerify(token, JWT_SECRET);
+    return { userId: payload.userId as string };
   } catch {
     return null;
   }
@@ -31,19 +35,19 @@ export async function getUserFromCookie() {
   const cookieStore = await cookies();
   const token = cookieStore.get(COOKIE_NAME)?.value;
   if (!token) return null;
-  const payload = verifyToken(token);
+  const payload = await verifyToken(token);
   if (!payload) return null;
   return prisma.user.findUnique({ where: { id: payload.userId } });
 }
 
-export function cookieOptions(token: string) {
+export async function cookieOptions(token: string) {
   return {
     name: COOKIE_NAME,
     value: token,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax" as const,
-    maxAge: 60 * 60 * 24 * 30,
+    maxAge: EXPIRES_IN,
     path: "/",
   };
 }
