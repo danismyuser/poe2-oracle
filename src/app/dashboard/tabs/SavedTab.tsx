@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { getBudgetStyle } from "@/lib/budget-styles";
 
 interface SavedCraft {
   id: string;
@@ -25,13 +26,6 @@ interface AttemptForm {
   notes: string;
 }
 
-const BUDGET_COLORS: Record<string, { color: string; bg: string; border: string }> = {
-  "league-start": { color: "#94A3B8", bg: "rgba(148,163,184,0.08)", border: "rgba(148,163,184,0.25)" },
-  mid:            { color: "var(--blue-light)", bg: "var(--blue-bg)", border: "var(--border-blue)" },
-  high:           { color: "var(--gold)", bg: "var(--gold-bg)", border: "var(--border-gold)" },
-  mirror:         { color: "#C084FC", bg: "rgba(168,85,247,0.1)", border: "rgba(168,85,247,0.3)" },
-};
-
 export default function SavedTab() {
   const [crafts, setCrafts] = useState<SavedCraft[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,6 +36,8 @@ export default function SavedTab() {
   const [attemptForm, setAttemptForm] = useState<AttemptForm>({ success: true, currencySpent: "", notes: "" });
   const [attemptSaving, setAttemptSaving] = useState(false);
   const [attemptMsg, setAttemptMsg] = useState("");
+  /** The craft ID pending inline delete confirmation (replaces browser confirm()). */
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   useEffect(() => { loadCrafts(); }, []);
 
@@ -64,11 +60,11 @@ export default function SavedTab() {
     setExpandLoading(false);
   }
 
-  async function deleteCraft(id: string) {
-    if (!confirm("Delete this saved craft?")) return;
+  async function confirmDelete(id: string) {
     await fetch(`/api/saved-crafts/${id}`, { method: "DELETE" });
     setCrafts((prev) => prev.filter((c) => c.id !== id));
     if (expandedId === id) { setExpandedId(null); setFullCraft(null); }
+    setPendingDeleteId(null);
   }
 
   async function logAttempt(e: React.FormEvent) {
@@ -118,7 +114,6 @@ export default function SavedTab() {
 
   return (
     <div className="flex flex-col gap-3 max-w-3xl">
-      {/* Success/error message */}
       {attemptMsg && (
         <div
           className="animate-fade-in px-4 py-3 rounded-lg text-sm"
@@ -133,9 +128,10 @@ export default function SavedTab() {
       )}
 
       {crafts.map((craft) => {
-        const budgetStyle = BUDGET_COLORS[craft.budget] ?? BUDGET_COLORS["league-start"];
+        const budgetStyle = getBudgetStyle(craft.budget);
         const isExpanded = expandedId === craft.id;
         const isAttempt = attemptCraftId === craft.id;
+        const isPendingDelete = pendingDeleteId === craft.id;
 
         return (
           <div
@@ -195,21 +191,47 @@ export default function SavedTab() {
                   </span>
                 </div>
               </button>
-              <div className="flex gap-2 shrink-0">
-                <button
-                  onClick={() => { setAttemptCraftId(craft.id); setAttemptMsg(""); }}
-                  className="btn-ghost"
-                  style={{ fontSize: "0.78rem" }}
-                >
-                  Log
-                </button>
-                <button
-                  onClick={() => deleteCraft(craft.id)}
-                  className="btn-ghost"
-                  style={{ color: "var(--red)", borderColor: "rgba(239,68,68,0.25)", fontSize: "0.78rem" }}
-                >
-                  Delete
-                </button>
+
+              {/* Action buttons — inline delete confirmation replaces browser confirm() */}
+              <div className="flex gap-2 shrink-0 items-center">
+                {isPendingDelete ? (
+                  <>
+                    <span style={{ fontSize: "0.75rem", color: "var(--text-tertiary)", whiteSpace: "nowrap" }}>
+                      Delete?
+                    </span>
+                    <button
+                      onClick={() => confirmDelete(craft.id)}
+                      className="btn-ghost"
+                      style={{ color: "var(--red)", borderColor: "rgba(239,68,68,0.4)", fontSize: "0.78rem" }}
+                    >
+                      Yes
+                    </button>
+                    <button
+                      onClick={() => setPendingDeleteId(null)}
+                      className="btn-ghost"
+                      style={{ fontSize: "0.78rem" }}
+                    >
+                      No
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => { setAttemptCraftId(craft.id); setAttemptMsg(""); setPendingDeleteId(null); }}
+                      className="btn-ghost"
+                      style={{ fontSize: "0.78rem" }}
+                    >
+                      Log
+                    </button>
+                    <button
+                      onClick={() => { setPendingDeleteId(craft.id); setAttemptCraftId(null); }}
+                      className="btn-ghost"
+                      style={{ color: "var(--red)", borderColor: "rgba(239,68,68,0.25)", fontSize: "0.78rem" }}
+                    >
+                      Delete
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 
@@ -241,10 +263,7 @@ export default function SavedTab() {
                 </p>
 
                 <div className="flex gap-5 items-center">
-                  <label
-                    className="flex items-center gap-2 text-sm cursor-pointer"
-                    style={{ color: "var(--green)" }}
-                  >
+                  <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: "var(--green)" }}>
                     <input
                       type="radio"
                       name="success"
@@ -254,10 +273,7 @@ export default function SavedTab() {
                     />
                     Success
                   </label>
-                  <label
-                    className="flex items-center gap-2 text-sm cursor-pointer"
-                    style={{ color: "var(--red)" }}
-                  >
+                  <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: "var(--red)" }}>
                     <input
                       type="radio"
                       name="success"

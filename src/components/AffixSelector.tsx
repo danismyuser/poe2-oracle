@@ -1,10 +1,6 @@
 "use client";
+import type { AffixSlot } from "@/types/craft";
 import { AffixDef } from "@/lib/affix-data";
-
-interface AffixSlot {
-  name: string;
-  tier: string;
-}
 
 interface Props {
   label: string;

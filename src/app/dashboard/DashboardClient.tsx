@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useLogout } from "@/hooks/useLogout";
 import AskTab from "./tabs/AskTab";
 import SimulateTab from "./tabs/SimulateTab";
 import SavedTab from "./tabs/SavedTab";
@@ -9,9 +9,9 @@ const TABS = ["Ask the Oracle", "Configure & Simulate", "Saved Crafts"] as const
 type Tab = (typeof TABS)[number];
 
 const TAB_CONFIG: { key: Tab; icon: string; short: string }[] = [
-  { key: "Ask the Oracle",      icon: "⚗", short: "Ask" },
+  { key: "Ask the Oracle",       icon: "⚗", short: "Ask" },
   { key: "Configure & Simulate", icon: "⚙", short: "Simulate" },
-  { key: "Saved Crafts",        icon: "◈", short: "Saved" },
+  { key: "Saved Crafts",         icon: "◈", short: "Saved" },
 ];
 
 export default function DashboardClient({
@@ -22,13 +22,7 @@ export default function DashboardClient({
   initialTab?: Tab;
 }) {
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
-  const router = useRouter();
-
-  async function logout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/");
-    router.refresh();
-  }
+  const logout = useLogout();
 
   return (
     <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
@@ -45,12 +39,11 @@ export default function DashboardClient({
           padding: "1.5rem 0.75rem",
           gap: "0.25rem",
           position: "sticky",
-          top: 52,           /* NavBar height */
+          top: 52,
           height: "calc(100vh - 52px)",
           overflowY: "auto",
         }}
       >
-        {/* Section label */}
         <p
           style={{
             fontFamily: "var(--font-display)",
@@ -66,7 +59,6 @@ export default function DashboardClient({
           Navigation
         </p>
 
-        {/* Nav links */}
         {TAB_CONFIG.map(({ key, icon, short }) => (
           <button
             key={key}
@@ -78,13 +70,10 @@ export default function DashboardClient({
           </button>
         ))}
 
-        {/* Spacer */}
         <div style={{ flex: 1 }} />
 
-        {/* Divider */}
         <div style={{ height: 1, background: "var(--border-light)", margin: "0.5rem 0" }} />
 
-        {/* User info */}
         <div style={{ padding: "0.5rem" }}>
           <p style={{
             fontFamily: "var(--font-display)",
@@ -120,7 +109,6 @@ export default function DashboardClient({
       {/* ── Main content ──────────────────────────────────────────────────── */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
 
-        {/* Content header */}
         <div
           style={{
             padding: "1.75rem 2.5rem 0",
@@ -130,10 +118,7 @@ export default function DashboardClient({
         >
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "1.25rem" }}>
             <div>
-              <p
-                className="section-label"
-                style={{ color: "var(--blue-bright)", marginBottom: "0.4rem" }}
-              >
+              <p className="section-label" style={{ color: "var(--blue-bright)", marginBottom: "0.4rem" }}>
                 {TAB_CONFIG.find(t => t.key === activeTab)?.icon} &nbsp;Oracle Chamber
               </p>
               <h1
@@ -153,7 +138,6 @@ export default function DashboardClient({
           </div>
         </div>
 
-        {/* Tab content */}
         <div
           className="animate-fade-in"
           style={{

@@ -1,12 +1,12 @@
 "use client";
 import { useState } from "react";
 import { ITEM_CLASSES, BASES, getModPool, ItemClass } from "@/lib/affix-data";
+import type { AffixSlot } from "@/types/craft";
 import AffixSelector from "@/components/AffixSelector";
 import ItemPreview from "@/components/ItemPreview";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
-interface AffixSlot { name: string; tier: string; }
 const EMPTY_SLOT = (): AffixSlot => ({ name: "", tier: "" });
 
 const BUDGETS = [

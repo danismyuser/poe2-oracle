@@ -1,6 +1,6 @@
 "use client";
-
-interface AffixSlot { name: string; tier: string; }
+import { getBudgetStyle } from "@/lib/budget-styles";
+import type { AffixSlot } from "@/types/craft";
 
 interface Props {
   itemClass: string;
@@ -11,17 +11,10 @@ interface Props {
   suffixes: AffixSlot[];
 }
 
-const BUDGET_STYLES: Record<string, { label: string; color: string; bg: string; border: string }> = {
-  "league-start": { label: "League Start", color: "#94A3B8", bg: "rgba(148,163,184,0.08)", border: "rgba(148,163,184,0.25)" },
-  mid:            { label: "Mid-tier",     color: "var(--blue-light)", bg: "var(--blue-bg)", border: "var(--border-blue)" },
-  high:           { label: "High-end",     color: "var(--gold)",       bg: "var(--gold-bg)", border: "var(--border-gold)" },
-  mirror:         { label: "Mirror",       color: "#C084FC",           bg: "rgba(168,85,247,0.1)", border: "rgba(168,85,247,0.3)" },
-};
-
 export default function ItemPreview({ itemClass, base, ilvl, budget, prefixes, suffixes }: Props) {
   const filledPrefixes = prefixes.filter((p) => p.name);
   const filledSuffixes = suffixes.filter((s) => s.name);
-  const budgetStyle = BUDGET_STYLES[budget] ?? BUDGET_STYLES["league-start"];
+  const budgetStyle = getBudgetStyle(budget);
 
   return (
     <div
@@ -35,7 +28,7 @@ export default function ItemPreview({ itemClass, base, ilvl, budget, prefixes, s
         overflow: "hidden",
       }}
     >
-      {/* Subtle top glow based on budget */}
+      {/* Budget-coloured top accent line */}
       <div style={{
         position: "absolute",
         top: 0, left: 0, right: 0,
@@ -83,7 +76,6 @@ export default function ItemPreview({ itemClass, base, ilvl, budget, prefixes, s
         </span>
       </div>
 
-      {/* Separator */}
       <div style={{ borderTop: "1px solid var(--border-light)", marginBottom: "0.75rem" }} />
 
       {/* Affixes */}
@@ -144,11 +136,7 @@ export default function ItemPreview({ itemClass, base, ilvl, budget, prefixes, s
       {/* Footer count */}
       <div
         className="flex gap-4"
-        style={{
-          marginTop: "0.9rem",
-          paddingTop: "0.65rem",
-          borderTop: "1px solid var(--border-light)",
-        }}
+        style={{ marginTop: "0.9rem", paddingTop: "0.65rem", borderTop: "1px solid var(--border-light)" }}
       >
         <span style={{ fontSize: "0.72rem", color: "var(--blue-light)" }}>
           {filledPrefixes.length}<span style={{ opacity: 0.4 }}>/3</span> prefixes

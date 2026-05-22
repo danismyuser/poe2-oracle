@@ -1,27 +1,18 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useLogout } from "@/hooks/useLogout";
 
-export default function NavBar() {
-  const router = useRouter();
-  const [email, setEmail] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
+interface Props {
+  /**
+   * The logged-in user's email, resolved server-side by the root layout.
+   * Null means unauthenticated. Passed as a prop to eliminate client-side
+   * fetch and the resulting flash of unauthenticated state.
+   */
+  userEmail: string | null;
+}
 
-  useEffect(() => {
-    setMounted(true);
-    fetch("/api/auth/me")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((u) => setEmail(u?.email ?? null))
-      .catch(() => setEmail(null));
-  }, []);
-
-  async function logout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    setEmail(null);
-    router.push("/");
-    router.refresh();
-  }
+export default function NavBar({ userEmail }: Props) {
+  const logout = useLogout();
 
   return (
     <nav
@@ -41,7 +32,6 @@ export default function NavBar() {
 
         {/* Logo */}
         <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}>
-          {/* PoE-style bracket logo */}
           <span style={{
             fontFamily: "var(--font-display)",
             fontSize: "0.65rem",
@@ -72,30 +62,26 @@ export default function NavBar() {
           </span>
         </Link>
 
-        {/* Right actions */}
+        {/* Right actions — rendered correctly on first paint (no flash) */}
         <div className="flex items-center gap-3">
-          {mounted && email ? (
-            /* Logged in — sidebar handles main nav, just show minimal info */
-            <>
-              <Link
-                href="/dashboard"
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "0.82rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  color: "var(--text-secondary)",
-                  textDecoration: "none",
-                  transition: "color 0.15s",
-                  padding: "0.3rem 0.6rem",
-                }}
-              >
-                Dashboard
-              </Link>
-            </>
-          ) : mounted ? (
-            /* Logged out */
+          {userEmail ? (
+            <Link
+              href="/dashboard"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "0.82rem",
+                fontWeight: 700,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--text-secondary)",
+                textDecoration: "none",
+                transition: "color 0.15s",
+                padding: "0.3rem 0.6rem",
+              }}
+            >
+              Dashboard
+            </Link>
+          ) : (
             <>
               <Link
                 href="/login"
@@ -116,7 +102,7 @@ export default function NavBar() {
                 Get Started
               </Link>
             </>
-          ) : null}
+          )}
         </div>
       </div>
     </nav>

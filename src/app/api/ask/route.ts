@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getUserFromCookie } from "@/lib/auth";
 import { askOracle } from "@/lib/oracle";
 import { prisma } from "@/lib/db";
+import { getCurrentPatchVersion } from "@/lib/patch-cache";
 
 export async function POST(req: NextRequest) {
   const user = await getUserFromCookie();
@@ -21,6 +22,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Hard rule: every craft request and response is logged — no silent calls.
+  const patchVersion = await getCurrentPatchVersion();
   const saved = await prisma.savedCraft.create({
     data: {
       userId: user.id,
@@ -31,7 +33,7 @@ export async function POST(req: NextRequest) {
       budget: "unknown",
       question,
       response,
-      patchVersion: "0.4",
+      patchVersion,
     },
   });
 

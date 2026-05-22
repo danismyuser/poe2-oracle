@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getUserFromCookie } from "@/lib/auth";
 import { askOracle } from "@/lib/oracle";
 import { prisma } from "@/lib/db";
+import { getCurrentPatchVersion } from "@/lib/patch-cache";
 
 export async function POST(req: NextRequest) {
   const user = await getUserFromCookie();
@@ -42,6 +43,7 @@ Please provide:
     return NextResponse.json({ error: "Oracle call failed" }, { status: 502 });
   }
 
+  const patchVersion = await getCurrentPatchVersion();
   const saved = await prisma.savedCraft.create({
     data: {
       userId: user.id,
@@ -51,7 +53,7 @@ Please provide:
       affixes,
       budget,
       response,
-      patchVersion: "0.4",
+      patchVersion,
     },
   });
 

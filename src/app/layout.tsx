@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Rajdhani, Sora, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
+import { getUserFromCookie } from "@/lib/auth";
 
 const rajdhani = Rajdhani({
   variable: "--font-rajdhani",
@@ -29,14 +30,18 @@ export const metadata: Metadata = {
   description: "Accurate, patch-aware Path of Exile 2 crafting guides powered by authoritative game data.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Resolve auth once per request on the server — NavBar receives the initial
+  // email as a prop, eliminating the client-side flash of unauthenticated state.
+  const user = await getUserFromCookie();
+
   return (
     <html
       lang="en"
       className={`${rajdhani.variable} ${sora.variable} ${jetbrainsMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col">
-        <NavBar />
+        <NavBar userEmail={user?.email ?? null} />
         {children}
       </body>
     </html>
