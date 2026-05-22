@@ -4,7 +4,7 @@ import { ITEM_CLASSES, BASES, getModPool, ItemClass } from "@/lib/affix-data";
 import type { AffixSlot } from "@/types/craft";
 import AffixSelector from "@/components/AffixSelector";
 import ItemPreview from "@/components/ItemPreview";
-import MarkdownRenderer from "@/components/MarkdownRenderer";
+import OracleResponse from "@/components/OracleResponse";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
 const EMPTY_SLOT = (): AffixSlot => ({ name: "", tier: "" });
@@ -299,7 +299,7 @@ export default function SimulateTab() {
           className="animate-fade-in card p-7"
           style={{ borderColor: "var(--border-blue)" }}
         >
-          <MarkdownRenderer content={response} />
+          <OracleResponse content={response} />
         </div>
       )}
     </div>

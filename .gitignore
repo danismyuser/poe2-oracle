@@ -53,3 +53,6 @@ next-env.d.ts
 # Dev server log captures
 dev-server.log
 *.log
+
+# Cached upstream data (rebuilt by scripts/build-coe-lookup.mjs)
+.coe-data-cache.json

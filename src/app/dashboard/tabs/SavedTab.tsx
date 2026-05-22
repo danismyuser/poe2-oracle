@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import MarkdownRenderer from "@/components/MarkdownRenderer";
+import OracleResponse from "@/components/OracleResponse";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { getBudgetStyle } from "@/lib/budget-styles";
 
@@ -238,7 +238,7 @@ export default function SavedTab() {
             {/* ── Expanded response ────────────────────────────────────────── */}
             {isExpanded && (
               <div className="px-6 py-6 animate-fade-in">
-                {expandLoading ? <LoadingSpinner /> : fullCraft && <MarkdownRenderer content={fullCraft.response} />}
+                {expandLoading ? <LoadingSpinner /> : fullCraft && <OracleResponse content={fullCraft.response} />}
               </div>
             )}
 

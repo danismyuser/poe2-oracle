@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import MarkdownRenderer from "@/components/MarkdownRenderer";
+import OracleResponse from "@/components/OracleResponse";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function AskTab() {
@@ -145,7 +145,7 @@ export default function AskTab() {
             </div>
           )}
           <div className="card p-7">
-            <MarkdownRenderer content={response} />
+            <OracleResponse content={response} />
           </div>
         </div>
       )}

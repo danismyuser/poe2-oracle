@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import MarkdownRenderer from "@/components/MarkdownRenderer";
+import OracleResponse from "@/components/OracleResponse";
 import { getBudgetStyle } from "@/lib/budget-styles";
 
 interface CraftRow {
@@ -181,7 +181,7 @@ export default function AdminClient({ crafts, stats }: Props) {
                             </p>
                           </div>
                         )}
-                        <MarkdownRenderer content={craft.response} />
+                        <OracleResponse content={craft.response} />
                       </div>
                     )}
                   </div>
