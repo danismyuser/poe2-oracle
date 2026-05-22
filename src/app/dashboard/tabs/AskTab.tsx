@@ -35,24 +35,37 @@ export default function AskTab() {
   }
 
   return (
-    <div className="flex flex-col gap-5 max-w-3xl">
+    <div className="flex flex-col gap-6 max-w-3xl">
 
-      {/* Input card */}
-      <div className="card p-5 flex flex-col gap-4">
+      {/* ── Input card ─────────────────────────────────────────────────────── */}
+      <div className="card p-6 flex flex-col gap-5">
         <div>
-          <p className="section-label mb-1">Ask the Oracle</p>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.88rem" }}>
+          <p
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "1.3rem",
+              fontWeight: 800,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              color: "var(--text-primary)",
+              marginBottom: "0.35rem",
+            }}
+          >
+            Ask the Oracle
+          </p>
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>
             Describe your target item or ask any PoE2 crafting question.
           </p>
         </div>
 
-        <form onSubmit={submit} className="flex flex-col gap-3">
+        <form onSubmit={submit} className="flex flex-col gap-4">
           <textarea
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            rows={5}
+            rows={6}
             placeholder="e.g. How do I craft a high physical damage bow on a mid-tier budget? What essences should I use?"
-            className="field px-3.5 py-3 resize-none"
+            className="field px-4 py-3 resize-none"
+            style={{ lineHeight: 1.6 }}
             onKeyDown={(e) => {
               if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
                 submit(e as unknown as React.FormEvent);
@@ -64,9 +77,10 @@ export default function AskTab() {
             <button
               type="submit"
               disabled={loading || !question.trim()}
-              className="btn-primary px-6 py-2"
+              className="btn-primary"
+              style={{ padding: "0.65rem 2rem" }}
             >
-              {loading ? "Consulting…" : "Ask Oracle"}
+              {loading ? "Consulting…" : "⚗ Ask Oracle"}
             </button>
 
             {response && !loading && (
@@ -74,8 +88,8 @@ export default function AskTab() {
                 type="button"
                 onClick={(e) => submit(e as unknown as React.FormEvent, true)}
                 disabled={loading}
-                className="btn-secondary px-4 py-2"
-                style={{ fontSize: "0.82rem" }}
+                className="btn-secondary"
+                style={{ fontSize: "0.85rem", padding: "0.6rem 1.25rem" }}
               >
                 ↻ Refresh patch data
               </button>
@@ -88,26 +102,49 @@ export default function AskTab() {
         </form>
       </div>
 
-      {/* Error */}
+      {/* ── Error ──────────────────────────────────────────────────────────── */}
       {error && (
-        <p className="animate-fade-in" style={{ color: "var(--red)", fontSize: "0.88rem" }}>
+        <div
+          className="animate-fade-in"
+          style={{
+            background: "var(--red-bg)",
+            border: "1px solid rgba(239,68,68,0.3)",
+            borderRadius: 8,
+            padding: "0.85rem 1.1rem",
+            color: "var(--red)",
+            fontSize: "0.9rem",
+          }}
+        >
           {error}
-        </p>
+        </div>
       )}
 
-      {/* Loading */}
+      {/* ── Loading ─────────────────────────────────────────────────────────── */}
       {loading && <LoadingSpinner />}
 
-      {/* Response */}
+      {/* ── Response ────────────────────────────────────────────────────────── */}
       {response && !loading && (
-        <div className="animate-fade-in flex flex-col gap-2">
+        <div className="animate-fade-in flex flex-col gap-3">
           {savedId && (
-            <p style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}>
-              <span style={{ color: "var(--green)" }}>✓</span>{" "}
-              Saved to craft history · {savedId.slice(0, 8)}…
-            </p>
+            <div className="flex items-center gap-2" style={{ fontSize: "0.78rem", color: "var(--text-tertiary)" }}>
+              <span style={{ color: "var(--green)" }}>✓</span>
+              <span>Saved to craft history</span>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.72rem",
+                  background: "var(--bg-elevated)",
+                  border: "1px solid var(--border-light)",
+                  borderRadius: 4,
+                  padding: "0.05rem 0.4rem",
+                  color: "var(--text-tertiary)",
+                }}
+              >
+                {savedId.slice(0, 8)}…
+              </span>
+            </div>
           )}
-          <div className="card p-6">
+          <div className="card p-7">
             <MarkdownRenderer content={response} />
           </div>
         </div>

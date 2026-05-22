@@ -18,22 +18,46 @@ export default function AffixSelector({ label, slot, affixPool, onChange }: Prop
 
   return (
     <div className="flex gap-2 items-center">
-      <span className="text-xs text-zinc-500 w-16 shrink-0">{label}</span>
+      <span
+        style={{
+          fontFamily: "var(--font-display)",
+          fontSize: "0.72rem",
+          fontWeight: 700,
+          letterSpacing: "0.06em",
+          textTransform: "uppercase",
+          color: "var(--text-tertiary)",
+          width: 52,
+          flexShrink: 0,
+        }}
+      >
+        {label}
+      </span>
+
+      {/* Mod name */}
       <select
         value={slot.name}
         onChange={(e) => onChange({ name: e.target.value, tier: "" })}
-        className="flex-1 bg-zinc-800 border border-zinc-700 rounded px-2 py-1.5 text-sm focus:outline-none focus:border-amber-500"
+        className="select-field"
+        style={{ flex: 1 }}
       >
         <option value="">— none —</option>
         {affixPool.map((a) => (
           <option key={a.name} value={a.name}>{a.name}</option>
         ))}
       </select>
+
+      {/* Tier */}
       <select
         value={slot.tier}
         onChange={(e) => onChange({ ...slot, tier: e.target.value })}
         disabled={!slot.name}
-        className="w-20 bg-zinc-800 border border-zinc-700 rounded px-2 py-1.5 text-sm focus:outline-none focus:border-amber-500 disabled:opacity-40"
+        className="select-field"
+        style={{
+          width: 80,
+          flexShrink: 0,
+          opacity: slot.name ? 1 : 0.35,
+          cursor: slot.name ? "pointer" : "not-allowed",
+        }}
       >
         <option value="">Tier</option>
         {tiers.map((t) => (

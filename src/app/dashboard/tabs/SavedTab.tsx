@@ -25,6 +25,13 @@ interface AttemptForm {
   notes: string;
 }
 
+const BUDGET_COLORS: Record<string, { color: string; bg: string; border: string }> = {
+  "league-start": { color: "#94A3B8", bg: "rgba(148,163,184,0.08)", border: "rgba(148,163,184,0.25)" },
+  mid:            { color: "var(--blue-light)", bg: "var(--blue-bg)", border: "var(--border-blue)" },
+  high:           { color: "var(--gold)", bg: "var(--gold-bg)", border: "var(--border-gold)" },
+  mirror:         { color: "#C084FC", bg: "rgba(168,85,247,0.1)", border: "rgba(168,85,247,0.3)" },
+};
+
 export default function SavedTab() {
   const [crafts, setCrafts] = useState<SavedCraft[]>([]);
   const [loading, setLoading] = useState(true);
@@ -75,7 +82,7 @@ export default function SavedTab() {
     });
     setAttemptSaving(false);
     if (res.ok) {
-      setAttemptMsg("Attempt logged!");
+      setAttemptMsg("Attempt logged successfully!");
       setAttemptCraftId(null);
       setAttemptForm({ success: true, currencySpent: "", notes: "" });
     } else {
@@ -88,13 +95,22 @@ export default function SavedTab() {
 
   if (crafts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 gap-3 text-center">
-        <span style={{ fontSize: "1.5rem", color: "var(--gold)", opacity: 0.4 }}>◈</span>
-        <p style={{ fontFamily: "var(--font-display)", fontSize: "0.68rem", letterSpacing: "0.18em", color: "var(--text-tertiary)" }}>
-          NO SAVED CRAFTS YET
+      <div className="flex flex-col items-center justify-center py-24 gap-4 text-center">
+        <span style={{ fontSize: "3rem", color: "var(--blue-bright)", opacity: 0.2, textShadow: "0 0 20px var(--blue-glow)" }}>◈</span>
+        <p
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "0.85rem",
+            fontWeight: 800,
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "var(--text-tertiary)",
+          }}
+        >
+          No saved crafts yet
         </p>
-        <p style={{ color: "var(--text-tertiary)", fontSize: "0.88rem" }}>
-          Use Ask the Oracle or Configure &amp; Simulate to generate your first guide.
+        <p style={{ color: "var(--text-tertiary)", fontSize: "0.9rem", maxWidth: 360 }}>
+          Use Ask the Oracle or Configure &amp; Simulate to generate your first guide — it will appear here automatically.
         </p>
       </div>
     );
@@ -102,84 +118,194 @@ export default function SavedTab() {
 
   return (
     <div className="flex flex-col gap-3 max-w-3xl">
+      {/* Success/error message */}
       {attemptMsg && (
-        <div className="px-4 py-2 rounded-lg text-sm"
-          style={{ background: "rgba(30,126,90,0.08)", border: "1px solid rgba(30,126,90,0.25)", color: "var(--green)" }}>
+        <div
+          className="animate-fade-in px-4 py-3 rounded-lg text-sm"
+          style={{
+            background: attemptMsg.startsWith("Failed") ? "var(--red-bg)" : "var(--green-bg)",
+            border: `1px solid ${attemptMsg.startsWith("Failed") ? "rgba(239,68,68,0.3)" : "rgba(16,185,129,0.3)"}`,
+            color: attemptMsg.startsWith("Failed") ? "var(--red)" : "var(--green)",
+          }}
+        >
           {attemptMsg}
         </div>
       )}
 
-      {crafts.map((craft) => (
-        <div key={craft.id} className="card overflow-hidden">
-          {/* Summary row */}
-          <div className="flex items-center justify-between px-4 py-3"
-            style={{ background: "var(--bg-subtle)", borderBottom: expandedId === craft.id || attemptCraftId === craft.id ? "1px solid var(--border-light)" : "none" }}>
-            <button onClick={() => expand(craft.id)} className="flex-1 text-left flex items-center gap-3">
-              <span style={{ color: "var(--gold)", fontSize: "0.7rem", flexShrink: 0 }}>
-                {expandedId === craft.id ? "▾" : "▸"}
-              </span>
-              <span style={{ fontSize: "0.875rem", color: "var(--text-primary)", lineHeight: 1.4 }}>
-                {craft.itemType === "free-form"
-                  ? (craft.question?.slice(0, 70) ?? "Free-form question") + "…"
-                  : `${craft.base} · ${craft.itemType}`}
-              </span>
-              <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)", flexShrink: 0 }}>
-                {craft.budget} · patch {craft.patchVersion} · {new Date(craft.createdAt).toLocaleDateString()}
-              </span>
-            </button>
-            <div className="flex gap-2 ml-4 shrink-0">
-              <button onClick={() => { setAttemptCraftId(craft.id); setAttemptMsg(""); }}
-                className="btn-ghost">Log</button>
-              <button onClick={() => deleteCraft(craft.id)}
-                className="btn-ghost"
-                style={{ color: "var(--red)", borderColor: "rgba(192,57,43,0.25)" }}>Delete</button>
+      {crafts.map((craft) => {
+        const budgetStyle = BUDGET_COLORS[craft.budget] ?? BUDGET_COLORS["league-start"];
+        const isExpanded = expandedId === craft.id;
+        const isAttempt = attemptCraftId === craft.id;
+
+        return (
+          <div
+            key={craft.id}
+            className="card overflow-hidden"
+            style={{ borderColor: isExpanded ? "var(--border-blue)" : undefined }}
+          >
+            {/* ── Summary row ─────────────────────────────────────────────── */}
+            <div
+              className="flex items-center justify-between px-4 py-3 gap-3"
+              style={{
+                background: "var(--bg-subtle)",
+                borderBottom: isExpanded || isAttempt ? "1px solid var(--border-light)" : "none",
+              }}
+            >
+              <button
+                onClick={() => expand(craft.id)}
+                className="flex-1 text-left flex items-center gap-3 min-w-0"
+              >
+                <span style={{ color: "var(--blue-bright)", fontSize: "0.75rem", flexShrink: 0 }}>
+                  {isExpanded ? "▾" : "▸"}
+                </span>
+                <span
+                  style={{
+                    fontSize: "0.9rem",
+                    color: "var(--text-primary)",
+                    lineHeight: 1.4,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    minWidth: 0,
+                  }}
+                >
+                  {craft.itemType === "free-form"
+                    ? (craft.question?.slice(0, 65) ?? "Free-form question") + "…"
+                    : `${craft.base} · ${craft.itemType}`}
+                </span>
+                <div className="flex items-center gap-2 shrink-0 ml-auto">
+                  <span
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "0.72rem",
+                      color: budgetStyle.color,
+                      background: budgetStyle.bg,
+                      border: `1px solid ${budgetStyle.border}`,
+                      borderRadius: 4,
+                      padding: "0.1rem 0.5rem",
+                    }}
+                  >
+                    {craft.budget}
+                  </span>
+                  <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)" }}>
+                    patch {craft.patchVersion}
+                  </span>
+                  <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)" }}>
+                    {new Date(craft.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+              </button>
+              <div className="flex gap-2 shrink-0">
+                <button
+                  onClick={() => { setAttemptCraftId(craft.id); setAttemptMsg(""); }}
+                  className="btn-ghost"
+                  style={{ fontSize: "0.78rem" }}
+                >
+                  Log
+                </button>
+                <button
+                  onClick={() => deleteCraft(craft.id)}
+                  className="btn-ghost"
+                  style={{ color: "var(--red)", borderColor: "rgba(239,68,68,0.25)", fontSize: "0.78rem" }}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
+
+            {/* ── Expanded response ────────────────────────────────────────── */}
+            {isExpanded && (
+              <div className="px-6 py-6 animate-fade-in">
+                {expandLoading ? <LoadingSpinner /> : fullCraft && <MarkdownRenderer content={fullCraft.response} />}
+              </div>
+            )}
+
+            {/* ── Log attempt form ─────────────────────────────────────────── */}
+            {isAttempt && (
+              <form
+                onSubmit={logAttempt}
+                className="px-5 py-5 flex flex-col gap-4 animate-fade-in"
+                style={{ background: "var(--bg-subtle)", borderTop: "1px solid var(--border-light)" }}
+              >
+                <p
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "0.85rem",
+                    fontWeight: 800,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "var(--text-secondary)",
+                  }}
+                >
+                  Log Real-World Attempt
+                </p>
+
+                <div className="flex gap-5 items-center">
+                  <label
+                    className="flex items-center gap-2 text-sm cursor-pointer"
+                    style={{ color: "var(--green)" }}
+                  >
+                    <input
+                      type="radio"
+                      name="success"
+                      checked={attemptForm.success}
+                      onChange={() => setAttemptForm((f) => ({ ...f, success: true }))}
+                      style={{ accentColor: "var(--green)" }}
+                    />
+                    Success
+                  </label>
+                  <label
+                    className="flex items-center gap-2 text-sm cursor-pointer"
+                    style={{ color: "var(--red)" }}
+                  >
+                    <input
+                      type="radio"
+                      name="success"
+                      checked={!attemptForm.success}
+                      onChange={() => setAttemptForm((f) => ({ ...f, success: false }))}
+                      style={{ accentColor: "var(--red)" }}
+                    />
+                    Failed
+                  </label>
+                </div>
+
+                <input
+                  required
+                  placeholder="Currency spent (e.g. 8 div)"
+                  value={attemptForm.currencySpent}
+                  onChange={(e) => setAttemptForm((f) => ({ ...f, currencySpent: e.target.value }))}
+                  className="field px-4 py-2.5"
+                />
+                <input
+                  placeholder="Notes (optional)"
+                  value={attemptForm.notes}
+                  onChange={(e) => setAttemptForm((f) => ({ ...f, notes: e.target.value }))}
+                  className="field px-4 py-2.5"
+                />
+
+                <div className="flex gap-3">
+                  <button
+                    type="submit"
+                    disabled={attemptSaving}
+                    className="btn-primary"
+                    style={{ padding: "0.6rem 1.75rem" }}
+                  >
+                    {attemptSaving ? "Saving…" : "Save Attempt"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAttemptCraftId(null)}
+                    className="btn-secondary"
+                    style={{ padding: "0.6rem 1.25rem" }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
-
-          {/* Expanded response */}
-          {expandedId === craft.id && (
-            <div className="px-5 py-5 animate-fade-in">
-              {expandLoading ? <LoadingSpinner /> : fullCraft && <MarkdownRenderer content={fullCraft.response} />}
-            </div>
-          )}
-
-          {/* Log attempt form */}
-          {attemptCraftId === craft.id && (
-            <form onSubmit={logAttempt} className="px-4 py-4 flex flex-col gap-3"
-              style={{ background: "var(--bg-subtle)" }}>
-              <p className="section-label">Log real-world attempt</p>
-              <div className="flex gap-5 items-center">
-                <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: "var(--green)" }}>
-                  <input type="radio" name="success" checked={attemptForm.success}
-                    onChange={() => setAttemptForm((f) => ({ ...f, success: true }))} />
-                  Success
-                </label>
-                <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: "var(--red)" }}>
-                  <input type="radio" name="success" checked={!attemptForm.success}
-                    onChange={() => setAttemptForm((f) => ({ ...f, success: false }))} />
-                  Failed
-                </label>
-              </div>
-              <input required placeholder="Currency spent (e.g. 8 div)"
-                value={attemptForm.currencySpent}
-                onChange={(e) => setAttemptForm((f) => ({ ...f, currencySpent: e.target.value }))}
-                className="field px-3 py-2" />
-              <input placeholder="Notes (optional)"
-                value={attemptForm.notes}
-                onChange={(e) => setAttemptForm((f) => ({ ...f, notes: e.target.value }))}
-                className="field px-3 py-2" />
-              <div className="flex gap-2">
-                <button type="submit" disabled={attemptSaving} className="btn-primary px-5 py-2">
-                  {attemptSaving ? "Saving…" : "Save attempt"}
-                </button>
-                <button type="button" onClick={() => setAttemptCraftId(null)} className="btn-secondary px-4 py-2">
-                  Cancel
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

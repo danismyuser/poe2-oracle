@@ -10,10 +10,10 @@ interface AffixSlot { name: string; tier: string; }
 const EMPTY_SLOT = (): AffixSlot => ({ name: "", tier: "" });
 
 const BUDGETS = [
-  { value: "league-start", label: "League Start", colour: "text-zinc-400" },
-  { value: "mid", label: "Mid-tier", colour: "text-blue-400" },
-  { value: "high", label: "High-end / BIS", colour: "text-amber-400" },
-  { value: "mirror", label: "Mirror tier", colour: "text-fuchsia-400" },
+  { value: "league-start", label: "League Start", activeClass: "active-league" },
+  { value: "mid",          label: "Mid-tier",     activeClass: "active-mid" },
+  { value: "high",         label: "High-end",     activeClass: "active-high" },
+  { value: "mirror",       label: "Mirror",       activeClass: "active-mirror" },
 ];
 
 export default function SimulateTab() {
@@ -49,7 +49,6 @@ export default function SimulateTab() {
     setError("");
     setResponse("");
     setLoading(true);
-
     const res = await fetch("/api/simulate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -66,66 +65,107 @@ export default function SimulateTab() {
     });
     const data = await res.json();
     setLoading(false);
-
     if (!res.ok) { setError(data.error ?? "Something went wrong"); return; }
     setResponse(data.response);
   }
 
   return (
     <div className="flex flex-col gap-6">
-      <form onSubmit={generate} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left — config */}
-        <div className="flex flex-col gap-4">
-          {/* Class + Base + iLvl */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-zinc-500">Item class</label>
-              <select
-                value={itemClass}
-                onChange={(e) => changeClass(e.target.value as ItemClass)}
-                className="bg-zinc-800 border border-zinc-700 rounded px-2 py-1.5 text-sm focus:outline-none focus:border-amber-500"
-              >
-                {ITEM_CLASSES.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-zinc-500">Base</label>
-              <select
-                value={base}
-                onChange={(e) => setBase(e.target.value)}
-                className="bg-zinc-800 border border-zinc-700 rounded px-2 py-1.5 text-sm focus:outline-none focus:border-amber-500"
-              >
-                {BASES[itemClass].map((b) => <option key={b} value={b}>{b}</option>)}
-              </select>
-            </div>
-          </div>
+      <form onSubmit={generate} className="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
-          <div className="flex flex-col gap-1">
-            <label className="text-xs text-zinc-500">Item level: {ilvl}</label>
-            <input
-              type="range" min={1} max={100} value={ilvl}
-              onChange={(e) => setIlvl(Number(e.target.value))}
-              className="accent-amber-500"
-            />
-            <div className="flex justify-between text-xs text-zinc-600">
-              <span>1</span><span>50</span><span>100</span>
+        {/* ── Left — configuration ───────────────────────────────────────── */}
+        <div className="flex flex-col gap-5">
+
+          {/* Item class + base */}
+          <div className="card p-5 flex flex-col gap-4">
+            <p
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "0.78rem",
+                fontWeight: 800,
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "var(--text-tertiary)",
+              }}
+            >
+              Item Setup
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <label className="field-label">Item Class</label>
+                <select
+                  value={itemClass}
+                  onChange={(e) => changeClass(e.target.value as ItemClass)}
+                  className="select-field"
+                >
+                  {ITEM_CLASSES.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="field-label">Base</label>
+                <select
+                  value={base}
+                  onChange={(e) => setBase(e.target.value)}
+                  className="select-field"
+                >
+                  {BASES[itemClass].map((b) => <option key={b} value={b}>{b}</option>)}
+                </select>
+              </div>
+            </div>
+
+            {/* Item level slider */}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <label className="field-label" style={{ margin: 0 }}>Item Level</label>
+                <span
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.9rem",
+                    fontWeight: 700,
+                    color: ilvl >= 82 ? "var(--gold)" : ilvl >= 68 ? "var(--blue-light)" : "var(--text-secondary)",
+                  }}
+                >
+                  {ilvl}
+                  {ilvl >= 82 && <span style={{ fontSize: "0.7rem", marginLeft: 4, color: "var(--text-gold)" }}>T1</span>}
+                </span>
+              </div>
+              <input
+                type="range"
+                min={1}
+                max={100}
+                value={ilvl}
+                onChange={(e) => setIlvl(Number(e.target.value))}
+                style={{ accentColor: "var(--blue-bright)", width: "100%", cursor: "pointer" }}
+              />
+              <div className="flex justify-between" style={{ fontSize: "0.72rem", color: "var(--text-tertiary)" }}>
+                <span>1</span>
+                <span style={{ color: ilvl >= 68 ? "var(--blue-light)" : "var(--text-tertiary)" }}>68 (T2+)</span>
+                <span style={{ color: ilvl >= 82 ? "var(--gold)" : "var(--text-tertiary)" }}>82+ (T1)</span>
+              </div>
             </div>
           </div>
 
           {/* Budget */}
-          <div className="flex flex-col gap-1">
-            <label className="text-xs text-zinc-500">Budget</label>
+          <div className="card p-5 flex flex-col gap-3">
+            <p
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "0.78rem",
+                fontWeight: 800,
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "var(--text-tertiary)",
+              }}
+            >
+              Budget
+            </p>
             <div className="flex gap-2 flex-wrap">
               {BUDGETS.map((b) => (
                 <button
                   key={b.value}
                   type="button"
                   onClick={() => setBudget(b.value)}
-                  className={`px-3 py-1.5 rounded text-xs font-medium border transition-colors ${
-                    budget === b.value
-                      ? `border-amber-500 bg-amber-500/10 ${b.colour}`
-                      : "border-zinc-700 text-zinc-500 hover:border-zinc-500"
-                  }`}
+                  className={`budget-pill ${budget === b.value ? b.activeClass : ""}`}
                 >
                   {b.label}
                 </button>
@@ -134,55 +174,99 @@ export default function SimulateTab() {
           </div>
 
           {/* Affixes */}
-          <div className="flex flex-col gap-2">
-            <label className="text-xs text-zinc-500 font-medium">Prefixes</label>
-            {prefixes.map((p, i) => (
-              <AffixSelector
-                key={i}
-                label={`Pre ${i + 1}`}
-                slot={p}
-                affixPool={pool.prefixes}
-                onChange={(slot) => updatePrefix(i, slot)}
-              />
-            ))}
-          </div>
+          <div className="card p-5 flex flex-col gap-4">
+            <p
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "0.78rem",
+                fontWeight: 800,
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "var(--text-tertiary)",
+              }}
+            >
+              Target Affixes
+            </p>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-xs text-zinc-500 font-medium">Suffixes</label>
-            {suffixes.map((s, i) => (
-              <AffixSelector
-                key={i}
-                label={`Suf ${i + 1}`}
-                slot={s}
-                affixPool={pool.suffixes}
-                onChange={(slot) => updateSuffix(i, slot)}
-              />
-            ))}
+            <div className="flex flex-col gap-2">
+              <p style={{ fontSize: "0.72rem", color: "var(--blue-light)", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                Prefixes
+              </p>
+              {prefixes.map((p, i) => (
+                <AffixSelector
+                  key={i}
+                  label={`Pre ${i + 1}`}
+                  slot={p}
+                  affixPool={pool.prefixes}
+                  onChange={(slot) => updatePrefix(i, slot)}
+                />
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-2" style={{ borderTop: "1px solid var(--border-light)", paddingTop: "1rem" }}>
+              <p style={{ fontSize: "0.72rem", color: "var(--gold)", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                Suffixes
+              </p>
+              {suffixes.map((s, i) => (
+                <AffixSelector
+                  key={i}
+                  label={`Suf ${i + 1}`}
+                  slot={s}
+                  affixPool={pool.suffixes}
+                  onChange={(slot) => updateSuffix(i, slot)}
+                />
+              ))}
+            </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-black font-semibold py-2.5 rounded-lg text-sm mt-1 transition-colors"
+            className="btn-primary"
+            style={{ padding: "0.85rem", fontSize: "0.95rem" }}
           >
-            {loading ? "Generating guide…" : "Generate crafting guide"}
+            {loading ? "Generating guide…" : "⚙ Generate Crafting Guide"}
           </button>
         </div>
 
-        {/* Right — item preview */}
-        <div className="flex flex-col gap-3">
-          <label className="text-xs text-zinc-500">Item preview</label>
-          <ItemPreview
-            itemClass={itemClass}
-            base={base}
-            ilvl={ilvl}
-            budget={budget}
-            prefixes={prefixes}
-            suffixes={suffixes}
-          />
-          <div className="bg-zinc-800/30 border border-zinc-800 rounded-lg p-3 text-xs text-zinc-600 leading-relaxed">
-            <p className="text-zinc-500 font-medium mb-1">Tips</p>
-            <ul className="space-y-1 list-disc list-inside">
+        {/* ── Right — item preview ───────────────────────────────────────── */}
+        <div className="flex flex-col gap-4">
+          <div className="card p-5 flex flex-col gap-3">
+            <p
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "0.78rem",
+                fontWeight: 800,
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "var(--text-tertiary)",
+              }}
+            >
+              Item Preview
+            </p>
+            <ItemPreview
+              itemClass={itemClass}
+              base={base}
+              ilvl={ilvl}
+              budget={budget}
+              prefixes={prefixes}
+              suffixes={suffixes}
+            />
+          </div>
+
+          {/* Tips */}
+          <div
+            style={{
+              background: "var(--blue-bg)",
+              border: "1px solid var(--border-blue)",
+              borderRadius: 10,
+              padding: "1rem 1.25rem",
+            }}
+          >
+            <p style={{ fontSize: "0.78rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-blue)", marginBottom: "0.6rem" }}>
+              Tips
+            </p>
+            <ul style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.7, listStyle: "disc", paddingLeft: "1.2rem" }}>
               <li>Leave affixes blank to let the Oracle suggest the best ones</li>
               <li>iLvl 82+ unlocks T1 mods on most item types</li>
               <li>Budget affects which routes the Oracle recommends</li>
@@ -191,11 +275,30 @@ export default function SimulateTab() {
         </div>
       </form>
 
-      {error && <p className="text-red-400 text-sm">{error}</p>}
+      {/* ── Error ──────────────────────────────────────────────────────────── */}
+      {error && (
+        <div
+          style={{
+            background: "var(--red-bg)",
+            border: "1px solid rgba(239,68,68,0.3)",
+            borderRadius: 8,
+            padding: "0.85rem 1.1rem",
+            color: "var(--red)",
+            fontSize: "0.9rem",
+          }}
+        >
+          {error}
+        </div>
+      )}
+
       {loading && <LoadingSpinner />}
 
+      {/* ── Response ────────────────────────────────────────────────────────── */}
       {response && !loading && (
-        <div className="bg-zinc-800/40 border border-zinc-700 rounded-xl p-5">
+        <div
+          className="animate-fade-in card p-7"
+          style={{ borderColor: "var(--border-blue)" }}
+        >
           <MarkdownRenderer content={response} />
         </div>
       )}
