@@ -2,8 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-const ART_IMG = "https://cdn.cloudflare.steamstatic.com/steam/apps/2694490/library_600x900.jpg";
+import OracleLogo from "@/components/OracleLogo";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -29,94 +28,99 @@ export default function SignupPage() {
   }
 
   return (
-    <main className="flex-1 flex" style={{ minHeight: "calc(100vh - 60px)" }}>
+    <main className="flex-1 flex" style={{ minHeight: "calc(100vh - 52px)" }}>
 
-      {/* ── Left art panel ─────────────────────────────────────────────────── */}
+      {/* ── Left — brand panel ─────────────────────────────────────────────── */}
       <div
         className="hidden lg:flex"
         style={{
           width: "42%",
           flexShrink: 0,
+          background: "var(--bg-subtle)",
+          borderRight: "1px solid var(--border-light)",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
           position: "relative",
           overflow: "hidden",
+          padding: "3rem",
         }}
       >
+        {/* Dot grid */}
         <div style={{
           position: "absolute", inset: 0,
-          backgroundImage: `url(${ART_IMG})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center top",
-          filter: "brightness(0.45) saturate(0.8)",
+          backgroundImage: "radial-gradient(circle, rgba(56,139,253,0.12) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+          opacity: 0.6,
+          pointerEvents: "none",
         }} />
+        {/* Center glow */}
         <div style={{
-          position: "absolute", inset: 0,
-          background: "linear-gradient(to right, rgba(5,8,16,0) 0%, rgba(5,8,16,0.95) 100%)",
+          position: "absolute",
+          top: "50%", left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "60%", paddingBottom: "60%",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(29,111,235,0.09) 0%, transparent 70%)",
+          pointerEvents: "none",
         }} />
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "radial-gradient(ellipse 80% 60% at 30% 70%, rgba(37,99,235,0.18) 0%, transparent 100%)",
-        }} />
-        {/* Brand */}
-        <div style={{ position: "absolute", bottom: 40, left: 40, zIndex: 2 }}>
-          <div className="flex items-center gap-3 mb-4">
-            <span style={{ color: "var(--blue-bright)", fontSize: "1.5rem", textShadow: "0 0 20px var(--blue-glow)" }}>◈</span>
-            <span style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "1.2rem",
-              fontWeight: 800,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "var(--text-primary)",
-            }}>
-              POE2 Oracle
-            </span>
-          </div>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", maxWidth: 260, lineHeight: 1.6 }}>
-            Join thousands of exiles crafting smarter with patch-accurate Oracle guidance.
-          </p>
+        {/* Corner brackets */}
+        {[
+          { top: 20, left: 20, borderTop: "1px solid", borderLeft: "1px solid", width: 28, height: 28 },
+          { top: 20, right: 20, borderTop: "1px solid", borderRight: "1px solid", width: 28, height: 28 },
+          { bottom: 20, left: 20, borderBottom: "1px solid", borderLeft: "1px solid", width: 28, height: 28 },
+          { bottom: 20, right: 20, borderBottom: "1px solid", borderRight: "1px solid", width: 28, height: 28 },
+        ].map((s, i) => <div key={i} style={{ position: "absolute", borderColor: "rgba(56,139,253,0.22)", ...s }} />)}
+
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <OracleLogo scale={0.85} tagline />
         </div>
+
+        <p style={{
+          position: "absolute", bottom: 28,
+          fontFamily: "var(--font-display)",
+          fontSize: "0.6rem",
+          fontWeight: 700,
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          color: "var(--text-tertiary)",
+          opacity: 0.5,
+        }}>
+          Join thousands of exiles crafting smarter
+        </p>
       </div>
 
-      {/* ── Right form panel ───────────────────────────────────────────────── */}
+      {/* ── Right — form ───────────────────────────────────────────────────── */}
       <div
         className="flex-1 flex items-center justify-center px-6 py-14"
         style={{ background: "var(--bg-base)" }}
       >
         <div className="w-full max-w-md animate-fade-up">
-
-          {/* Header */}
           <div className="mb-8">
-            <p
-              className="section-label mb-3"
-              style={{ color: "var(--blue-bright)" }}
-            >
+            <p className="section-label mb-3" style={{ color: "var(--blue-bright)" }}>
               ◈ &nbsp;Oracle Chamber
             </p>
             <h1
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "2.5rem",
-                fontWeight: 800,
+                fontSize: "2.8rem",
+                fontWeight: 700,
                 letterSpacing: "0.04em",
                 textTransform: "uppercase",
                 color: "var(--text-primary)",
-                lineHeight: 1.1,
+                lineHeight: 1.0,
                 marginBottom: "0.5rem",
               }}
             >
               Get Started Free
             </h1>
-            <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>
+            <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>
               No credit card required. Start crafting in seconds.
             </p>
           </div>
 
-          {/* Form */}
-          <div
-            className="card p-8 flex flex-col gap-5"
-            style={{ borderColor: "var(--border-blue)" }}
-          >
-            <form onSubmit={submit} className="flex flex-col gap-5">
+          <div className="card p-8" style={{ borderColor: "var(--border-blue)", display: "flex", flexDirection: "column", gap: 20 }}>
+            <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
               <div>
                 <label className="field-label">Email Address</label>
                 <input
@@ -128,7 +132,6 @@ export default function SignupPage() {
                   className="field px-4 py-3"
                 />
               </div>
-
               <div>
                 <label className="field-label">Password</label>
                 <input
@@ -143,37 +146,19 @@ export default function SignupPage() {
               </div>
 
               {error && (
-                <div
-                  style={{
-                    background: "var(--red-bg)",
-                    border: "1px solid rgba(239,68,68,0.3)",
-                    borderRadius: 7,
-                    padding: "0.7rem 1rem",
-                    color: "var(--red)",
-                    fontSize: "0.88rem",
-                  }}
-                >
+                <div style={{ background: "var(--red-bg)", border: "1px solid rgba(244,112,103,0.3)", borderRadius: 5, padding: "0.7rem 1rem", color: "var(--red)", fontSize: "0.88rem" }}>
                   {error}
                 </div>
               )}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="btn-primary w-full"
-                style={{ padding: "0.85rem", fontSize: "0.95rem", marginTop: "0.25rem" }}
-              >
+              <button type="submit" disabled={loading} className="btn-primary w-full" style={{ padding: "0.85rem", fontSize: "0.95rem" }}>
                 {loading ? "Creating account…" : "Create Account"}
               </button>
             </form>
 
             <div className="divider">already have an account</div>
 
-            <Link
-              href="/login"
-              className="btn-secondary w-full"
-              style={{ padding: "0.75rem", textAlign: "center" }}
-            >
+            <Link href="/login" className="btn-secondary w-full" style={{ padding: "0.75rem", textAlign: "center" }}>
               Log In
             </Link>
           </div>

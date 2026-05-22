@@ -387,6 +387,10 @@ body {
   from { opacity: 0; transform: translateX(30px); }
   to   { opacity: 1; transform: translateX(0); }
 }
+@keyframes glow-pulse {
+  0%, 100% { text-shadow: 0 0 20px var(--blue-glow), 0 0 40px rgba(29,111,235,0.2); }
+  50%       { text-shadow: 0 0 35px var(--blue-glow), 0 0 70px rgba(29,111,235,0.35); }
+}
 
 .animate-fade-up   { animation: fadeUp  0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .animate-fade-in   { animation: fadeIn  0.3s ease both; }
