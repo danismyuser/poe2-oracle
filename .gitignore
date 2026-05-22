@@ -46,3 +46,10 @@ next-env.d.ts
 
 # Superpowers brainstorming session files (local only)
 .superpowers/
+
+# Local Claude Code tooling config
+.claude/
+
+# Dev server log captures
+dev-server.log
+*.log

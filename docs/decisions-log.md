@@ -137,6 +137,22 @@ These need answers before the relevant phase of `docs/build-plan.md` can complet
 
 ---
 
+## 2026-05-22 — Phase 8 Oracle validation: three system-prompt patches
+
+**Decision:** After running the 5 canonical Phase-8 validation prompts against the live Oracle, three failure patterns were identified and patched in `docs/instructions.md` section 12:
+
+1. **No fabricated live fetches** — the Oracle hallucinated `"Source: trade2, fetched May 21 2025"` on the currency-price test (T5). Until tool-use is wired up (v1.1), the Oracle must say "cached training knowledge" and redirect users to the source. New hard rule added.
+2. **Three budget variants are mandatory, no exceptions** — the Oracle skipped league-start and high-end on the amulet test (T3) and offered to "provide them on request." Section 7 was clear but the Oracle re-interpreted it conversationally. New hard rule reinforces "every single time, in full, in the same response."
+3. **PoE1 contamination patrol extended** — T1 leaked the PoE1 league name "Settlers of Kalguur"; T4 referenced PoE1 "socketed gems" terminology. The PoE1-currency rule already existed; the new rule extends it to league names and system terminology.
+
+**Rationale:** Per the heartbeat-first principle, the system prompt is the source of truth — failures in Oracle behaviour are fixed in `instructions.md`, not in code. The validation script (`scripts/validate-oracle.mjs`) can be re-run after each patch to confirm the regressions are resolved.
+
+**Implication:** Re-run validation before any production deploy. The fabricated-fetch failure (T5) is the highest-priority — it's directly product-corrosive in a way users will catch the first time they verify a claim.
+
+**Supersedes:** None — this is a refinement of section 12's existing PoE2-only rules, not a strategic change.
+
+---
+
 ## Template for future entries
 
 ```
