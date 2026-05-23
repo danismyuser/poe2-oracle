@@ -1,8 +1,8 @@
 # Oracle Validation Report
 
-**Run:** 2026-05-22T21:04:00.357Z
+**Run:** 2026-05-23T11:55:55.477Z
 **Model:** claude-sonnet-4-5
-**Prompts:** 5
+**Prompts:** 6
 
 ## How to use this report
 
@@ -14,7 +14,7 @@ For each test below, read the Oracle's response and tick the rubric checkboxes t
 
 **Prompt:** How do I craft a high physical damage bow on a mid-tier budget? What essences should I use?
 
-**Latency:** 81969ms · **Response length:** 10883 chars
+**Latency:** 52354ms · **Response length:** 6850 chars
 
 ### Rubric (tick after reading the response)
 
@@ -33,174 +33,120 @@ For each test below, read the Oracle's response and tick the rubric checkboxes t
 
 ## Target Affixes
 
-For maximum physical damage output, you want:
+**Prefixes (damage):**
+- **#% increased Physical Damage** (T1: 175–200% at ilvl 82)
+- **Adds # to # Physical Damage** (T1: 50–58 at ilvl 82)
+- **#% increased Attack Speed** (T1: 27–30% at ilvl 82)
 
-**Prefixes:**
-- `#% increased Physical Damage` (T1: 175-200%)
-- `Adds # to # Physical Damage` (T1: 25-38 flat)
-- `#% increased Attack Speed` (T1: 16-20%)
-
-**Suffixes:**
-- `+#% to Critical Damage Bonus` (T1: 38-42%)
-- `+# to Dexterity` (T2: 43-50) — helps requirements and adds accuracy
-- `+# to Accuracy Rating` (T2: 501-650) or `#% increased Critical Hit Chance` (T2: 31-40%)
-
-## Route Comparison
-
-### Route 1: Greater Essence of Abrasion + Omen-Protected Chaos ⭐ RECOMMENDED
-**Method:**
-1. Acquire white Crude Bow base (iLvl 82+)
-2. Apply **Greater Essence of Abrasion** → guarantees T1 flat physical damage prefix
-3. Check the other 5 mods. If suffixes are salvageable (crit multi present), use **Omen of Dextral Erasure** to protect prefixes
-4. Apply **Greater Chaos Orb** to reroll suffixes only (Erasure protects your Abrasion prefix)
-5. Repeat step 3-4 until you hit crit multi + useful second suffix
-6. If prefix slots open, use **Omen of Dextral Exaltation** + **Greater Exalted Orb** to add % phys damage deterministically
-7. Finish remaining slots with crafted bench or accept as-is
-
-**Cost:** 8-15 Divine Orbs  
-**Determinism:** Semi-deterministic — Essence guarantees one prefix, Omens let you protect/target slots  
-**Best used when:** You want the highest chance at T1 flat physical with controlled rerolling  
-**Failure modes:** Low-tier % phys or attack speed on initial Essence slam. Recover by protecting the flat phys with Erasure and Greater Chaos spamming the other prefixes. You can also annul bad prefixes (risky) or accept T2 % phys as "good enough" for mid-tier.
-
-### Route 2: Greater Chaos Spam (Pure RNG)
-**Method:**
-1. Acquire white base (iLvl 82+)
-2. Apply **Greater Alchemy Orb** to create rare
-3. Spam **Greater Chaos Orbs** until all three target prefixes hit acceptable tiers
-4. Once prefixes locked in via luck, use Omen of Sinistral Erasure + Greater Chaos to fix suffixes
-
-**Cost:** 10-25 Divine Orbs (high variance)  
-**Determinism:** RNG-heavy  
-**Best used when:** Essences are expensive in your league OR you're comfortable with higher variance  
-**Failure modes:** Can burn 30+ Greater Chaos without hitting the trifecta. No recovery except keep rolling or scrap and start over.
-
-### Route 3: Perfect Orb Farming (High Determinism, Slow)
-**Method:**
-1. Start with white base
-2. Apply **Perfect Transmutation Orb** → guarantees T1-T3 prefix
-3. Apply **Perfect Augmentation Orb** → adds second mod at T1-T3
-4. If both prefixes hit acceptable tiers, **Perfect Regal Orb** to rare (adds third mod T1-T3)
-5. Evaluate. If 2/3 prefixes are phys damage or attack speed, proceed to Essence or Exalt the remaining slots
-6. Finish suffixes with Greater Chaos + Omen of Dextral Erasure
-
-**Cost:** 12-20 Divine Orbs (Perfect orbs are expensive)  
-**Determinism:** Deterministic tier floors  
-**Best used when:** You farm Perfect orbs yourself or they're cheap in league; guarantees no T5-T6 garbage  
-**Failure modes:** Still requires hitting the right *types* of mods, not just high tiers. Can waste Perfect orbs rolling ES% or elemental damage. Recovery: accept the Perfect orbs as sunk cost and chaos-spam over it.
+**Suffixes (utility):**
+- **+#% to Critical Damage Bonus** (T1: 38–42% at ilvl 76)
+- **+# to Dexterity** (T2: 43–50 at ilvl 55)
+- **+# to Accuracy Rating** (T2: 351–500 at ilvl 44)
 
 ---
 
-## Recommended Route: Essence of Abrasion + Omen Combo
+## Recommended Route: Essence of Abrasion + Omen-Protected Chaos
 
-For mid-tier budget, **Route 1** gives the best cost-to-determinism ratio. You lock in T1 flat physical immediately (the hardest prefix to hit randomly) and use Omens to reroll around it safely.
+**Method:** Essence slam → Omen-protected Greater Chaos rerolls → finish with Greater Exalted
+
+### Step-by-Step
+
+1. **Acquire ilvl 82+ bow base** — use **Composite Bow** (best phys DPS base) or **Recurve Bow** (cheaper, still strong). Buy white from trade or farm in high-tier maps.
+
+2. **Apply Greater Essence of Abrasion** to guarantee **Adds # to # Physical Damage** (T1 equivalent). This turns the white base into a rare with one locked prefix and 2–5 random affixes.
+
+3. **Evaluate the result:**
+   - If you hit **#% increased Physical Damage** (any tier) alongside the flat phys → move to step 4.
+   - If not → use **Omen of Dextral Erasure** (protects prefixes) + **Greater Chaos Orb** to reroll suffixes while keeping the flat phys. Repeat until you hit %phys or decide to pivot.
+
+4. **Lock in #% increased Physical Damage** — if it landed at T2/T3, use **Omen of Dextral Erasure** + **Greater Chaos Orb** again to attempt upgrading it to T1 while keeping the flat phys locked. Budget 5–10 attempts.
+
+5. **Add Attack Speed** — once you have flat phys + %phys, use **Omen of Dextral Exaltation** (forces the next exalt to add a prefix) + **Greater Exalted Orb**. Attack speed is weighted heavily in the bow prefix pool, so you have ~60% chance to hit it.
+
+6. **Finish suffixes** — use **Greater Exalted Orb** (no omen) to fill empty suffix slots. Aim for crit damage bonus, dexterity, and accuracy. If you brick a suffix (e.g. hit a resistance when you wanted damage), use **Omen of Crystallisation** to preview and abort before committing currency.
+
+7. **Optional: Defiled mod** — if you have 20+ div remaining, apply **Ancient Jawbone** for a 4th prefix. Choose the outcome at the Well of Souls in Act 2. Target outcomes: **#% chance to deal Double Damage** or **Culling Strike**.
+
+### Estimated Cost
+
+- **Essence of Abrasion (Greater):** 0.3–0.5 div each; budget 3–5 = **1.5–2.5 div**
+- **Omen of Dextral Erasure:** 0.8 div each; budget 5 = **4 div**
+- **Greater Chaos Orbs:** 0.3 div each; budget 10 = **3 div**
+- **Omen of Dextral Exaltation:** 1.2 div
+- **Greater Exalted Orbs:** 1.5 div each; budget 3 = **4.5 div**
+- **Base (ilvl 82 Composite Bow):** 0.5 div
+- **Omen of Crystallisation (safety net):** 2 div × 2 = **4 div**
+
+**Total mid-tier budget: 20–25 Divine Orbs**
+
+### Determinism Rating
+
+**Semi-deterministic.** The Essence guarantees flat phys, and the Dextral Erasure omens protect it while you roll for %phys. Attack speed has good odds via Dextral Exaltation. The main RNG is upgrading %phys from T2 → T1, which may take 10+ attempts.
+
+### Best Used When
+
+- You have 15–25 div to spend and want a finished bow in one crafting session.
+- You value consistency over lottery-ticket gambling (contrast with pure chaos spam, which is cheaper but can take 100+ attempts).
+
+### Failure Modes
+
+- **Hit %phys at T3, can't upgrade to T1** — accept T2/T3 for now; upgrade later with more currency.
+- **Brick attack speed slot with a resist** — use Omen of Crystallisation on the next exalt to preview; if the preview is bad, abort and annul the bricked suffix with an Orb of Annulment (1 div).
+- **Run out of currency before filling 6 affixes** — stop at 4–5 affixes; the bow is still usable. Add the last affix later.
 
 ---
 
 ## Budget Variants
 
-### League Start (1-5 div)
-**Target affixes:**
-- % Phys Damage (T2-T3: 135-174%)
-- Flat Phys (T2: 19-24)
-- Attack Speed (T2-T3: 11-15%)
-- Crit Multi (T2: 28-37%)
-- Dex (any tier)
+### League Start (1–5 div)
 
-**Method:** Skip Essences entirely. Apply Greater Alchemy + Greater Chaos spam until you hit 2/3 target prefixes at T2+. Accept T3 rolls. Do NOT use Omens (too expensive). Cost: 2-4 div.
+**Target:** 2 damage prefixes + 1 utility suffix
 
-### Mid-Tier (8-15 div) ⭐ CURRENT FOCUS
-**Target affixes:** As listed at top (T1 flat phys, T1-T2 % phys and attack speed, T1 crit multi)  
-**Method:** Greater Essence of Abrasion + Omen of Dextral Erasure + Greater Chaos rerolls. Finish with Dextral Exaltation if needed.  
-Cost: 8-15 div.
+1. Buy ilvl 70+ bow base (0.1 div)
+2. Apply **Lesser Essence of Abrasion** (0.05 div) for guaranteed flat phys
+3. Use **Chaos Orbs** (not Greater) until you hit **#% increased Physical Damage** at any tier (budget 20 orbs = 0.4 div)
+4. Stop at 3 affixes. Use the bow as-is or sell and upgrade.
 
-### High-End / BIS (25-40 div)
-**Target affixes:** All T1 on every slot. Add **Ancient Jawbone** Defiled prefix (options like "Gain #% of Physical Damage as Extra Fire" or "Projectiles Pierce 2 Additional Targets").  
-**Method:** Start with Route 1. Once you hit perfect prefixes and suffixes, apply **Hinekora's Lock** before using the Ancient Jawbone to preview the three Defiled options. Choose the best. Optionally corrupt with Vaal Orb for implicit (risky but mirror-tier when it hits).  
-Cost: 25-40 div (Lock alone is 8-12 div).
+**Total: 1–2 div**
+
+### High-End (30–50 div)
+
+**Goal:** All T1 prefixes + Defiled mod + T1 crit multi suffix
+
+1. Use **Perfect Essence of Abrasion** (2 div each) instead of Greater to guarantee T1 flat phys (budget 5 essences = 10 div)
+2. Use **Perfect Chaos Orbs** (1.5 div each) with Dextral Erasure to force T1 %phys (budget 10 = 15 div)
+3. Add attack speed with **Perfect Exalted Orb** (5 div) + Dextral Exaltation
+4. Apply **Ancient Jawbone** (8 div) for Defiled mod; choose **#% chance to deal Double Damage** at the Well of Souls
+5. Finish suffixes with Perfect Exalts (budget 10 div)
+
+**Total: 45–55 div**
 
 ---
 
 ## Why Essence of Abrasion?
 
-**Essence of Abrasion** guarantees the `Adds # to # Physical Damage` prefix, which is the *hardest* of the three physical prefixes to hit randomly:
-- % Phys Damage has higher weighting on bows (easier to chaos into)
-- Attack Speed is a common prefix
-- Flat physical damage has lower weight AND competes with elemental flat damage mods in the prefix pool
+**Essence of Abrasion** guarantees **Adds # to # Physical Damage**, which is the single highest-impact mod for bow physical DPS. Without it, you're chaos-spamming with ~5% chance to hit flat phys each roll. The essence turns a 1-in-20 gamble into a certainty, letting you focus currency on the %phys roll instead.
 
-By Essencing the flat phys, you remove the worst RNG bottleneck from the craft. The other two prefixes are then easier to fill via Omen-protected Chaos spam or deterministic Exalts.
-
-**Alternatives:**  
-- **Essence of Haste** (guarantees attack speed) — worse choice because attack speed is already easier to hit naturally
-- **Essence of Battle** (guarantees % phys *to attack skills* hybrid) — PoE2 has distinct "attack skills" vs weapon damage mods; the hybrid is weaker than pure % phys weapon damage for this craft
-
-Stick with **Abrasion**.
+**Alternative essences to avoid:**
+- **Essence of Battle** (guarantees +# to Level of Socketed Attack Skills) — useful for spell bows, not phys bows.
+- **Essence of Haste** (guarantees attack speed) — attack speed is a secondary mod; you need flat phys first.
 
 ---
 
-## Essential Crafting Materials (Mid-Tier)
+## Recommended First Move
 
-| Currency | Quantity Needed | Purpose | Current Price (temp league, May 2026 est.) |
-|----------|----------------|---------|---------------------------------------------|
-| Greater Essence of Abrasion | 1-2 | Guarantee flat phys prefix | ~2 div each |
-| Omen of Dextral Erasure | 2-4 | Protect prefixes during suffix rerolls | ~1.5 div each |
-| Greater Chaos Orb | 10-20 | Reroll suffixes or bad prefixes | ~0.3 div each |
-| Omen of Dextral Exaltation | 1-2 | Force prefix exalt to fill % phys or attack speed | ~2 div each |
-| Greater Exalted Orb | 1-2 | Add the forced prefix | ~1.2 div each |
-| Crude Bow base (white, iLvl 82+) | 1 | Starting canvas | ~0.1 div |
-
-**Total estimated spend:** 8-15 div for a finished mid-tier bow with 2-3 T1/T2 affixes and usable suffixes.
+1. **Buy the base** — search trade for "ilvl 82 Composite Bow, white" (0.5 div).
+2. **Buy 3 Greater Essence of Abrasion** (1.5 div total).
+3. **Slam the first essence** and evaluate the result. If you hit %phys alongside the flat phys, you're ahead of curve — proceed to step 4 of the main route. If not, reroll with the remaining essences.
 
 ---
 
-## Step-by-Step Execution (Route 1)
-
-1. **Acquire base:** Buy or find white **Crude Bow** with iLvl 82+ (guarantees access to T1 mods). Verify it's white (no mods) — rares cannot be reset to white in PoE2.
-
-2. **Apply Greater Essence of Abrasion:** Right-click the Essence, left-click the bow. This creates a rare bow with 3 prefixes + 3 suffixes, one of which is guaranteed T1 flat physical damage.
-
-3. **Evaluate the slam:** Check the other 5 mods.
-   - **If you hit % phys damage or attack speed at T2+:** Great start. Proceed to suffix fixing.
-   - **If prefixes are bad (e.g., two elemental damage mods):** Use **Omen of Dextral Erasure**, then **Greater Chaos Orb**. The Omen protects all prefixes (including your Abrasion roll), and the Chaos rerolls only suffixes. Repeat until suffixes are salvageable or you hit better prefixes on a lucky reroll.
-
-4. **Fix suffixes:** Once prefixes are acceptable, protect them with **Omen of Dextral Erasure** and use **Greater Chaos Orb** to reroll suffixes. Target: Crit Multi + Dex or Accuracy. Stop when you hit two useful suffixes.
-
-5. **Fill empty prefix slots (if any):** If you have 1-2 open prefix slots, use **Omen of Dextral Exaltation** + **Greater Exalted Orb**. The Omen forces the Exalt to add a prefix (not suffix). Pray for % phys or attack speed. If you low-roll a bad prefix here (e.g., life gain on hit), you can annul it with **Orb of Annulment** (risky — 1/6 chance to remove your Essence mod), or accept the bow as-is.
-
-6. **Finishing touches:** If one suffix is open and you want to guarantee a specific mod (e.g., Dex), you can use **Omen of Sinistral Exaltation** + Greater Exalted to force a suffix add. Or craft it at the bench if available (crafted mods are lower tier but deterministic).
-
-7. **Done.** You now have a mid-tier physical bow with T1 flat phys, T1-T2 % phys or attack speed, and crit multi suffix. DPS should be competitive for red maps and early endgame bosses.
-
----
-
-## Simulation (Optional Validation)
-
-If you want to validate expected currency spend before committing, run **1,000 iterations** targeting:
-- Prefix pool: `Adds # to # Physical Damage` (locked by Essence), `#% increased Physical Damage` (T1-T2), `#% increased Attack Speed` (T1-T2)
-- Suffix pool: `+#% to Critical Damage Bonus` (T1-T2), `+# to Dexterity` (any), wildcard
-
-**Assumptions for simulation (using craftofexile.com/?game=poe2 weightings):**
-- Item: Crude Bow, iLvl 82
-- Method: Essence (Abrasion) + Chaos spam with Omen protection
-- Success condition: 3/3 target prefixes at stated tiers + crit multi suffix present
-
-**Expected results (from community data, not live simulation — validate yourself):**
-- **Success rate:** ~15-20% per Essence slam to hit all three target prefixes at T1-T2, then ~30% to hit crit multi on suffix rerolls
-- **Median attempts:** 5-8 Greater Chaos rerolls after the initial Essence slam
-- **Currency spend distribution:** 8 div (10th percentile), 12 div (median), 18 div (90th percentile)
-- **Max observed spend:** 25 div for very unlucky streaks
-
-Validate these numbers yourself at https://www.craftofexile.com/?game=poe2 before investing.
-
----
-
-*This guide reflects patch 0.4 crafting mechanics. Patch 0.5 ("Return of the Ancients," May 29 2026) introduces Runeforging, which may add new deterministic physical-damage crafting paths. If you're reading this after 0.5 launch, request a refresh to incorporate Runeforging routes.*
-
-*Sources consulted: craftofexile.com/?game=poe2 (mod weightings and pools), poe2db.tw/us/Bow (tier ranges), community essence-pricing data from temp league trade.*
+**Sources:** craftofexile.com/?game=poe2 (mod weightings), poe2db.tw (tier ranges). Advice is current as of **patch 0.4**. If you'd like me to refresh against the latest patch or verify live currency prices, let me know.
 
 ```recipe
 {
   "itemClass": "Bow",
-  "base": "Crude Bow",
+  "base": "Composite Bow",
   "ilvl": 82,
   "budget": "mid",
   "routeName": "Greater Essence of Abrasion + Omen-Protected Chaos",
@@ -210,14 +156,15 @@ Validate these numbers yourself at https://www.craftofexile.com/?game=poe2 befor
     "prefixes": [
       { "name": "#% increased Physical Damage", "tier": "T1" },
       { "name": "Adds # to # Physical Damage", "tier": "T1" },
-      { "name": "#% increased Attack Speed", "tier": "T2" }
+      { "name": "#% increased Attack Speed", "tier": "T1" }
     ],
     "suffixes": [
       { "name": "+#% to Critical Damage Bonus", "tier": "T1" },
-      { "name": "+# to Dexterity", "tier": "T2" }
+      { "name": "+# to Dexterity", "tier": "T2" },
+      { "name": "+# to Accuracy Rating", "tier": "T2" }
     ]
   },
-  "notes": "Use Omen of Dextral Erasure to protect prefixes while rerolling suffixes with Greater Chaos. Fill empty prefix slots with Dextral Exaltation + Greater Exalted."
+  "notes": "Use Omen of Dextral Erasure to protect flat phys while rerolling for %phys. Finish attack speed with Dextral Exaltation. Budget 5-10 Greater Chaos attempts to upgrade %phys from T2 to T1."
 }
 ```
 ```
@@ -228,7 +175,7 @@ Validate these numbers yourself at https://www.craftofexile.com/?game=poe2 befor
 
 **Prompt:** Best deterministic route to max ES on Sadist Garb.
 
-**Latency:** 65449ms · **Response length:** 8691 chars
+**Latency:** 52490ms · **Response length:** 7212 chars
 
 ### Rubric (tick after reading the response)
 
@@ -243,220 +190,159 @@ Validate these numbers yourself at https://www.craftofexile.com/?game=poe2 befor
 ### Response
 
 ```markdown
-# Maximum ES on Sadist Garb — Deterministic Route
+# Maximum ES on INT Body Armour — Deterministic Route
 
-**Current patch:** 0.4 "The Last of the Druids"
-
----
-
-## Target affixes
-
-**Prefixes (3):**
-- `#% increased Energy Shield` (T1: 175–200%)
-- `+# to maximum Energy Shield` (T1: 80–100)
-- `#% increased Energy Shield and Evasion Rating` (hybrid T1: 60–70%)
-
-**Suffixes (3):**
-- `+# to Intelligence` (T1: 51–55) — increases base ES via INT scaling
-- `#% to Fire Resistance` (T1: 43–48%)
-- `#% to Lightning Resistance` (T1: 43–48%)
-
-**Why these affixes:**
-- Sadist Garb is an INT/ES base with implicit ES — stacking % increased ES multiplies the base.
-- Hybrid ES/Evasion prefix adds another multiplier layer.
-- Flat ES adds to the base before % modifiers apply.
-- High INT directly increases ES (1 INT = 0.5% ES).
-- Dual resistances finish the defensive package.
+**Base correction:** "Sadist Garb" does not exist in PoE2. The INT body armour bases are **Tattered Robe**, **Silk Robe**, and **Imperial Robe**. For maximum ES, use **Imperial Robe** (highest base ES at 89–105).
 
 ---
 
-## Route comparison
+## Target Affixes (Max ES)
 
-### Route 1: Perfect Essence of Ruin → Omen-Protected Perfect Chaos (RECOMMENDED)
+### Prefixes (3/3)
+1. **+# to maximum Energy Shield** — T1: 125–141 ES (iLvl 82+)
+2. **#% increased Energy Shield** — T1: 125–141% (iLvl 82+)
+3. **+# to maximum Mana** — T1: 91–105 (iLvl 82+) — synergy with ES builds, but removable if you want a defensive utility suffix instead
 
-**Method:**
-1. **Acquire white iLvl 82+ Sadist Garb** (ensures all T1 mods are available).
-2. **Apply Perfect Essence of Ruin** — guarantees T1 flat ES prefix, fills 2 other random affixes (makes the item rare).
-3. **Evaluate prefixes:**
-   - If you hit both `% increased ES` and `hybrid ES/Evasion` → proceed to suffixes.
-   - If you hit only one → continue to step 4.
-4. **Apply Omen of Dextral Erasure** — protects all prefixes.
-5. **Apply Perfect Chaos Orb** — rerolls suffixes only, keeps all prefixes.
-6. **Repeat steps 4–5** until suffixes land on INT + dual resistances (or close enough).
-7. **(Optional) Fill empty affix slots** with Perfect Exalted Orb + Omen of Sinistral/Dextral Exaltation to force the missing prefix or suffix.
+### Suffixes (3/3)
+4. **+#% to Fire Resistance** — T1: 43–48% (iLvl 73+)
+5. **+#% to Cold Resistance** — T1: 43–48% (iLvl 73+)
+6. **+#% to Lightning Resistance** — T1: 43–48% (iLvl 73+)
 
-**Estimated cost:**
-- Perfect Essence of Ruin: ~2–3 div
-- Omen of Dextral Erasure: ~1–1.5 div per use
-- Perfect Chaos Orb: ~1.5–2 div per use
-- Expected iterations: 5–10 Erasure + Chaos cycles
-- **Total: 15–30 div** for high-end, 8–15 div for mid-tier (accepting T2 on one prefix)
-
-**Determinism rating:** Semi-deterministic. The Essence locks flat ES at T1; Erasure locks all prefixes while rerolling suffixes. RNG is constrained to suffix outcomes only.
-
-**Best used when:** You want guaranteed T1 flat ES and are willing to iterate on suffixes deterministically.
-
-**Failure modes:**
-- Bricking prefixes before applying Erasure → start over on a new base.
-- Running out of Erasure omens → fall back to naked Perfect Chaos (loses prefix protection).
+**Alternative suffix:** Replace one resistance with **+# to Intelligence** (T1: 49–55, iLvl 82+) if you need attribute fixing.
 
 ---
 
-### Route 2: Perfect Chaos spam with manual exalt finishing
+## Route Comparison
 
-**Method:**
-1. White iLvl 82+ Sadist Garb.
-2. **Spam Perfect Chaos Orb** until you hit 2–3 desired prefixes.
-3. **Lock prefixes with Omen of Dextral Erasure**, then **Perfect Chaos** until suffixes hit.
-4. **Exalt slam empty slots** with Omen of Sinistral/Dextral Exaltation for the final affix.
-
-**Estimated cost:**
-- Perfect Chaos Orb: ~1.5–2 div each
-- Expected attempts: 15–30 (statistically, hitting 3 specific prefixes is low-probability even with Perfect tier)
-- **Total: 25–60 div**
-
-**Determinism rating:** RNG-heavy on the initial prefix-hitting phase, semi-deterministic after that.
-
-**Best used when:** Essences are unavailable or you're hunting a very specific prefix trio where no Essence covers it.
-
-**Failure modes:**
-- Wasting dozens of Perfect Chaos before landing 3 good prefixes.
-- Hitting 5–6 affixes with only 1–2 good ones → hard to recover without Orb of Annulment (risky).
-
----
-
-### Route 3: Tiered Exalt slam from magic base
-
-**Method:**
-1. White Sadist Garb → **Perfect Transmutation Orb** (magic, 1–2 affixes).
-2. **Perfect Augmentation Orb** if only 1 affix (adds second affix).
-3. **Perfect Regal Orb** → rare, adds a third affix.
-4. **Perfect Exalted Orb** → adds fourth affix (use Omen of Dextral Exaltation to force prefix if needed).
-5. **Repeat** exalt slams with omens until 6 affixes filled.
-
-**Estimated cost:**
-- Perfect Transmute/Aug/Regal: ~0.5 div combined
-- Perfect Exalted Orb: ~3–5 div each
-- Expected: 3–4 exalts to fill 6 slots
-- **Total: 10–20 div**
-
-**Determinism rating:** Low. Every orb adds a random affix from the entire pool; omens narrow it to prefix/suffix but not to specific mods.
-
-**Best used when:** You're building up from scratch and willing to accept whatever T1/T2 mods land, not chasing exact affixes.
-
-**Failure modes:**
-- Landing 3–4 mediocre T1 mods that aren't the ones you wanted → no recovery path except reforging bench (rerolls everything).
-
----
-
-## Recommended route
-
-**Perfect Essence of Ruin → Omen-Protected Perfect Chaos** (Route 1).
-
-- **Locks flat ES at T1** immediately, the highest-priority prefix for max ES.
-- **Deterministic suffix rerolling** via Erasure omens keeps prefixes intact while you fish for INT + resistances.
-- **Best balance** of cost vs determinism for this craft.
-
----
-
-## Budget variants
-
-### League start (1–5 div)
-
-**Affixes (simplified):**
-- `#% increased Energy Shield` (T2–3: 120–150%)
-- `+# to maximum Energy Shield` (T2: 60–79) — use Lesser/Normal Essence of Ruin
-- `#% to Fire Resistance` (T2–3)
-- `#% to Lightning Resistance` (T2–3)
-- `+# to Intelligence` (T3–4: 30–40)
-- (Open slot or low-tier third prefix)
-
-**Route:** Normal Essence of Ruin + Greater Chaos Orb spam (no omens).
-
-**Cost:** 1–3 div
-
-**Why:** Accepts T2 flat ES and T2–3 % ES; skips hybrid prefix; uses Greater Chaos (cheaper than Perfect) without Erasure protection. Still nets 400+ ES with decent INT scaling.
-
----
-
-### Mid-tier (5–20 div)
-
-**Affixes:**
-- `#% increased Energy Shield` (T1: 175–200%)
-- `+# to maximum Energy Shield` (T1: 80–100) — Greater Essence of Ruin
-- `#% increased ES and Evasion` (T2: 50–59%)
-- `+# to Intelligence` (T1–2: 45–55)
-- `#% to Fire Resistance` (T1–2)
-- `#% to Lightning Resistance` (T1–2)
-
-**Route:** Greater Essence of Ruin + Omen of Dextral Erasure + Perfect Chaos spam.
-
-**Cost:** 8–15 div
-
-**Why:** Guarantees T1 flat ES, accepts T2 hybrid prefix, uses Erasure to protect prefixes while Perfect Chaos rerolls suffixes for T1–2 INT + resistances. 500–600 ES range, fully functional for endgame mapping.
-
----
-
-### High-end / BIS (20–50 div)
-
-**Affixes:** Full T1 prefix trio + T1 INT + dual T1 resistances (listed at top of response).
-
-**Route:** Perfect Essence of Ruin + Omen of Dextral Erasure + Perfect Chaos cycles (5–10 iterations).
-
+### Route 1: Essence of Ruin + Omen-Protected Chaos (RECOMMENDED)
+**Determinism:** Semi-deterministic  
 **Cost:** 15–30 div
 
-**Why:** All T1, 650–750+ ES depending on rolls and base quality. Erasure omens protect the prefix investment while you iterate suffixes to perfect.
+#### Steps
+1. Start with **white Imperial Robe, iLvl 82+**.
+2. Apply **Greater Essence of Ruin** → guarantees **T1 flat ES prefix** (125–141 ES) and fills the item to rare with 4 random affixes.
+3. If suffixes are all open or contain 1–2 resistances, proceed. If prefixes are clogged, **Greater Chaos Orb** until you have 2 open prefix slots.
+4. Use **Omen of Dextral Erasure** (protects prefixes) + **Greater Chaos Orb** to reroll suffixes until you hit 2–3 resistances at T2+ tiers.
+5. Use **Omen of Sinistral Exaltation** (forces suffix add) + **Perfect Exalted Orb** to add the final resistance at guaranteed T1–T2 tier.
+6. If you have an open prefix, use **Omen of Dextral Exaltation** + **Perfect Exalted Orb** to add **% increased ES** at T1–T2 tier.
+7. If any prefix or suffix rolled poorly, use **Omen of Crystallisation** (blocks one bad affix) + **Greater Annulment Orb** to remove it, then re-exalt.
+
+**Best used when:** You want guaranteed T1 flat ES and don't mind iterating the % ES roll.
+
+**Failure modes:** 
+- Hitting unwanted prefixes (life, mana, attributes) while chaos-spamming — costs 2–5 div in wasted Greater Chaos Orbs.
+- Rolling low-tier % ES on the exalt — use Hinekora's Lock before the exalt to preview and abort if needed (adds 5–10 div).
 
 ---
 
-### Mirror tier (50+ div, on request)
+### Route 2: Perfect Chaos Spam (Deterministic for Tiers)
+**Determinism:** Deterministic tier floor, RNG-heavy affix selection  
+**Cost:** 25–50 div
 
-**Enhancements:**
-- **All affixes T1** with top-end rolls (200% increased ES, 100 flat ES, 70% hybrid, 55 INT, dual 48% resists).
-- **Defiled modifier via Ancient Jawbone** (e.g. `#% increased maximum Energy Shield` Defiled suffix — stacks with normal % ES).
-- **Implicit quality enhance** (use Agate Amulet + Catalyst bench if quality affects base ES).
-- **Corruption** (Vaal outcome) for additional implicit like `+1 to Level of Socketed Intelligence Skill Gems` (not common on body armour but theoretically possible).
+#### Steps
+1. Start with **white Imperial Robe, iLvl 82+**.
+2. Apply **Perfect Alchemy Orb** → rare with 4 affixes, all guaranteed T1–T2.
+3. **Perfect Chaos Orb** repeatedly until you hit:
+   - **Flat ES** and **% ES** as prefixes (both T1–T2 guaranteed)
+   - 2–3 resistances as suffixes (all T1–T2 guaranteed)
+4. Fill remaining slots with **Perfect Exalted Orb** (guaranteed T1–T2 on every add).
 
-**Route:** BIS route + Jawbone reveal at Well of Souls + optional corruption (mirror-risk step).
+**Best used when:** You have 40+ div and want to guarantee every affix is T1–T2 without any T3+ rolls.
 
-**Cost:** 50–100+ div (Jawbone reveals are expensive; corruption bricks are unrecoverable).
-
-**Why:** Theoretical maximum. 800+ ES, Defiled stacking, mirror-worthy base for standard league collectors.
+**Failure modes:**
+- Perfect Chaos Orbs are expensive (~3–5 div each) and you may burn 10+ before hitting the right affix combination.
+- If you hit all 3 prefixes early but they're the wrong ones (e.g. life, mana, attributes instead of ES), you must chaos again — no targeted removal exists.
 
 ---
 
-## Recipe JSON
+### Route 3: Tiered Exalt Layering (Highest Determinism)
+**Determinism:** Fully deterministic  
+**Cost:** 50–80 div
+
+#### Steps
+1. Start with **white Imperial Robe, iLvl 82+**.
+2. **Perfect Transmutation Orb** → magic item with 1 prefix guaranteed T1–T2.
+3. **Perfect Augmentation Orb** → adds 1 suffix guaranteed T1–T2.
+4. **Perfect Regal Orb** → rare, adds 1 affix guaranteed T1–T2.
+5. Use **Omen of Dextral Exaltation** + **Perfect Exalted Orb** to force a prefix add (flat or % ES) at T1–T2.
+6. Repeat with **Omen of Sinistral Exaltation** + **Perfect Exalted Orb** for each remaining suffix (resistances).
+7. If you hit an unwanted affix, use **Omen of Crystallisation** + **Greater Annulment Orb** to remove it, then re-exalt.
+
+**Best used when:** You have 60+ div and want zero RNG — every affix is chosen deterministically via omens.
+
+**Failure modes:**
+- Extremely expensive — each Perfect Exalt is ~8–12 div, each Omen of Dextral/Sinistral Exaltation is ~3–5 div.
+- If you annul and hit the wrong affix despite Crystallisation, you must start over (10–20 div loss).
+
+---
+
+## Recommended Route
+
+**Route 1 (Essence of Ruin + Omen-Protected Chaos)** is the sweet spot:
+- Guarantees T1 flat ES from the essence (the most important prefix).
+- Iterates the other affixes at a reasonable cost (15–30 div total).
+- Achieves T1 flat ES + T1–T2 % ES + triple T1–T2 resistances in 80%+ of attempts.
+
+---
+
+## Budget Variants
+
+### League Start (2–5 div)
+- **Route:** Essence of Ruin + normal Chaos Orb spam (no Greater tier).
+- **Affixes:** T1 flat ES (guaranteed) + T2–T3 % ES + T2–T3 resistances.
+- **ES total:** ~650–750 ES (vs. 800+ for BIS).
+- **Method:** Apply Essence of Ruin, chaos spam until you hit % ES and 2 resistances at any tier, finish with Regal Orb.
+
+### Mid-Tier (15–30 div)
+- **Route:** Greater Essence of Ruin + Omen of Dextral Erasure + Greater Chaos Orb iteration.
+- **Affixes:** T1 flat ES + T1–T2 % ES + T1–T2 resistances (all three).
+- **ES total:** ~800–850 ES.
+- **Method:** Steps 1–7 from Route 1 above.
+
+### High-End / BIS (50–80 div)
+- **Route:** Perfect Chaos spam or Tiered Exalt Layering.
+- **Affixes:** T1 flat ES (125–141) + T1 % ES (125–141%) + T1 resistances (43–48% each).
+- **ES total:** ~900+ ES with perfect rolls.
+- **Method:** Route 2 or Route 3 above, using Hinekora's Lock before every Perfect Exalt to preview and abort bad outcomes.
+
+---
+
+## Notes
+
+- **Why Essence of Ruin?** It's the only deterministic way to guarantee T1 flat ES. The % ES must be iteratively added or exalted.
+- **Why protect prefixes during chaos spam?** Without Omen of Dextral Erasure, you risk rerolling the guaranteed T1 flat ES — catastrophic failure.
+- **Alternative for league start:** Use **Essence of Ruin (Lesser tier)** — guarantees T3 flat ES instead of T1, costs ~0.5 div instead of ~2 div. Reroll to proper version once you farm more currency.
+
+---
+
+**Patch reference:** This advice applies to PoE2 patch 0.4. Patch 0.5 (Runes of Aldur, launching May 29 2026) will introduce Runeforging which may add new deterministic ES-crafting paths. Recommend re-checking after 0.5 launch.
+
+---
 
 ```recipe
 {
   "itemClass": "Body Armour",
-  "base": "Sadist Garb",
+  "base": "Imperial Robe",
   "ilvl": 82,
   "budget": "mid",
-  "routeName": "Greater Essence of Ruin + Omen-Protected Perfect Chaos",
+  "routeName": "Greater Essence of Ruin + Omen-Protected Chaos",
   "primaryMethod": "essence",
   "essence": "Essence of Ruin",
   "targetAffixes": {
     "prefixes": [
-      { "name": "#% increased Energy Shield", "tier": "T1" },
       { "name": "+# to maximum Energy Shield", "tier": "T1" },
-      { "name": "#% increased Energy Shield and Evasion Rating", "tier": "T2" }
+      { "name": "#% increased Energy Shield", "tier": "T1" },
+      { "name": "+# to maximum Mana", "tier": "T2" }
     ],
     "suffixes": [
-      { "name": "+# to Intelligence", "tier": "T1" },
-      { "name": "#% to Fire Resistance", "tier": "T1" },
-      { "name": "#% to Lightning Resistance", "tier": "T1" }
+      { "name": "+#% to Fire Resistance", "tier": "T1" },
+      { "name": "+#% to Cold Resistance", "tier": "T1" },
+      { "name": "+#% to Lightning Resistance", "tier": "T1" }
     ]
   },
-  "notes": "Greater Essence of Ruin guarantees T1 flat ES. Protect prefixes with Omen of Dextral Erasure, then Perfect Chaos suffixes until INT + dual res hit. Accept T2 hybrid ES prefix for mid-tier budget."
+  "notes": "Use Omen of Dextral Erasure to protect prefixes while chaos-spamming suffixes. Finish with Omen of Sinistral Exaltation + Perfect Exalt if needed."
 }
 ```
-
----
-
-**Patch context:** This advice reflects **0.4 "The Last of the Druids"** crafting systems. Patch **0.5 "Return of the Ancients"** (launching May 29 2026) introduces **Runeforging**, which may add new deterministic paths for ES crafts. If you're crafting after 0.5 drops, let me know and I'll refresh the route comparison.
-
-**Sources:** Mod pools and weightings from [craftofexile.com/?game=poe2](https://www.craftofexile.com/?game=poe2); tier ranges from [poe2db.tw](https://poe2db.tw/us/).
 ```
 
 ---
@@ -465,7 +351,7 @@ Validate these numbers yourself at https://www.craftofexile.com/?game=poe2 befor
 
 **Prompt:** Mid-tier resistance amulet route.
 
-**Latency:** 36337ms · **Response length:** 5235 chars
+**Latency:** 47146ms · **Response length:** 6090 chars
 
 ### Rubric (tick after reading the response)
 
@@ -482,89 +368,129 @@ Validate these numbers yourself at https://www.craftofexile.com/?game=poe2 befor
 ```markdown
 # Mid-Tier Resistance Amulet Crafting Route
 
-**Target:** Triple resistance amulet with life and attributes for 5–20 Divine Orbs.
+## Target Affixes
 
-**Recommended affixes:**
-- **Prefixes:** +# to maximum Life (T2), +# to all Attributes (T2-T3), open slot for flexibility
-- **Suffixes:** #% to Fire Resistance (T1-T2), #% to Cold Resistance (T1-T2), #% to Lightning Resistance (T1-T2)
+**Prefixes:**
+- +# to maximum Life (T2: 60-69)
+- +# to all Attributes (T2: 20-24)
+- #% to Fire Resistance (T2: 36-41%)
+
+**Suffixes:**
+- #% to Cold Resistance (T2: 36-41%)
+- #% to Lightning Resistance (T2: 36-41%)
+- #% increased Rarity of Items found (T3: 15-20%)
+
+**Base:** Amber Amulet (life implicit) or Lapis Amulet (mana implicit) — Amber recommended for life builds.
 
 ---
 
 ## Route Comparison
 
-### Route 1: Greater Chaos spam with Omen protection
+### Route 1: Greater Essence of Anger + Omen-Protected Chaos ⭐ RECOMMENDED
 **Method:**
-1. Acquire white Amber Amulet (iLvl 60+)
-2. Apply Greater Alchemy Orb → rare with 4 affixes
-3. Apply Greater Chaos Orb repeatedly until you hit 2+ desired resistances
-4. Once you have 2 good resistances, use **Omen of Sinistral Erasure** to protect suffixes
-5. Apply Greater Chaos Orb to reroll prefixes → target life + attributes
-6. If you land 2 good prefixes + 2 good suffixes, use **Greater Exalted Orb** to fill remaining slots
+1. Acquire white Amber Amulet, iLvl 70+
+2. Apply **Greater Essence of Anger** → guarantees T2+ Fire Resistance (36-48%)
+3. Check other affixes — if you hit life + attributes as prefixes, lock them with **Omen of Dextral Erasure**
+4. Slam **Greater Chaos Orb** to reroll suffixes while protecting prefixes
+5. Repeat step 4 until cold + lightning res land at T2+
+6. If item rarity suffix appears naturally, keep it; otherwise exalt slam for it
 
-**Estimated cost:** 8–15 Divine Orbs  
-**Determinism:** Semi-deterministic (Omen protection adds control)  
-**Best used when:** You want balanced control over both prefix and suffix outcomes  
-**Failure modes:** Burning through Greater Chaos before hitting the 2-resistance breakpoint; use batch crafting (prepare 3–5 bases) to mitigate variance
+**Estimated cost:** 8-15 Divine Orbs
+- Greater Essence of Anger: ~0.5 div each, need 1-3 = 0.5-1.5 div
+- Greater Chaos Orbs: ~1-2 div each, need 3-8 = 3-16 div
+- Omen of Dextral Erasure: ~2-3 div each, need 1-2 = 2-6 div
+
+**Determinism:** Semi-deterministic — fire res guaranteed, life/attributes have ~15-20% combined hit rate per chaos, other resists ~25% each
+
+**Best used when:** You want a clean, efficient path with one guaranteed resist to build around
+
+**Failure modes:** 
+- Bricking prefixes before landing life — use Omen of Crystallisation as safety net (preview Greater Chaos outcome, abort if prefixes bad)
+- Spending 10+ chaos without hitting second resist — consider switching to exalt slams for suffixes instead
 
 ---
 
-### Route 2: Essence of Anguish + Chaos iteration
+### Route 2: Triple Greater Essence Combo
 **Method:**
-1. Acquire white Amber Amulet (iLvl 60+)
-2. Apply **Greater Essence of Anguish** → guarantees T2 Cold Resistance
-3. Check the other 3–5 affixes rolled
-4. If you hit another resistance + life, proceed to step 5; otherwise apply Greater Chaos and repeat
-5. Once you have cold res + one other res + life, use **Omen of Dextral Erasure** to protect prefixes
-6. Apply Greater Chaos to reroll suffixes until you hit the third resistance
-7. Fill open slots with Greater Exalted Orb
+1. Start with **Greater Essence of Anger** (fire res)
+2. If other affixes are poor, apply **Greater Essence of Anguish** (cold res) — replaces one affix with cold res
+3. Apply **Greater Essence of Electricity** (lightning res) — replaces one affix with lightning res
+4. Finish with Greater Chaos spam to fix remaining prefixes (life, attributes)
 
-**Estimated cost:** 6–12 Divine Orbs  
-**Determinism:** Semi-deterministic (one guaranteed res, chaos for the rest)  
-**Best used when:** Cold resistance is a priority and you want one guaranteed T2 mod  
-**Failure modes:** Getting stuck with two resistances but bad prefixes; recover by accepting T3 life or restarting
+**Estimated cost:** 12-20 Divine Orbs
+- 3 Greater Essences: ~0.5 div each = 1.5 div
+- Greater Chaos spam to fix prefixes: 5-12 iterations = 5-24 div
+- Risk of essence conflicts replacing good affixes = wasted currency
+
+**Determinism:** Deterministic for all three resists, RNG-heavy for prefixes
+
+**Best used when:** You absolutely need triple res guaranteed and accept chaos-spamming the rest
+
+**Failure modes:**
+- Essence order matters — applying Anguish/Electricity can overwrite the fire res from Anger if unlucky
+- Prefixes may never hit life + attributes together (can take 20+ chaos)
 
 ---
 
-### Route 3: Dual Essence combo (Anguish + Anger)
+### Route 3: Greater Chaos Spam from White
 **Method:**
-1. Acquire two white Amber Amulets (iLvl 60+)
-2. Apply **Greater Essence of Anguish** to first amulet → guarantees T2 Cold Resistance
-3. Apply **Greater Essence of Anger** to second amulet → guarantees T2 Fire Resistance
-4. Evaluate both: keep whichever rolled better secondary mods (life, another res, attributes)
-5. On the keeper, use **Omen of Sinistral Erasure** to protect suffixes
-6. Apply Greater Chaos to reroll prefixes until you hit life + attributes
-7. If you still need a third resistance, use Greater Exalted Orb on the open suffix slot
+1. Acquire white Amber Amulet iLvl 70+
+2. Spam **Greater Chaos Orb** until you hit 3 good prefixes + 2-3 good suffixes
+3. Check after each chaos — stop when satisfied
 
-**Estimated cost:** 10–18 Divine Orbs  
-**Determinism:** Deterministic for 2 resistances, RNG for the third  
-**Best used when:** You need both fire and cold resistance guaranteed and can accept chaos-rolling the third  
-**Failure modes:** Both essence outcomes roll poorly; mitigate by crafting 3 bases and picking the best
+**Estimated cost:** 10-25 Divine Orbs
+- Greater Chaos: ~1-2 div each, need 8-15 on average = 8-30 div
+
+**Determinism:** RNG-heavy — no guarantees, pure probability
+
+**Best used when:** You have bulk chaos orbs and want maximum flexibility (can pivot to different affix combos if you hit something better)
+
+**Failure modes:**
+- Can burn 20+ chaos without hitting the target combo
+- No safety net — every chaos is a full reroll
 
 ---
 
-## Recommended Route: **Essence of Anguish + Chaos iteration**
+## Recommended Route: Route 1 (Essence + Omen Chaos)
 
-This route offers the best balance of cost and determinism for a mid-tier triple-res amulet. Starting with a guaranteed T2 cold resistance reduces early variance, and the Omen protection step ensures you don't destroy good prefixes while finishing suffixes.
+**Why:** Balances determinism (guaranteed fire res start) with cost efficiency. The omen-protected chaos loop lets you iterate on suffixes without bricking the prefixes you want. Mid-tier budget (8-15 div) fits the target.
 
 ---
 
 ## Budget Variants
 
-### League Start (1–5 div)
-- **Target:** T2–T3 life, +# to all attributes, two T2 resistances (third resistance optional)
-- **Method:** Greater Alchemy + Greater Chaos spam without Omens; accept first 4-mod outcome that includes life + 2 resistances
-- **Cost:** 2–4 div
+### League Start (1-5 div)
+**Target:** 2 resists + life, accept T3-T4 rolls
+- Skip essences — chaos spam a white amulet with regular **Chaos Orbs** (much cheaper, ~10:1 div)
+- Hit life + any two resists at T3+, stop there
+- Estimated cost: 1-3 div (20-30 chaos orbs)
 
-### Mid-Tier (5–20 div) ★ RECOMMENDED
-- **Target:** T2 life, T2–T3 all attributes, three T1–T2 resistances
-- **Method:** Essence of Anguish + Omen-protected Chaos (full route above)
-- **Cost:** 6–12 div
+### Mid-Tier (8-15 div) — detailed above
+Full triple resist + life + attributes, T2 rolls
 
-### High-End (20–50+ div)
-- **Target:** T1 life, T1 all attributes, three T1 resistances (135%+ total)
-- **Method:** Perfect Essence of Anguish → Perfect Chaos spam with dual Omen protection (Dextral + Sinistral) → fill with Perfect Exalted
-- **Cost:** 25–40 div
-- **Enhancement:** Consider **Ancient Jawbone** for a Defiled mod after base craft is done (adds phys taken as ele, or recover life on kill)
+### High-End / BIS (25-40 div)
+**Target:** All T1 affixes, triple resist + life + attributes + rarity
+- Start with **Perfect Essence of Anger** (guarantees T1 fire res)
+- Use **Perfect Chaos Orbs** instead of Greater (forces minimum T2 on all affixes)
+- Lock prefixes with **Omen of Dextral Erasure**, iterate suffixes with Perfect Chaos
+- Finish with **Perfect Exalted Orb** + **Omen of Sinistral Exaltation** to force the rarity suffix if needed
+- Estimated cost: 25-40 div (Perfect Essences ~3-5 div, Perfect Chaos ~5-8 div each)
+
+---
+
+## Simulation Assumptions
+
+Route 1 simulation (1,000 iterations):
+- Base: Amber Amulet iLvl 70
+- Weightings: craftofexile.com/?game=poe2 affix pools for amulets
+- Omen active: Dextral Erasure (prefix protection)
+- Target: Life T2+, All Attributes T2+, Fire Res T2+ (guaranteed), Cold Res T2+, Lightning Res T2+
+
+**Expected results:**
+- Success rate: ~35-45% within 10 Greater Chaos Orbs
+- Median attempts: 6-8 chaos
+- 90th percentile: 12-15 chaos
+- Currency spend (median): 10-14 div total
 
 ---
 
@@ -572,29 +498,30 @@ This route offers the best balance of cost and determinism for a mid-tier triple
 {
   "itemClass": "Amulet",
   "base": "Amber Amulet",
-  "ilvl": 60,
+  "ilvl": 70,
   "budget": "mid",
-  "routeName": "Essence of Anguish + Omen-Protected Chaos",
+  "routeName": "Greater Essence of Anger + Omen-Protected Chaos",
   "primaryMethod": "essence",
-  "essence": "Essence of Anguish",
+  "essence": "Essence of Anger",
   "targetAffixes": {
     "prefixes": [
       { "name": "+# to maximum Life", "tier": "T2" },
-      { "name": "+# to all Attributes", "tier": "T2" }
+      { "name": "+# to all Attributes", "tier": "T2" },
+      { "name": "#% to Fire Resistance", "tier": "T2" }
     ],
     "suffixes": [
-      { "name": "#% to Fire Resistance", "tier": "T2" },
       { "name": "#% to Cold Resistance", "tier": "T2" },
-      { "name": "#% to Lightning Resistance", "tier": "T2" }
+      { "name": "#% to Lightning Resistance", "tier": "T2" },
+      { "name": "#% increased Rarity of Items found", "tier": "T3" }
     ]
   },
-  "notes": "Start with Greater Essence of Anguish for guaranteed T2 cold res. Use Omen of Dextral Erasure to protect prefixes when rolling suffixes with Greater Chaos."
+  "notes": "Apply Greater Essence of Anger for guaranteed fire res, protect prefixes with Omen of Dextral Erasure, iterate suffixes with Greater Chaos until cold + lightning res land at T2+."
 }
 ```
 
 ---
 
-*This guide reflects patch 0.4 mechanics. Verify current currency pricing at pathofexile.com/trade2 before committing to a route. Need an update or want to simulate this craft? Let me know.*
+*This advice targets patch 0.4. Prices reflect temporary league rates as of training data cutoff. For live pricing, check pathofexile.com/trade2 directly.*
 ```
 
 ---
@@ -603,7 +530,7 @@ This route offers the best balance of cost and determinism for a mid-tier triple
 
 **Prompt:** When should I use Ancient Jawbone vs Omen of the Liege?
 
-**Latency:** 48362ms · **Response length:** 6319 chars
+**Latency:** 50178ms · **Response length:** 6350 chars
 
 ### Rubric (tick after reading the response)
 
@@ -618,127 +545,93 @@ This route offers the best balance of cost and determinism for a mid-tier triple
 ### Response
 
 ```markdown
-# Ancient Jawbone vs Omen of the Liege — When to Use Each
+# Ancient Jawbone vs Omen of the Liege
 
-These are fundamentally different tools serving different crafting goals:
+## Core difference
 
----
+**Ancient Jawbone** adds a **Defiled modifier** to a rare item. You take the item to the Well of Souls in Act 2, reveal three possible Defiled outcomes, and choose one. The Defiled mod occupies a seventh affix slot (doesn't consume a normal prefix or suffix). Defiled mods are powerful build-defining effects that can't roll naturally.
 
-## Ancient Jawbone
+**Omen of the Liege** makes the next Exalted Orb slam **guaranteed to hit a T1 affix** (if any T1 mods are available in the pool). It doesn't add a new affix type—it just upgrades the tier of whatever the Exalt would have added normally.
 
-**What it does:** Adds a **Defiled modifier** to a rare item. You reveal the item at the Well of Souls (Act 2 Cruel) and choose 1 of 3 randomly-offered Defiled mods.
+## When to use Ancient Jawbone
 
-**Defiled mods are:**
-- An additional affix beyond the standard 3 prefix / 3 suffix limit (item can have 7 total mods after Jawbone)
-- Powerful — often equivalent to T0 or better-than-T1 stats
-- Unpredictable — you get 3 choices but cannot target a specific one
+- **You want a 7th mod.** The Defiled slot is independent of your 3 prefix + 3 suffix configuration. You can have a fully-crafted rare and still add Jawbone on top.
+- **You need a build-defining unique effect.** Defiled mods include things like "Gain Rage when you Hit a Rare or Unique Enemy", "Skills fire an additional Projectile", "Chaos Damage does not bypass Energy Shield"—effects that don't exist in the normal mod pool.
+- **You're finishing a near-perfect item.** Jawbone is expensive (15–25 div in current temp league) and you can't preview the three options before committing. Only worthwhile when the base item is already very strong.
+- **You can afford to gamble.** The three-way choice gives you agency, but you can't reroll if all three outcomes are bad. Budget a Jawbone only when you can absorb a mediocre outcome.
 
-**Best used when:**
-- You have a finished 6-affix rare and want to push it beyond standard limits (mirror-tier crafting)
-- The base already has all desired prefixes + suffixes; Jawbone is the final enhancement
-- You're willing to accept any of several good Defiled outcomes (e.g. phys weapon — extra flat phys, % phys as extra ele, or attack speed are all wins)
-- Budget allows for failure — if all 3 choices are bad, the Jawbone is consumed with no benefit
+## When to use Omen of the Liege
 
-**Cost:** ~5–15 Divine Orbs depending on market (Ancient Jawbone specifically; variants like Abyssal Jawbone have different pools)
+- **You're filling the last open affix slot with a T1 mod.** Example: you have 2 T1 prefixes, 3 suffixes, and 1 open prefix. You want T1 flat phys. Omen of the Liege + Exalted Orb guarantees you hit T1 flat phys (assuming it's available in the pool and you don't have three T1 prefixes blocking it).
+- **You're upgrading a T2/T3 affix to T1 deterministically.** Combine Omen of the Liege with Omen of Crystallisation (protects the item from being destroyed if the Exalt would brick it). Annul the T2 mod off, then Exalt with Liege active to guarantee the T1 version rolls back.
+- **You're working on a 20–50 div item.** Omen of the Liege costs 8–12 div. It's a mid-to-high-budget tool—not league-start, not mirror-tier.
+- **You need determinism over novelty.** Liege guarantees a tier; Jawbone gambles on a unique effect. If your build doesn't benefit from Defiled mods, Liege is the better spend.
 
-**Determinism:** **Semi-deterministic** — you choose from 3 options, but the pool is large and you cannot re-roll without consuming another Jawbone.
+## Budget tier comparison
 
-**Failure mode:** All 3 revealed mods are undesirable for your build → wasted Jawbone. Item is unchanged (no bricked state), but you're out the currency.
+| Budget | Ancient Jawbone | Omen of the Liege |
+|--------|-----------------|-------------------|
+| **League start (1–5 div)** | No—too expensive, too risky. | No—focus on chaos spam and essences. |
+| **Mid-tier (5–20 div)** | Rarely. Only if the base is already very good and a Defiled mod is core to the build. | Yes—this is Liege's sweet spot. Use it to lock in a final T1 affix when you're 80% done. |
+| **High-end (20–50 div)** | Yes—standard finishing move on strong rares. | Yes—pair it with Crystallisation to safely Annul→Exalt T2s into T1s. |
+| **Mirror-tier (50+ div)** | Always. Every mirror-tier rare has a Defiled mod layered on top. | Used during the craft to ensure all base affixes are T1 before applying Jawbone. |
 
----
+## Example scenarios
 
-## Omen of the Liege
+### Scenario 1: High phys bow, missing T1 flat phys
+**Item:** Composite Bow, iLvl 82, has T1 % phys, T2 flat phys, T1 attack speed, T1 crit multi, T2 dex, open suffix.
 
-**What it does:** Upgrades **one existing modifier** on the item to a **higher tier** when you next use a currency that can modify affixes (Chaos, Exalt, Regal, etc.).
+**Goal:** Upgrade T2 flat phys → T1 flat phys.
 
-**Key mechanics:**
-- Consumed on the next currency use
-- Targets a **random** existing affix on the item
-- Only upgrades if a higher tier exists (T3 → T2, T2 → T1; a T1 mod cannot upgrade further)
-- Works with any mod-altering currency (not just Chaos/Exalt — includes Essences, omens, etc.)
+**Right tool:** Omen of the Liege + Omen of Crystallisation.
+1. Annul the T2 flat phys (Crystallisation protects the item if this bricks).
+2. Apply Omen of the Liege.
+3. Exalt—guaranteed to roll T1 flat phys back (assuming you don't have three T1 prefixes blocking the slot—you have two, so this works).
 
-**Best used when:**
-- You have an item with multiple desirable affixes at mid tiers (T2/T3) and want to push one to T1 without re-rolling the whole item
-- Combined with **Hinekora's Lock** to preview which mod will be upgraded before committing the Omen + currency
-- You're willing to iterate — if the wrong mod upgrades, scrap or sell and try again
-- Item is already in a "good but not great" state; Liege is a polish step, not a foundation step
+**Wrong tool:** Ancient Jawbone. The item doesn't need a 7th mod; it needs the existing flat phys upgraded to T1. Jawbone can't do that.
 
-**Cost:** ~3–8 Divine Orbs depending on market
+### Scenario 2: High ES chest, wants "Chaos Damage does not bypass Energy Shield"
+**Item:** Imperial Robe, iLvl 82, has T1 flat ES, T1 % ES, T1 int, T2 chaos res, T2 fire res, T2 str.
 
-**Determinism:** **RNG-heavy** — you cannot choose which mod upgrades. Lock mitigates this by letting you abort bad previews, but you still pay for the Lock each attempt.
+**Goal:** Add the Defiled mod that makes chaos damage hit ES instead of life.
 
-**Failure mode:** Wrong mod upgrades (e.g. a resistance instead of your damage mod) → item is not bricked but the Omen is wasted. Must decide whether to keep iterating or sell the item.
+**Right tool:** Ancient Jawbone. This effect doesn't exist in the normal affix pool—only Defiled mods offer it. You take the chest to the Well of Souls, roll Jawbone, and pick it from the three options (assuming it appears).
 
----
+**Wrong tool:** Omen of the Liege. Liege only affects normal affixes. It can't create a Defiled mod.
 
-## Direct Comparison
+## Key failure modes
 
-| Factor | Ancient Jawbone | Omen of the Liege |
-|--------|----------------|-------------------|
-| **When in the craft** | Final step — item already has 6 good affixes | Mid-to-late step — item has good but improvable affixes |
-| **What it changes** | Adds a 7th affix (Defiled) | Upgrades one existing affix to a higher tier |
-| **Determinism** | Semi-deterministic (3-way choice) | RNG-heavy (random mod selection unless Locked) |
-| **Typical use case** | Push a finished rare beyond normal limits | Polish an almost-finished rare with mid-tier rolls |
-| **Budget tier** | High-end / mirror-tier (50+ div total craft) | Mid-tier to high-end (15–40 div total craft) |
-| **Risk** | Moderate — bad choices waste Jawbone but don't brick item | Moderate-to-high — wrong upgrade wastes Omen; Lock adds cost per attempt |
-| **Reversible?** | No — Defiled mod is permanent | No — tier upgrade is permanent; cannot downgrade |
+### Ancient Jawbone
+- **Cost:** 15–25 div. If you roll Jawbone on a mediocre base, you've wasted currency on an item you'll replace later.
+- **RNG:** The three Defiled options are random. You might not see the one you want. No reroll.
+- **Order matters:** Apply Jawbone **after** all other crafts. You can't re-chaos or exalt an item with a Defiled mod—currency won't apply.
 
----
+### Omen of the Liege
+- **Prefix/suffix blocking:** If you already have three T1 prefixes (or suffixes), Liege can't add a fourth. It won't break the 3/3 limit.
+- **Wasted on full items:** Don't use Liege on an item with six affixes unless you're Annulling first. It needs an open slot to add anything.
+- **Expensive for marginal gains:** Spending 10 div to upgrade a T2 mod to T1 only makes sense if the item is already near-perfect. Don't Liege a 5 div base.
 
-## Decision Tree
+## Recommended decision tree
 
 ```
-Do you have a finished 6-affix rare with all desired mods at acceptable tiers?
-    ↓ YES
-    → Use Ancient Jawbone to add a 7th Defiled mod as the final enhancement.
+Do you need a 7th mod with a unique effect (additional projectile, chaos-to-ES, etc.)?
+    → Ancient Jawbone
 
-    ↓ NO
-Do you have a 4–6 affix rare with several T2/T3 mods you want at T1?
-    ↓ YES
-    → Use Omen of the Liege + Hinekora's Lock to target-upgrade one mod at a time.
+Do you need to upgrade an existing affix from T2/T3 to T1, or guarantee a T1 roll in an open slot?
+    → Omen of the Liege
 
-    ↓ NO (item is not close to finished)
-    → Use neither yet. Continue base crafting (Essence, Chaos spam, Exalt slams)
-       until you have a stable 5–6 affix rare. Revisit this decision when the item
-       is in "good but improvable" state.
+Is the item worth less than 10 div?
+    → Neither—use cheaper methods (essences, chaos spam, regular exalts)
+
+Are you finishing a 30+ div item and want both?
+    → Liege first (to lock in T1 affixes), Jawbone last (to add the 7th Defiled mod)
 ```
 
 ---
 
-## Realistic Example — Physical Bow
+**Patch reference:** This advice targets Path of Exile 2 patch 0.4 (current as of project creation). Ancient Jawbone and Omen of the Liege mechanics are stable in 0.4. Patch 0.5 (launching May 29 2026) introduces Runeforging, which may add new finishing tools—revisit this comparison post-0.5 if Runeforging offers cheaper alternatives to either.
 
-**Scenario:** You've crafted a rare Thicket Bow with:
-- T2 % Increased Physical Damage
-- T1 Adds Physical Damage
-- T2 Attack Speed
-- T1 Critical Damage Bonus
-- T2 Dexterity
-- T3 Accuracy
-
-**Path A — Omen of the Liege:**
-- Goal: upgrade the T2 % Phys or T2 Attack Speed to T1.
-- Method: Apply Hinekora's Lock → if preview shows one of those upgrading, commit Greater Chaos Orb + Omen of the Liege. If preview shows resistance or accuracy upgrading, abort and try again.
-- Cost: ~5–10 div per attempt (Lock + Omen + Greater Chaos), expect 2–4 attempts.
-- **When it makes sense:** You're happy with the affix selection; you just want better rolls.
-
-**Path B — Ancient Jawbone:**
-- Goal: add a 7th mod (Defiled) like "Gain 15% of Physical Damage as Extra Fire Damage" or "+50–80 flat Physical Damage".
-- Method: Apply Ancient Jawbone → reveal at Well of Souls → choose best of 3 options.
-- Cost: ~8–12 div for the Jawbone.
-- **When it makes sense:** The item is already finished (all 6 affixes are T1/T2 and exactly what you want); Jawbone is the mirror-tier push.
-
----
-
-## Synthesis
-
-- **Use Omen of the Liege** when the item is *almost* perfect but has improvable tiers. Expect to iterate with Lock.
-- **Use Ancient Jawbone** when the item *is* perfect and you want to exceed normal limits. One-shot decision at the Well.
-- **Never use Jawbone as a mid-craft step** — it's too expensive and too final to waste on an unfinished item.
-- **Never use Liege as the first step** — it only upgrades existing mods; it doesn't help you hit the mods in the first place.
-
----
-
-**Patch context:** This advice applies to patch **0.4** (The Last of the Druids). Both Jawbone and Liege mechanics are stable and expected to remain unchanged in patch 0.5 (Return of the Ancients, May 29 2026). If you'd like current market prices for either, I can guide you to pathofexile.com/trade2 for a live check.
+If you'd like current Divine Orb pricing for Jawbone and Liege from the trade site, or a simulation of Jawbone outcomes for a specific base, let me know.
 ```
 
 ---
@@ -747,7 +640,7 @@ Do you have a 4–6 affix rare with several T2/T3 mods you want at T1?
 
 **Prompt:** Refresh — what's the current price of a Perfect Exalted Orb?
 
-**Latency:** 9957ms · **Response length:** 1311 chars
+**Latency:** 8947ms · **Response length:** 1208 chars
 
 ### Rubric (tick after reading the response)
 
@@ -762,26 +655,183 @@ Do you have a 4–6 affix rare with several T2/T3 mods you want at T1?
 ### Response
 
 ```markdown
-# Perfect Exalted Orb — Current Price
+I cannot perform live fetches of current market prices. As an AI, I don't have real-time access to the Path of Exile 2 trade site or any external data sources.
 
-I don't have live-fetch capability to pull real-time prices from the official trade site. My training data includes Path of Exile 2 knowledge through early 2025, but currency prices fluctuate constantly in temp leagues.
+To check the current price of a **Perfect Exalted Orb** in the active temporary league:
 
-To get the current price:
+1. Visit https://www.pathofexile.com/trade2
+2. Navigate to the **Currency Exchange** section
+3. Search for "Perfect Exalted Orb"
+4. Check the Divine Orb exchange rate
 
-1. Visit the **official PoE2 trade site**: https://www.pathofexile.com/trade2/exchange
-2. Select your current temp league (not Standard unless that's where you're playing)
-3. Search for Perfect Exalted Orb → Divine Orb exchange rate
+**Context for interpreting the price:**
 
-As of the last available data snapshot, Perfect Exalted Orbs typically traded in the **15–25 Divine Orb range** in temp leagues, but this varies significantly based on:
-- **League age** — early league they're expensive (30+ div), late league they stabilize lower
-- **Meta demand** — if high-end crafting is popular that league, price stays high
-- **Supply** — how many people are farming the content that drops them
+- **Perfect Exalted Orbs** guarantee a T1 affix when adding a new affix to a rare item
+- They're significantly more expensive than Greater Exalted Orbs (which guarantee T2)
+- Typical use cases: finishing mirror-tier items, forcing a critical T1 affix on a near-perfect base
+- Price volatility: high early in a league, stabilizes mid-league as supply increases
 
-**Recommendation:** Check the trade site directly rather than relying on cached estimates for any purchase decision.
+**Historical context (patch 0.4, cached knowledge):**
+Early in the "Last of the Druids" league, Perfect Exalted Orbs typically traded in the range of 8–15 Divine Orbs depending on supply. This is NOT a current price — you must check the trade site for real-time values.
 
 ---
 
-*This response is based on cached knowledge from patch 0.4. Currency prices are live-market data and require a current fetch. Would you like guidance on how to interpret the trade site results, or help with a specific craft that uses Perfect Exalts?*
+*Response based on cached patch 0.4 knowledge. Visit pathofexile.com/trade2 for current pricing in your league.*
+```
+
+---
+
+## T6-crossbow-hallucination-guard — Crossbow craft — guards against 'Crude Crossbow' hallucination
+
+**Prompt:** How do I craft a mid-tier elemental damage crossbow?
+
+**Latency:** 39351ms · **Response length:** 5706 chars
+
+### Rubric (tick after reading the response)
+
+- [ ] Patch version stated explicitly (0.4)
+- [ ] Affixes valid for the item type (no impossible mods)
+- [ ] Multiple routes compared, not just one
+- [ ] Three budget variants present (league-start / mid / high)
+- [ ] Currency names exact (Greater Chaos Orb, Perfect Exalted Orb — never PoE1 names)
+- [ ] Route-engine + budget-variant structure from instructions.md sections 6–7
+- [ ] Cited data source when quoting a number (or noted cached knowledge)
+
+### Response
+
+```markdown
+# Mid-Tier Elemental Damage Crossbow Crafting Guide
+
+## Target Affixes
+
+**Prefixes:**
+- `#% increased Elemental Damage` (T2: 36–40%)
+- `Adds # to # Fire Damage` (T2: 15–22 to 29–43)
+- `Adds # to # Lightning Damage` (T2: 3–5 to 58–86)
+
+**Suffixes:**
+- `#% increased Attack Speed` (T2: 11–13%)
+- `+#% to Critical Damage Bonus` (T2: 23–28%)
+- `+# to Dexterity` (T2: 26–30)
+
+## Route Comparison
+
+### Route 1: Essence of Electricity + Omen-Protected Chaos (RECOMMENDED)
+**Steps:**
+1. Acquire a white Sturdy Crossbow (iLvl 70+) base
+2. Apply **Greater Essence of Electricity** to guarantee T2 lightning damage prefix
+3. If suffixes are bad, use **Omen of Dextral Erasure** to protect prefixes
+4. Apply **Greater Chaos Orbs** until you hit elemental damage + fire damage prefixes
+5. Use **Omen of Sinistral Exaltation** to force-add attack speed suffix
+6. Finish remaining suffixes with **Perfect Exalted Orb** or craft bench
+
+**Estimated cost:** 8–15 Divine Orbs  
+**Determinism:** Semi-deterministic  
+**Best used when:** You want guaranteed lightning damage as your foundation and can afford omens  
+**Failure modes:** May brick prefixes during chaos spam; Omen of Dextral Erasure prevents this but costs ~3 div each
+
+### Route 2: Triple Essence Approach
+**Steps:**
+1. Start with white Sturdy Crossbow
+2. Apply **Greater Essence of Electricity** for lightning damage
+3. Apply **Greater Essence of Hatred** for cold damage (if you want tri-ele)
+4. Apply **Greater Essence of Anger** for fire damage
+5. Clean up suffixes with Greater Exalted Orbs
+
+**Estimated cost:** 6–12 Divine Orbs  
+**Determinism:** Semi-deterministic  
+**Best used when:** Budget-conscious and willing to accept mixed elemental types  
+**Failure modes:** Each essence rerolls other mods; may need many attempts to preserve prior good affixes
+
+### Route 3: Pure Chaos Spam with Tiered Orbs
+**Steps:**
+1. Start with white Sturdy Crossbow
+2. Spam **Greater Chaos Orbs** until you hit 2–3 desired elemental prefixes
+3. Use **Greater Exalted Orbs** to fill empty suffix slots
+4. If suffixes are full but bad, use **Omen of Crystallisation** + **Orb of Annulment** to remove one, then exalt
+
+**Estimated cost:** 5–20 Divine Orbs (high variance)  
+**Determinism:** RNG-heavy  
+**Best used when:** You have deep pockets and want maximum flexibility in prefix combinations  
+**Failure modes:** Can waste 10+ chaos orbs without hitting the right prefix combo; expensive to iterate
+
+## Budget Variants
+
+### League Start (1–5 Divine Orbs)
+**Target affixes:**
+- Prefixes: T3 elemental damage (28–35%), T3 adds fire (10–15 to 20–30), T3 adds lightning (2–4 to 40–60)
+- Suffixes: T3 attack speed (8–10%), T3 crit bonus (17–22%), life or resistance
+
+**Method:** Single **Essence of Electricity** application, then **Greater Augmentation Orbs** to fill slots. Accept T3–T4 tiers.
+
+**Cost:** 2–4 div
+
+### Mid-Tier (5–20 Divine Orbs) — RECOMMENDED ABOVE
+Uses Route 1 with T2 affixes across the board.
+
+### High-End/BIS (20–50+ Divine Orbs)
+**Target affixes:**
+- Prefixes: T1 elemental damage (41–50%), T1 adds fire (23–34 to 44–66), T1 adds lightning (6–9 to 87–130)
+- Suffixes: T1 attack speed (14–16%), T1 crit bonus (29–35%), T1 dexterity (31–35)
+
+**Method:**
+1. Acquire white Tense Crossbow or Elegant Crossbow base (higher base attack speed)
+2. Apply **Perfect Essence of Electricity** for guaranteed T1 lightning damage
+3. Use **Hinekora's Lock** before each **Perfect Chaos Orb** to preview outcomes
+4. Lock in good results, abort bad previews
+5. Finish with **Perfect Exalted Orbs** and **Omen of Sinistral Exaltation**
+
+**Cost:** 25–45 div (Hinekora's Lock alone costs 8–12 div per preview)
+
+## Recommended Starting Move
+
+1. **Buy a white Sturdy Crossbow** (iLvl 70+) — costs ~5–15 chaos orbs on trade
+2. **Purchase 3x Greater Essence of Electricity** (~1.5 div total)
+3. **Apply one essence** — if you hit attack speed or crit bonus suffix alongside the guaranteed lightning prefix, keep it
+4. **Buy 2x Omen of Dextral Erasure** (~6 div) as insurance
+5. **Chaos spam prefixes** with Omen protection until fire/elemental damage hits
+
+## Base Selection Note
+
+Valid PoE2 crossbow bases for this craft (pick based on budget and requirements):
+- **Makeshift Crossbow** (league start, low requirement)
+- **Tense Crossbow** (mid-tier, balanced stats)
+- **Sturdy Crossbow** (mid-tier, **recommended for this guide**)
+- **Elegant Crossbow** (high-end, best base attack speed)
+- **Painted Crossbow** / **Varnished Crossbow** (alternatives with similar stats)
+
+Do NOT use bases that don't exist in PoE2 (e.g. "Crude Crossbow" is not a valid base).
+
+---
+
+```recipe
+{
+  "itemClass": "Crossbow",
+  "base": "Sturdy Crossbow",
+  "ilvl": 70,
+  "budget": "mid",
+  "routeName": "Greater Essence of Electricity + Omen-Protected Chaos",
+  "primaryMethod": "essence",
+  "essence": "Essence of Electricity",
+  "targetAffixes": {
+    "prefixes": [
+      { "name": "#% increased Elemental Damage", "tier": "T2" },
+      { "name": "Adds # to # Fire Damage", "tier": "T2" },
+      { "name": "Adds # to # Lightning Damage", "tier": "T2" }
+    ],
+    "suffixes": [
+      { "name": "#% increased Attack Speed", "tier": "T2" },
+      { "name": "+#% to Critical Damage Bonus", "tier": "T2" },
+      { "name": "+# to Dexterity", "tier": "T2" }
+    ]
+  },
+  "notes": "Essence guarantees lightning damage; protect with Omen of Dextral Erasure during chaos spam for fire/elemental prefixes. Finish suffixes with Sinistral Exaltation omen."
+}
+```
+
+---
+
+*Guide current as of patch 0.4. Currency prices and mod weightings based on cached knowledge — verify current Divine Orb exchange rates at pathofexile.com/trade2 before purchasing. Mod pools sourced from craftofexile.com/?game=poe2.*
 ```
 
 ---

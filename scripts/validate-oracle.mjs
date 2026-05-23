@@ -27,12 +27,51 @@ if (!process.env.CLAUDE_API_KEY) {
   process.exit(1);
 }
 
-// Same prompt construction as src/lib/oracle.ts
+// Same prompt construction as src/lib/oracle.ts.
+// Keep this in sync — validation only catches regressions if it sees the
+// same system prompt production does.
 const docsDir = path.join(projectRoot, "docs");
 const INSTRUCTIONS = fs.readFileSync(path.join(docsDir, "instructions.md"), "utf-8");
 const DATA_SOURCES = fs.readFileSync(path.join(docsDir, "data-sources.md"), "utf-8");
 
+// Parse POE2_BASES_GROUPED out of the auto-generated coe-lookup.ts so we can
+// build the same authoritative-bases section that src/lib/bases-prompt.ts builds.
+const lookupTs = fs.readFileSync(path.join(projectRoot, "src/lib/coe-lookup.ts"), "utf-8");
+const basesMatch = lookupTs.match(/export const POE2_BASES_GROUPED[^=]*=\s*(\{[\s\S]*?\});\s*\n/);
+const POE2_BASES_GROUPED = basesMatch ? JSON.parse(basesMatch[1]) : {};
+
+function buildBasesSection(grouped) {
+  const cats = Object.keys(grouped).sort();
+  let total = 0;
+  let body = "";
+  for (const cat of cats) {
+    const list = grouped[cat];
+    if (!list.length) continue;
+    total += list.length;
+    body += `### ${cat} (${list.length})\n${list.join(", ")}\n\n`;
+  }
+  return `## Authoritative PoE2 Base Items — use ONLY names from this list
+
+When you recommend a specific base in any craft response, you MUST pick from the lists below. These names are sourced from craftofexile.com/?game=poe2 (the authoritative community source) and represent every base that legally exists in patch 0.4.
+
+**DO NOT invent base names.** Common failure modes to avoid:
+- "Crude Crossbow" — does NOT exist. Real PoE2 crossbows include Makeshift Crossbow, Tense Crossbow, Sturdy Crossbow.
+- "Sadist Garb" — does NOT exist. Real PoE2 INT body armours include Tattered Robe, Silk Robe, Imperial Robe.
+- Any PoE1 name like "Spine Bow", "Vaal Regalia", "Astral Plate" — do NOT use these.
+
+If the user asks about a base you don't recognize, pick the closest valid base from the list below and explain the substitution. NEVER fabricate.
+
+There are ${total} valid bases across ${cats.length} categories:
+
+${body.trim()}
+`;
+}
+
+const BASES_SECTION = buildBasesSection(POE2_BASES_GROUPED);
+
 const SYSTEM_PROMPT = `You are the PoE2 Crafting Oracle. You must follow the rules in these two documents exactly and completely.
+
+${BASES_SECTION}
 
 # instructions.md
 ${INSTRUCTIONS}
@@ -42,6 +81,7 @@ ${DATA_SOURCES}
 
 CRITICAL RULES — these override everything else:
 - THIS IS PATH OF EXILE 2, NOT PATH OF EXILE 1. Every mod pool, currency, base item, and crafting mechanic you reference must be PoE2-specific. PoE1 items, mods, and mechanics do not exist in this game and must never appear in your answers.
+- When recommending a base item, you MUST pick a name from the "Authoritative PoE2 Base Items" list at the top of this prompt. Hallucinating a base (e.g. "Crude Crossbow", "Sadist Garb") is a hard violation.
 - When referencing Craft of Exile data, the URL is always https://www.craftofexile.com/?game=poe2 — the ?game=poe2 parameter is mandatory. Without it the site shows PoE1 data. Never cite or reference craftofexile.com without this parameter.
 - Mod pools are strictly scoped to the item type selected. Never suggest a mod that cannot legally roll on the chosen base in PoE2.
 - Currency names must be exact PoE2 names: Greater Chaos Orb, Perfect Exalted Orb, Omen of Sinistral Erasure, Ancient Jawbone, Hinekora's Lock, Essence of Abrasion, etc. PoE1 currency names (Chaos Orb, Exalted Orb, Orb of Scouring) do not exist in PoE2.
@@ -80,6 +120,11 @@ const TEST_PROMPTS = [
     title: "Refresh trigger: current price of Perfect Exalted Orb",
     prompt: "Refresh — what's the current price of a Perfect Exalted Orb?",
   },
+  {
+    id: "T6-crossbow-hallucination-guard",
+    title: "Crossbow craft — guards against 'Crude Crossbow' hallucination",
+    prompt: "How do I craft a mid-tier elemental damage crossbow?",
+  },
 ];
 
 async function ask(prompt) {
@@ -96,7 +141,7 @@ async function ask(prompt) {
 }
 
 async function main() {
-  console.log("Running 5 validation prompts against the live Oracle…\n");
+  console.log(`Running ${TEST_PROMPTS.length} validation prompts against the live Oracle…\n`);
 
   const results = [];
   for (const test of TEST_PROMPTS) {

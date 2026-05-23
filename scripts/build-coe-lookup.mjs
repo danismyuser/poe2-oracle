@@ -69,13 +69,24 @@ async function main() {
   // Includes `bn` = parent category name (e.g. "Body Armour (INT)") so we can
   // join into the Google-sheet mod-weight data which is keyed by category.
   const bitemsByName = {};
+  // Also group bitems by category — used to inject the authoritative
+  // bases list into the Oracle's system prompt, stopping it from hallucinating
+  // PoE1-style names like "Crude Crossbow" or "Sadist Garb".
+  const bitemsByCategory = {};
   for (const bi of d.bitems.seq) {
     bitemsByName[bi.name_bitem] = {
       b: Number(bi.id_base),
       bi: Number(bi.id_bitem),
       bn: baseIdToName[bi.id_base] ?? null,
     };
+    const cat = baseIdToName[bi.id_base];
+    if (cat) {
+      bitemsByCategory[cat] ??= [];
+      bitemsByCategory[cat].push(bi.name_bitem);
+    }
   }
+  // Stable alphabetical order within each category
+  for (const cat in bitemsByCategory) bitemsByCategory[cat].sort();
 
   // --- Essences ---
   const essencesByName = {};
@@ -115,6 +126,13 @@ export const COE_BASE_CATEGORIES: Record<string, { b: number }> = ${tsLiteral(ba
  *  \`bn\` is the parent category name — used to join into mod-weight data
  *  from the Google Sheet which is keyed by category, not specific item. */
 export const COE_BITEMS: Record<string, { b: number; bi: number; bn: string | null }> = ${tsLiteral(bitemsByName)};
+
+/** All bitem names grouped by their parent CoE category — e.g.
+ *  POE2_BASES_GROUPED["Bow"] = ["Crude Bow", "Shortbow", "Warden Bow", ...].
+ *  Used by src/lib/oracle.ts to inject the authoritative list into the
+ *  system prompt so the Oracle cannot hallucinate fake base names
+ *  (e.g. "Crude Crossbow" or "Sadist Garb"). */
+export const POE2_BASES_GROUPED: Record<string, string[]> = ${tsLiteral(bitemsByCategory)};
 
 /** id_essence for a Craft of Exile essence. Keyed by full name AND by stripped
  *  suffix, so both "Essence of Abrasion" and "Abrasion" resolve. */
