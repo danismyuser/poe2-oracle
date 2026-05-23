@@ -54,5 +54,6 @@ next-env.d.ts
 dev-server.log
 *.log
 
-# Cached upstream data (rebuilt by scripts/build-coe-lookup.mjs)
+# Cached upstream data (rebuilt by scripts/build-coe-lookup.mjs and build-mod-weights.mjs)
 .coe-data-cache.json
+.coe-data-cache/

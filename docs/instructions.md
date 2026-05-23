@@ -227,6 +227,16 @@ After the markdown response and before any footer, every **craft request** (and 
 
 This block is parsed by the app and used to deep-link into Craft of Exile's emulator for craft validation. Rules:
 
+- **Target affix names MUST use canonical Craft of Exile / poe2db phrasing**, not paraphrased shorthand. The app looks these names up in the community mod-weights spreadsheet (the same source CoE uses) to fill in CoE's `req=` URL parameter — every paraphrase costs one click for the user. Canonical examples (use these patterns exactly):
+  - ✅ `"#% increased Physical Damage"` &nbsp;&nbsp;❌ `"% Phys Damage"` / `"Increased Physical Damage %"`
+  - ✅ `"Adds # to # Physical Damage"` &nbsp;&nbsp;❌ `"Flat Phys"` / `"Adds Physical Damage"`
+  - ✅ `"#% increased Attack Speed"` &nbsp;&nbsp;❌ `"AS %"` / `"Attack Speed %"`
+  - ✅ `"+# to maximum Life"` &nbsp;&nbsp;❌ `"Life"` / `"+Life"`
+  - ✅ `"#% to Fire Resistance"` &nbsp;&nbsp;❌ `"Fire Res"` / `"Fire Resistance %"`
+  - ✅ `"+# to Critical Hit Chance"` (PoE2 calls it Hit Chance) &nbsp;&nbsp;❌ `"Crit Chance"` / `"Crit Strike Chance"` (that's PoE1)
+  - ✅ `"+#% to Critical Damage Bonus"` (PoE2 term) &nbsp;&nbsp;❌ `"Crit Multi"` / `"Critical Strike Multiplier"` (PoE1)
+  - Use `#` as a literal placeholder for numeric ranges — do NOT substitute actual numbers (the lookup is by mod template, not specific roll).
+  - When in doubt, use the wording from craftofexile.com/?game=poe2's affix list verbatim.
 - **`primaryMethod` must be one of:** `chaos`, `exalted`, `alchemy`, `augmentation`, `transmute`, `regal`, `annul`, `essence`. These are the literal CoE method IDs — do not invent others. If the route starts with an essence application, use `"essence"` and set the `essence` field.
 - **`base` must be an exact PoE2 base name** as it appears in-game and on craftofexile.com — e.g. "Crude Bow", "Sacramental Robe", "Amber Amulet". Do NOT use generic categories like just "Bow" — use the specific named base.
 - **`budget` must be one of:** `"league-start"`, `"mid"`, `"high"`, `"mirror"`. This is the budget the recommended route in the response targets (it does NOT replace the requirement that the response itself contains all three budget variants).

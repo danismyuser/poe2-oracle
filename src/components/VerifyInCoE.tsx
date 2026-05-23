@@ -17,11 +17,13 @@ export default function VerifyInCoE({ recipe }: Props) {
   const result = buildCoeUrl(recipe);
 
   const completenessLabel =
+    result.completeness === "complete" ? `Fully pre-filled · ${result.affixesResolved}/${result.affixesRequested} affixes` :
     result.completeness === "full" ? "Base + method pre-filled" :
     result.completeness === "partial" ? "Method pre-filled · base manual" :
     "Opens in PoE2 mode";
 
   const completenessColor =
+    result.completeness === "complete" ? "var(--green)" :
     result.completeness === "full" ? "var(--green)" :
     result.completeness === "partial" ? "var(--gold)" :
     "var(--text-tertiary)";
