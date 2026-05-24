@@ -34,11 +34,48 @@ const docsDir = path.join(projectRoot, "docs");
 const INSTRUCTIONS = fs.readFileSync(path.join(docsDir, "instructions.md"), "utf-8");
 const DATA_SOURCES = fs.readFileSync(path.join(docsDir, "data-sources.md"), "utf-8");
 
-// Parse POE2_BASES_GROUPED out of the auto-generated coe-lookup.ts so we can
-// build the same authoritative-bases section that src/lib/bases-prompt.ts builds.
+// Parse POE2_BASES_GROUPED out of the auto-generated coe-lookup.ts and
+// MOD_DATA out of mod-weights.ts so we build the same authoritative sections
+// that src/lib/bases-prompt.ts and src/lib/mods-prompt.ts build.
 const lookupTs = fs.readFileSync(path.join(projectRoot, "src/lib/coe-lookup.ts"), "utf-8");
 const basesMatch = lookupTs.match(/export const POE2_BASES_GROUPED[^=]*=\s*(\{[\s\S]*?\});\s*\n/);
 const POE2_BASES_GROUPED = basesMatch ? JSON.parse(basesMatch[1]) : {};
+
+const weightsTs = fs.readFileSync(path.join(projectRoot, "src/lib/mod-weights.ts"), "utf-8");
+const modDataMatch = weightsTs.match(/export const MOD_DATA[^=]*=\s*(\{[\s\S]*?\});\s*\n\/\*\*/);
+const MOD_DATA = modDataMatch ? JSON.parse(modDataMatch[1]) : {};
+
+function buildModsSection(modData) {
+  const bases = Object.keys(modData).sort();
+  let total = 0;
+  let body = "";
+  for (const base of bases) {
+    const prefixes = Object.keys(modData[base].PREFIX ?? {}).sort();
+    const suffixes = Object.keys(modData[base].SUFFIX ?? {}).sort();
+    if (!prefixes.length && !suffixes.length) continue;
+    total += prefixes.length + suffixes.length;
+    body += `### ${base}\n`;
+    if (prefixes.length) body += `**Prefixes (${prefixes.length}):** ${prefixes.join(", ")}\n`;
+    if (suffixes.length) body += `**Suffixes (${suffixes.length}):** ${suffixes.join(", ")}\n`;
+    body += "\n";
+  }
+  return `## Authoritative PoE2 Mod Names — use ONLY these in recipe targetAffixes
+
+When you populate a recipe block's \`targetAffixes\` array, the \`name\` field of each affix MUST be selected verbatim from the list below. These are the canonical mod names from the community-maintained PoE2 mod-weights spreadsheet. The app looks them up to build CoE's \`req=\` URL parameter — every paraphrase costs one manual click for the user in CoE.
+
+**DO NOT paraphrase mod names.** Common failure modes to avoid:
+- ❌ \`"% Phys Damage"\` → ✅ \`"#% increased Physical Damage"\`
+- ❌ \`"Flat Phys"\` → ✅ \`"Adds # to # Physical Damage"\`
+- ❌ \`"Crit Multi"\` → ✅ \`"+#% to Critical Damage Bonus"\`
+- ❌ \`"Fire Res"\` → ✅ \`"#% to Fire Resistance"\`
+
+\`#\` is a literal placeholder for numeric ranges — do NOT substitute actual numbers.
+
+There are ${total} mods across ${bases.length} base categories. Mods must be valid for the chosen base.
+
+${body.trim()}
+`;
+}
 
 function buildBasesSection(grouped) {
   const cats = Object.keys(grouped).sort();
@@ -68,10 +105,13 @@ ${body.trim()}
 }
 
 const BASES_SECTION = buildBasesSection(POE2_BASES_GROUPED);
+const MODS_SECTION = buildModsSection(MOD_DATA);
 
 const SYSTEM_PROMPT = `You are the PoE2 Crafting Oracle. You must follow the rules in these two documents exactly and completely.
 
 ${BASES_SECTION}
+
+${MODS_SECTION}
 
 # instructions.md
 ${INSTRUCTIONS}

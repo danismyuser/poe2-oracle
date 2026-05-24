@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import fs from "fs";
 import path from "path";
 import { buildBasesPromptSection } from "@/lib/bases-prompt";
+import { buildModsPromptSection } from "@/lib/mods-prompt";
 
 if (!process.env.CLAUDE_API_KEY) {
   throw new Error("CLAUDE_API_KEY is not set. Add it to .env.local before starting the server.");
@@ -15,14 +16,20 @@ const docsDir = path.join(process.cwd(), "docs");
 const INSTRUCTIONS = fs.readFileSync(path.join(docsDir, "instructions.md"), "utf-8");
 const DATA_SOURCES = fs.readFileSync(path.join(docsDir, "data-sources.md"), "utf-8");
 
-// Authoritative base-items list, computed once. Injected near the top of the
-// system prompt so it has top-of-context salience — stops the Oracle from
-// hallucinating bases like "Crude Crossbow" or "Sadist Garb".
+// Authoritative lookups, computed once. Injected near the top of the system
+// prompt so they have top-of-context salience. Stops the Oracle from
+// hallucinating base names (e.g. "Crude Crossbow") or paraphrasing mod names
+// (e.g. "% Phys Damage" instead of "#% increased Physical Damage").
+// Both are large (~17K tokens combined) but Anthropic prompt caching makes
+// them essentially free after the first call in a 5-minute window.
 const BASES_SECTION = buildBasesPromptSection();
+const MODS_SECTION = buildModsPromptSection();
 
 const SYSTEM_PROMPT = `You are the PoE2 Crafting Oracle. You must follow the rules in these two documents exactly and completely.
 
 ${BASES_SECTION}
+
+${MODS_SECTION}
 
 # instructions.md
 ${INSTRUCTIONS}

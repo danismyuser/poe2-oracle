@@ -51,10 +51,26 @@ function lookupCoeModId(affix, name) {
   const nk = `${affix.toUpperCase()}|${normalize(name)}`;
   return COE_MOD_IDS_NORMALIZED?.[nk] ?? null;
 }
+// Pre-built normalized index for fuzzy mod-name matching — mirrors the
+// runtime logic in src/lib/mod-weights.ts so this test reflects production.
+const _normIndex = {};
+function _getNorm(bk, tk) {
+  if (!_normIndex[bk]) _normIndex[bk] = { PREFIX: {}, SUFFIX: {} };
+  if (!Object.keys(_normIndex[bk][tk]).length) {
+    const mods = MOD_DATA?.[bk]?.[tk] ?? {};
+    for (const c of Object.keys(mods)) _normIndex[bk][tk][normalize(c)] = c;
+  }
+  return _normIndex[bk][tk];
+}
 function lookupModTier(baseName, type, modName, tier) {
   const bk = baseName?.toUpperCase();
   if (!bk) return null;
-  const e = MOD_DATA?.[bk]?.[type.toUpperCase()]?.[modName];
+  const tk = type.toUpperCase();
+  let e = MOD_DATA?.[bk]?.[tk]?.[modName];
+  if (!e) {
+    const canonical = _getNorm(bk, tk)[normalize(modName)];
+    if (canonical) e = MOD_DATA[bk][tk][canonical];
+  }
   if (!e) return null;
   return e.tiers[tier - 1] ?? null;
 }

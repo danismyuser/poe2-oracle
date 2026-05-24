@@ -185,9 +185,36 @@ export const MOD_DATA: Record<
 /** All base names in MOD_DATA, useful for validation / autocomplete. */
 export const MOD_DATA_BASES: string[] = ${JSON.stringify(Object.keys(modData).sort(), null, 2)};
 
+/** Normalized form for fuzzy mod-name matching — strips +/#/% and collapses
+ *  whitespace. Lets us match "+# to Dexterity" (Oracle paraphrase) against the
+ *  sheet's "# to Dexterity" without an exact-string match. */
+function normalizeModName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[#%+]/g, "")
+    .replace(/\\s+to\\s+/g, " ")
+    .replace(/\\s+/g, " ")
+    .trim();
+}
+
+/** Pre-computed normalized → canonical name map per base × type, built lazily. */
+const NORMALIZED_INDEX: Record<string, Record<"PREFIX" | "SUFFIX", Record<string, string>>> = {};
+function getNormalizedIndex(baseKey: string, typeKey: "PREFIX" | "SUFFIX"): Record<string, string> {
+  if (!NORMALIZED_INDEX[baseKey]) NORMALIZED_INDEX[baseKey] = { PREFIX: {}, SUFFIX: {} };
+  if (!Object.keys(NORMALIZED_INDEX[baseKey][typeKey]).length) {
+    const mods = MOD_DATA[baseKey]?.[typeKey] ?? {};
+    for (const canonical of Object.keys(mods)) {
+      NORMALIZED_INDEX[baseKey][typeKey][normalizeModName(canonical)] = canonical;
+    }
+  }
+  return NORMALIZED_INDEX[baseKey][typeKey];
+}
+
 /**
- * Look up a single (base, type, modName, tier) entry. Returns null if any step
- * misses. The base name is uppercased to match the sheet's convention.
+ * Look up a single (base, type, modName, tier) entry. Tries exact match
+ * first, falls back to normalized matching if the Oracle paraphrased slightly
+ * (e.g. wrote "+# to Dexterity" when the sheet has "# to Dexterity"). Returns
+ * null if any step misses.
  */
 export function lookupModTier(
   baseName: string,
@@ -197,7 +224,12 @@ export function lookupModTier(
 ): TierData | null {
   const baseKey = baseName?.toUpperCase();
   if (!baseKey) return null;
-  const entry = MOD_DATA[baseKey]?.[type.toUpperCase() as "PREFIX" | "SUFFIX"]?.[modName];
+  const typeKey = type.toUpperCase() as "PREFIX" | "SUFFIX";
+  let entry = MOD_DATA[baseKey]?.[typeKey]?.[modName];
+  if (!entry) {
+    const canonical = getNormalizedIndex(baseKey, typeKey)[normalizeModName(modName)];
+    if (canonical) entry = MOD_DATA[baseKey][typeKey][canonical];
+  }
   if (!entry) return null;
   const td = entry.tiers[tier - 1];
   return td ?? null;
