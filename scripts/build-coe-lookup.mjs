@@ -89,11 +89,26 @@ async function main() {
   for (const cat in bitemsByCategory) bitemsByCategory[cat].sort();
 
   // --- Essences ---
+  // Plain name → id_essence map (for URL deep-linking).
   const essencesByName = {};
+  // Per-essence applicability — which base CATEGORIES each essence can roll on.
+  // Sourced from each essence's `tiers` field, which is keyed by id_base of
+  // every base the essence applies to. Critical for preventing the Oracle from
+  // recommending nonsense combos like "Essence of Electricity on a Quiver".
+  const essenceApplicability = {};
   for (const e of d.essences.seq) {
     essencesByName[e.name_essence] = Number(e.id_essence);
     const stripped = e.name_essence.replace(/^Essence of\s+/i, "");
     if (stripped !== e.name_essence) essencesByName[stripped] = Number(e.id_essence);
+
+    // Parse the applicability list from e.tiers (stored as JSON string in CoE data)
+    let tierObj = {};
+    try { tierObj = typeof e.tiers === "string" ? JSON.parse(e.tiers) : (e.tiers ?? {}); } catch { tierObj = {}; }
+    const baseIds = Object.keys(tierObj).map((s) => Number(s)).filter(Number.isFinite);
+    const categories = baseIds.map((bid) => baseIdToName[bid]).filter(Boolean).sort();
+    let tooltip = [];
+    try { tooltip = typeof e.tooltip === "string" ? JSON.parse(e.tooltip) : (e.tooltip ?? []); } catch { tooltip = []; }
+    essenceApplicability[e.name_essence] = { baseIds, categories, tooltip };
   }
 
   // --- Modifiers (mod name → id_modifier, used for &req= URL param) ---
@@ -137,6 +152,20 @@ export const POE2_BASES_GROUPED: Record<string, string[]> = ${tsLiteral(bitemsBy
 /** id_essence for a Craft of Exile essence. Keyed by full name AND by stripped
  *  suffix, so both "Essence of Abrasion" and "Abrasion" resolve. */
 export const COE_ESSENCES: Record<string, number> = ${tsLiteral(essencesByName)};
+
+/** Per-essence applicability — what base CATEGORIES each essence can be applied to.
+ *  Sourced from the essence's tier table in CoE's data (which is keyed by id_base
+ *  of every base the essence can roll its guaranteed mod on).
+ *  Used by src/lib/essences-prompt.ts to prevent the Oracle from recommending
+ *  invalid combos like "Essence of Electricity on a Quiver". */
+export interface EssenceApplicability {
+  baseIds: number[];
+  /** Sorted, deduplicated parent category names like "Bow", "Quiver", "Body Armour (INT)". */
+  categories: string[];
+  /** Human-readable rules from CoE's tooltip JSON, e.g. "One Handed Melee Weapon or Bow: Adds # to # Lightning Damage". */
+  tooltip: string[];
+}
+export const COE_ESSENCE_APPLICABILITY: Record<string, EssenceApplicability> = ${tsLiteral(essenceApplicability)};
 
 /** id_modifier for the &req= URL parameter. Keyed as "PREFIX|<name>" / "SUFFIX|<name>"
  *  since the same mod text can exist as both on different items.

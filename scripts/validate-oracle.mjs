@@ -45,6 +45,29 @@ const weightsTs = fs.readFileSync(path.join(projectRoot, "src/lib/mod-weights.ts
 const modDataMatch = weightsTs.match(/export const MOD_DATA[^=]*=\s*(\{[\s\S]*?\});\s*\n\/\*\*/);
 const MOD_DATA = modDataMatch ? JSON.parse(modDataMatch[1]) : {};
 
+const essAppMatch = lookupTs.match(/export const COE_ESSENCE_APPLICABILITY[^=]*=\s*(\{[\s\S]*?\});\s*$/m);
+const COE_ESSENCE_APPLICABILITY = essAppMatch ? JSON.parse(essAppMatch[1]) : {};
+
+function buildEssencesSection(app) {
+  const names = Object.keys(app).sort();
+  let body = "";
+  for (const n of names) {
+    const a = app[n];
+    if (!a || !a.categories?.length) continue;
+    body += `- **${n}** → applies to: ${a.categories.join(", ")}\n`;
+  }
+  return `## Essence Applicability — which essences can target which bases
+
+Each PoE2 essence rolls its guaranteed mod on a specific subset of item types only. Recommending an essence on a base it cannot apply to is a hard accuracy failure (real reported bug: "Essence of Electricity on a Visceral Quiver" — Electricity only rolls on weapons, never quivers).
+
+When you write a recipe with \`primaryMethod: "essence"\`, you MUST verify the \`essence\` is valid for the base. Use this table:
+
+${body.trim()}
+
+If an essence isn't applicable to the user's base, EITHER pick a different essence that IS, OR switch to chaos / exalted / regal. NEVER recommend an essence on an incompatible base.
+`;
+}
+
 function buildModsSection(modData) {
   const bases = Object.keys(modData).sort();
   let total = 0;
@@ -106,12 +129,15 @@ ${body.trim()}
 
 const BASES_SECTION = buildBasesSection(POE2_BASES_GROUPED);
 const MODS_SECTION = buildModsSection(MOD_DATA);
+const ESSENCES_SECTION = buildEssencesSection(COE_ESSENCE_APPLICABILITY);
 
 const SYSTEM_PROMPT = `You are the PoE2 Crafting Oracle. You must follow the rules in these two documents exactly and completely.
 
 ${BASES_SECTION}
 
 ${MODS_SECTION}
+
+${ESSENCES_SECTION}
 
 # instructions.md
 ${INSTRUCTIONS}
@@ -164,6 +190,11 @@ const TEST_PROMPTS = [
     id: "T6-crossbow-hallucination-guard",
     title: "Crossbow craft — guards against 'Crude Crossbow' hallucination",
     prompt: "How do I craft a mid-tier elemental damage crossbow?",
+  },
+  {
+    id: "T7-quiver-essence-mismatch",
+    title: "Quiver craft — guards against essence/base mismatch + Perfect-on-white",
+    prompt: "How do I craft a Visceral Quiver for a lightning bow build, mid-tier budget?",
   },
 ];
 
