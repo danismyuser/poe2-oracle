@@ -1,5 +1,5 @@
 import type { Recipe } from "@/types/craft";
-import { COE_ESSENCE_APPLICABILITY, lookupCoeBase } from "@/lib/coe-lookup";
+import { COE_ESSENCE_APPLICABILITY, lookupCoeBase, checkModOnBase } from "@/lib/coe-lookup";
 import { MOD_DATA } from "@/lib/mod-weights";
 
 export type IssueSeverity = "critical" | "warning";
@@ -197,6 +197,11 @@ export function validateRecipe(recipe: Recipe): ValidationResult {
   }
 
   // Check 2: target affix names actually roll on this base
+  // PRIMARY check uses CoE's authoritative basemods table (checkModOnBase).
+  // SECONDARY check falls back to the sheet's MOD_DATA — but only if CoE
+  // says "invalid", and the sheet says "valid", we suppress the issue
+  // (the sheet may have entries CoE's data doesn't, but CoE is the canonical
+  // source for what shows up in their emulator).
   if (baseCategory) {
     const sheetKey = baseCategory.toUpperCase();
     const prefixIndex = buildNormalizedIndex(MOD_DATA[sheetKey]?.PREFIX);
@@ -204,8 +209,19 @@ export function validateRecipe(recipe: Recipe): ValidationResult {
 
     for (const slot of recipe.targetAffixes?.prefixes ?? []) {
       if (!slot.name) continue;
+      const coeStatus = checkModOnBase(baseCategory, "prefix", slot.name);
+      if (coeStatus === "valid") continue;
+      // Wrong slot per CoE: warning regardless of sheet
+      if (coeStatus === "wrong-slot") {
+        issues.push({
+          severity: "warning",
+          field: "prefix",
+          message: `"${slot.name}" is listed as a PREFIX but on ${baseCategory} it's actually a SUFFIX (per Craft of Exile data) — swap it.`,
+        });
+        continue;
+      }
+      // Invalid per CoE — check sheet as a sanity confirmation; if sheet also doesn't have it, escalate
       if (!prefixIndex.has(normalizeModName(slot.name))) {
-        // Maybe the Oracle put it in the wrong slot — check suffixes
         const inSuffixes = suffixIndex.has(normalizeModName(slot.name));
         issues.push({
           severity: inSuffixes ? "warning" : "critical",
@@ -218,6 +234,16 @@ export function validateRecipe(recipe: Recipe): ValidationResult {
     }
     for (const slot of recipe.targetAffixes?.suffixes ?? []) {
       if (!slot.name) continue;
+      const coeStatus = checkModOnBase(baseCategory, "suffix", slot.name);
+      if (coeStatus === "valid") continue;
+      if (coeStatus === "wrong-slot") {
+        issues.push({
+          severity: "warning",
+          field: "suffix",
+          message: `"${slot.name}" is listed as a SUFFIX but on ${baseCategory} it's actually a PREFIX (per Craft of Exile data) — swap it.`,
+        });
+        continue;
+      }
       if (!suffixIndex.has(normalizeModName(slot.name))) {
         const inPrefixes = prefixIndex.has(normalizeModName(slot.name));
         issues.push({
