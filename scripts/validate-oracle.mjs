@@ -131,6 +131,30 @@ const BASES_SECTION = buildBasesSection(POE2_BASES_GROUPED);
 const MODS_SECTION = buildModsSection(MOD_DATA);
 const ESSENCES_SECTION = buildEssencesSection(COE_ESSENCE_APPLICABILITY);
 
+// Mirror buildKnownCraftsPromptSection — load docs/known-good-crafts/*.md
+function buildKnownCraftsSection() {
+  const dir = path.join(projectRoot, "docs", "known-good-crafts");
+  if (!fs.existsSync(dir)) return "";
+  const files = fs.readdirSync(dir)
+    .filter((f) => f.endsWith(".md"))
+    .filter((f) => !f.startsWith("TEMPLATE") && !f.startsWith("_"))
+    .sort();
+  if (files.length === 0) return "";
+  const examples = files.map((file) => {
+    const content = fs.readFileSync(path.join(dir, file), "utf-8").trim();
+    return `### Example: ${file.replace(/\.md$/, "").replace(/^\d+-/, "").replace(/-/g, " ")}\n\n${content}`;
+  });
+  return `## Known-Good Crafts — verified worked examples
+
+The crafts below have been VERIFIED IN-GAME by the user. When a user question matches one of these, base your recommendation on the example's pattern rather than reasoning from first principles.
+
+There are ${files.length} verified example${files.length === 1 ? "" : "s"} below.
+
+${examples.join("\n\n---\n\n")}
+`;
+}
+const KNOWN_CRAFTS_SECTION = buildKnownCraftsSection();
+
 // Mirror the buildCurrencyPromptSection logic — we can't import the .ts
 // directly, but the data file is self-contained so we read it as text and
 // extract the key facts. Done lazily to keep this script standalone.
@@ -159,6 +183,8 @@ const CURRENCY_SECTION = (() => {
 })();
 
 const SYSTEM_PROMPT = `You are the PoE2 Crafting Oracle. You must follow the rules in these two documents exactly and completely.
+
+${KNOWN_CRAFTS_SECTION}
 
 ${BASES_SECTION}
 

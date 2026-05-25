@@ -5,6 +5,7 @@ import { buildBasesPromptSection } from "@/lib/bases-prompt";
 import { buildModsPromptSection } from "@/lib/mods-prompt";
 import { buildEssencesPromptSection } from "@/lib/essences-prompt";
 import { buildCurrencyPromptSection } from "@/lib/currency-prompt";
+import { buildKnownCraftsPromptSection } from "@/lib/known-crafts-prompt";
 
 if (!process.env.CLAUDE_API_KEY) {
   throw new Error("CLAUDE_API_KEY is not set. Add it to .env.local before starting the server.");
@@ -28,8 +29,14 @@ const BASES_SECTION = buildBasesPromptSection();
 const MODS_SECTION = buildModsPromptSection();
 const ESSENCES_SECTION = buildEssencesPromptSection();
 const CURRENCY_SECTION = buildCurrencyPromptSection();
+// User-curated verified crafts (docs/known-good-crafts/*.md). Highest-priority
+// section — if a user's question matches one of these, the Oracle should base
+// its recommendation on the example's pattern rather than reasoning from rules.
+const KNOWN_CRAFTS_SECTION = buildKnownCraftsPromptSection();
 
 const SYSTEM_PROMPT = `You are the PoE2 Crafting Oracle. You must follow the rules in these two documents exactly and completely.
+
+${KNOWN_CRAFTS_SECTION}
 
 ${BASES_SECTION}
 
