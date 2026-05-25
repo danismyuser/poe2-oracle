@@ -2,7 +2,7 @@
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import VerifyInCoE from "@/components/VerifyInCoE";
 import { parseOracleResponse } from "@/lib/recipe-parser";
-import { validateRecipe, validateCurrencyFlow, type RecipeIssue } from "@/lib/recipe-validate";
+import { validateRecipe, validateCurrencyFlow, validateWeaponVsQuiverMods, type RecipeIssue } from "@/lib/recipe-validate";
 
 interface Props {
   content: string;
@@ -19,7 +19,8 @@ export default function OracleResponse({ content }: Props) {
   const { markdown, recipe } = parseOracleResponse(content);
   const recipeIssues = recipe ? validateRecipe(recipe).issues : [];
   const currencyIssues = validateCurrencyFlow(markdown);
-  const allIssues = [...recipeIssues, ...currencyIssues];
+  const namingIssues = validateWeaponVsQuiverMods(recipe);
+  const allIssues = [...recipeIssues, ...currencyIssues, ...namingIssues];
 
   return (
     <>

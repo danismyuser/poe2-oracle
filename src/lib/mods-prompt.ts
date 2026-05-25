@@ -43,6 +43,11 @@ When you populate a recipe block's \`targetAffixes\` array, the \`name\` field o
 - ❌ \`"Crit Multi"\` → ✅ \`"+#% to Critical Damage Bonus"\`
 - ❌ \`"Fire Res"\` → ✅ \`"#% to Fire Resistance"\` (exact phrasing — note no "+" prefix in canonical form)
 
+**CRITICAL — Weapon vs Quiver damage-mod naming differs:**
+- On **weapons** (Bow, Crossbow, Wand, Staff, Sceptre, all melee weapons): canonical name is \`"Adds # to # X Damage"\` (NO "to Attacks" suffix). The weapon itself deals the damage.
+- On **Quivers** (and some off-hands): canonical name is \`"Adds # to # X damage to Attacks"\` (WITH "to Attacks" suffix). The quiver doesn't deal damage; it adds damage to your attacks.
+- Reported failure: writing \`"Adds # to # Lightning Damage to Attacks"\` on a Bow recipe is WRONG — on a Bow it must be \`"Adds # to # Lightning Damage"\`. The same rule applies to all four damage types.
+
 \`#\` is a literal placeholder for numeric ranges — do NOT substitute actual numbers in the recipe block. The lookup is by mod template, not specific roll.
 
 If a mod you want isn't on the list, pick the closest valid mod and substitute. NEVER fabricate a mod name.

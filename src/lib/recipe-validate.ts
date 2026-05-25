@@ -121,6 +121,42 @@ export function validateCurrencyFlow(markdown: string): RecipeIssue[] {
   return issues;
 }
 
+/**
+ * Catches the weapon-vs-quiver mod-naming confusion the user reported.
+ * On weapons (Bow, Crossbow, Wand, Staff, etc.) elemental/physical damage
+ * mods are named "Adds # to # X Damage". On Quivers they're named
+ * "Adds # to # X Damage to Attacks" (because quivers don't deal damage
+ * themselves — they add damage to the wielder's attacks). The Oracle
+ * sometimes copies the Quiver naming onto weapon recipes.
+ */
+export function validateWeaponVsQuiverMods(recipe: Recipe | null): RecipeIssue[] {
+  if (!recipe) return [];
+  const issues: RecipeIssue[] = [];
+  const weaponClasses = new Set([
+    "Bow", "Crossbow", "Wand", "Staff", "Sceptre",
+    "One Hand Sword", "Two Hand Sword", "One Hand Axe", "Two Hand Axe",
+    "One Hand Mace", "Two Hand Mace", "Dagger", "Claw", "Flail", "Spear", "Warstaff",
+    "Chaos Wand", "Fire Wand", "Ice Wand", "Lightning Wand", "Physical Wand",
+    "Chaos Staff", "Fire Staff", "Ice Staff", "Lightning Staff", "Physical Staff",
+  ]);
+  const isWeapon = weaponClasses.has(recipe.itemClass) ||
+    /\b(Bow|Crossbow|Wand|Staff|Sceptre|Sword|Axe|Mace|Dagger|Claw|Flail|Spear)\b/.test(recipe.itemClass);
+
+  if (!isWeapon) return issues;
+
+  for (const slot of [...(recipe.targetAffixes?.prefixes ?? []), ...(recipe.targetAffixes?.suffixes ?? [])]) {
+    if (!slot.name) continue;
+    if (/Adds\s+#\s+to\s+#\s+\w+\s+[Dd]amage\s+to\s+Attacks/i.test(slot.name)) {
+      issues.push({
+        severity: "critical",
+        field: slot.name in (recipe.targetAffixes?.prefixes ?? []) ? "prefix" : "suffix",
+        message: `"${slot.name}" uses Quiver naming on a ${recipe.itemClass}. On weapons the canonical name is "${slot.name.replace(/\s+to\s+Attacks/i, "")}" (no "to Attacks" suffix). That suffix is Quiver-only.`,
+      });
+    }
+  }
+  return issues;
+}
+
 function normalizeModName(name: string): string {
   return name.toLowerCase().replace(/[#%+]/g, "").replace(/\s+to\s+/g, " ").replace(/\s+/g, " ").trim();
 }
