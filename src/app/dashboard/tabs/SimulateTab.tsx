@@ -9,6 +9,22 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 
 const EMPTY_SLOT = (): AffixSlot => ({ name: "", tier: "" });
 
+/** Group ITEM_CLASSES by parent name so the dropdown renders 76 categories
+ *  as collapsible-feeling optgroups: e.g. all "Body Armour (DEX)" / "(INT)" /
+ *  ... sit under a "Body Armour" header. */
+function buildItemClassGroups(classes: readonly string[]): { label: string; classes: string[] }[] {
+  const groups = new Map<string, string[]>();
+  for (const c of classes) {
+    const parent = c.replace(/\s*\([^)]+\)\s*$/, "").trim();
+    if (!groups.has(parent)) groups.set(parent, []);
+    groups.get(parent)!.push(c);
+  }
+  return [...groups.entries()]
+    .map(([label, list]) => ({ label, classes: list.sort() }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+}
+const ITEM_CLASS_GROUPS = buildItemClassGroups(ITEM_CLASSES);
+
 const BUDGETS = [
   { value: "league-start", label: "League Start", activeClass: "active-league" },
   { value: "mid",          label: "Mid-tier",     activeClass: "active-mid" },
@@ -98,7 +114,19 @@ export default function SimulateTab() {
                   onChange={(e) => changeClass(e.target.value as ItemClass)}
                   className="select-field"
                 >
-                  {ITEM_CLASSES.map((c) => <option key={c} value={c}>{c}</option>)}
+                  {ITEM_CLASS_GROUPS.map((group) =>
+                    group.classes.length === 1 ? (
+                      <option key={group.classes[0]} value={group.classes[0]}>
+                        {group.classes[0]}
+                      </option>
+                    ) : (
+                      <optgroup key={group.label} label={group.label}>
+                        {group.classes.map((c) => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </optgroup>
+                    ),
+                  )}
                 </select>
               </div>
               <div className="flex flex-col gap-1.5">
