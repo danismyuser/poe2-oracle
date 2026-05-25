@@ -6,24 +6,24 @@ import AffixSelector from "@/components/AffixSelector";
 import ItemPreview from "@/components/ItemPreview";
 import OracleResponse from "@/components/OracleResponse";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import SearchableSelect, { type SelectOption } from "@/components/SearchableSelect";
 
 const EMPTY_SLOT = (): AffixSlot => ({ name: "", tier: "" });
 
-/** Group ITEM_CLASSES by parent name so the dropdown renders 76 categories
- *  as collapsible-feeling optgroups: e.g. all "Body Armour (DEX)" / "(INT)" /
- *  ... sit under a "Body Armour" header. */
-function buildItemClassGroups(classes: readonly string[]): { label: string; classes: string[] }[] {
-  const groups = new Map<string, string[]>();
-  for (const c of classes) {
-    const parent = c.replace(/\s*\([^)]+\)\s*$/, "").trim();
-    if (!groups.has(parent)) groups.set(parent, []);
-    groups.get(parent)!.push(c);
-  }
-  return [...groups.entries()]
-    .map(([label, list]) => ({ label, classes: list.sort() }))
-    .sort((a, b) => a.label.localeCompare(b.label));
-}
-const ITEM_CLASS_GROUPS = buildItemClassGroups(ITEM_CLASSES);
+/** Build SelectOption list for ITEM_CLASSES, with `group` derived from the
+ *  parent name (e.g. "Body Armour (INT)" → group "Body Armour"). Renders as
+ *  optgroups in SearchableSelect. */
+const ITEM_CLASS_OPTIONS: SelectOption[] = (() => {
+  const parented = ITEM_CLASSES.map((c) => ({
+    value: c,
+    label: c,
+    group: c.replace(/\s*\([^)]+\)\s*$/, "").trim(),
+  }));
+  // Sort by group then by label so the dropdown reads naturally
+  return parented.sort((a, b) =>
+    a.group.localeCompare(b.group) || a.label.localeCompare(b.label),
+  );
+})();
 
 const BUDGETS = [
   { value: "league-start", label: "League Start", activeClass: "active-league" },
@@ -109,35 +109,21 @@ export default function SimulateTab() {
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
                 <label className="field-label">Item Class</label>
-                <select
+                <SearchableSelect
                   value={itemClass}
-                  onChange={(e) => changeClass(e.target.value as ItemClass)}
-                  className="select-field"
-                >
-                  {ITEM_CLASS_GROUPS.map((group) =>
-                    group.classes.length === 1 ? (
-                      <option key={group.classes[0]} value={group.classes[0]}>
-                        {group.classes[0]}
-                      </option>
-                    ) : (
-                      <optgroup key={group.label} label={group.label}>
-                        {group.classes.map((c) => (
-                          <option key={c} value={c}>{c}</option>
-                        ))}
-                      </optgroup>
-                    ),
-                  )}
-                </select>
+                  onChange={(v) => changeClass(v as ItemClass)}
+                  options={ITEM_CLASS_OPTIONS}
+                  placeholder="Pick an item class…"
+                />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="field-label">Base</label>
-                <select
+                <SearchableSelect
                   value={base}
-                  onChange={(e) => setBase(e.target.value)}
-                  className="select-field"
-                >
-                  {BASES[itemClass].map((b) => <option key={b} value={b}>{b}</option>)}
-                </select>
+                  onChange={setBase}
+                  options={BASES[itemClass].map((b) => ({ value: b, label: b }))}
+                  placeholder="Pick a base…"
+                />
               </div>
             </div>
 

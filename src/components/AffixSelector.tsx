@@ -1,6 +1,7 @@
 "use client";
 import type { AffixSlot } from "@/types/craft";
 import { AffixDef } from "@/lib/affix-data";
+import SearchableSelect from "@/components/SearchableSelect";
 
 interface Props {
   label: string;
@@ -11,6 +12,11 @@ interface Props {
 
 export default function AffixSelector({ label, slot, affixPool, onChange }: Props) {
   const tiers = affixPool.find((a) => a.name === slot.name)?.tiers ?? [];
+
+  const modOptions = [
+    { value: "", label: "— none —" },
+    ...affixPool.map((a) => ({ value: a.name, label: a.name })),
+  ];
 
   return (
     <div className="flex gap-2 items-center">
@@ -29,20 +35,17 @@ export default function AffixSelector({ label, slot, affixPool, onChange }: Prop
         {label}
       </span>
 
-      {/* Mod name */}
-      <select
-        value={slot.name}
-        onChange={(e) => onChange({ name: e.target.value, tier: "" })}
-        className="select-field"
-        style={{ flex: 1 }}
-      >
-        <option value="">— none —</option>
-        {affixPool.map((a) => (
-          <option key={a.name} value={a.name}>{a.name}</option>
-        ))}
-      </select>
+      {/* Mod name — searchable since pools can be 20-45 entries */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <SearchableSelect
+          value={slot.name}
+          onChange={(v) => onChange({ name: v, tier: "" })}
+          options={modOptions}
+          placeholder="— none —"
+        />
+      </div>
 
-      {/* Tier */}
+      {/* Tier — only ~5 options, native select is fine */}
       <select
         value={slot.tier}
         onChange={(e) => onChange({ ...slot, tier: e.target.value })}
