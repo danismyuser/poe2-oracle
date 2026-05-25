@@ -4,6 +4,7 @@ import path from "path";
 import { buildBasesPromptSection } from "@/lib/bases-prompt";
 import { buildModsPromptSection } from "@/lib/mods-prompt";
 import { buildEssencesPromptSection } from "@/lib/essences-prompt";
+import { buildCurrencyPromptSection } from "@/lib/currency-prompt";
 
 if (!process.env.CLAUDE_API_KEY) {
   throw new Error("CLAUDE_API_KEY is not set. Add it to .env.local before starting the server.");
@@ -26,6 +27,7 @@ const DATA_SOURCES = fs.readFileSync(path.join(docsDir, "data-sources.md"), "utf
 const BASES_SECTION = buildBasesPromptSection();
 const MODS_SECTION = buildModsPromptSection();
 const ESSENCES_SECTION = buildEssencesPromptSection();
+const CURRENCY_SECTION = buildCurrencyPromptSection();
 
 const SYSTEM_PROMPT = `You are the PoE2 Crafting Oracle. You must follow the rules in these two documents exactly and completely.
 
@@ -34,6 +36,8 @@ ${BASES_SECTION}
 ${MODS_SECTION}
 
 ${ESSENCES_SECTION}
+
+${CURRENCY_SECTION}
 
 # instructions.md
 ${INSTRUCTIONS}

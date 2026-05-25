@@ -131,6 +131,33 @@ const BASES_SECTION = buildBasesSection(POE2_BASES_GROUPED);
 const MODS_SECTION = buildModsSection(MOD_DATA);
 const ESSENCES_SECTION = buildEssencesSection(COE_ESSENCE_APPLICABILITY);
 
+// Mirror the buildCurrencyPromptSection logic — we can't import the .ts
+// directly, but the data file is self-contained so we read it as text and
+// extract the key facts. Done lazily to keep this script standalone.
+const currencyTs = fs.readFileSync(path.join(projectRoot, "src/lib/currency-data.ts"), "utf-8");
+const CURRENCY_SECTION = (() => {
+  const curMatches = [...currencyTs.matchAll(/\{\s*name:\s*"([^"]+)",[^}]*?effect:\s*"([^"]+)"[^}]*\}/g)];
+  const omenMatches = [...currencyTs.matchAll(/\{\s*name:\s*"([^"]+)",\s*modifies:\s*"([^"]*)",\s*effect:\s*"([^"]+)"\s*\}/g)];
+  let s = `## Authoritative PoE2 Currency Reference — non-negotiable mechanics
+
+**Source:** poe2db.tw. See src/lib/currency-data.ts for the structured data and recipe-validate.ts for runtime enforcement.
+
+### Currencies
+`;
+  for (const m of curMatches) s += `- **${m[1]}** — ${m[2]}\n`;
+  s += "\n### Omens — modify the NEXT currency use\n";
+  for (const m of omenMatches) s += `- **${m[1]}** [next ${m[2]}] — ${m[3]}\n`;
+  s += `\n### Critical rules
+1. Non-Perfect essences (Lesser/Greater) require MAGIC, not white. To craft white→essence-rare: Transmutation first, then Essence.
+2. Perfect essences require RARE and REPLACE a random affix.
+3. Perfect essences produce DIFFERENT modifiers than Greater essences.
+4. Hinekora's Lock is the preview tool — there is NO "Omen of Crystallisation".
+5. Chaos Orbs require RARE (they remove+add, net 0).
+6. Exalted Orbs require an OPEN slot.
+`;
+  return s;
+})();
+
 const SYSTEM_PROMPT = `You are the PoE2 Crafting Oracle. You must follow the rules in these two documents exactly and completely.
 
 ${BASES_SECTION}
@@ -138,6 +165,8 @@ ${BASES_SECTION}
 ${MODS_SECTION}
 
 ${ESSENCES_SECTION}
+
+${CURRENCY_SECTION}
 
 # instructions.md
 ${INSTRUCTIONS}

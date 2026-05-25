@@ -6,13 +6,119 @@ export type IssueSeverity = "critical" | "warning";
 
 export interface RecipeIssue {
   severity: IssueSeverity;
-  field: "essence" | "prefix" | "suffix" | "base";
+  field: "essence" | "prefix" | "suffix" | "base" | "currency-flow";
   message: string;
 }
 
 export interface ValidationResult {
   issues: RecipeIssue[];
   critical: boolean;
+}
+
+/**
+ * Detect the most common currency-mechanic errors in the Oracle's prose.
+ * Looks at the markdown response — these patterns can't be checked from the
+ * structured recipe block alone because they're about the sequence of steps
+ * described in the natural-language explanation.
+ *
+ * Rules sourced from poe2db.tw/us/Currency and /Essence — non-Perfect
+ * essences require MAGIC (not white), Perfect essences require RARE,
+ * Hinekora's Lock is the preview tool (no "Omen of Crystallisation"), etc.
+ */
+export function validateCurrencyFlow(markdown: string): RecipeIssue[] {
+  const issues: RecipeIssue[] = [];
+  const md = markdown;
+
+  /** True when the markdown directly applies a Lesser/Greater/Perfect Essence
+   *  to a white item — looks for explicit "Apply/Use [Essence] to/on (a) white"
+   *  phrasing in a single clause, OR "[Essence] to a white [base-noun]" /
+   *  "white [base-noun] ... Apply [Essence]" within ~120 chars and no upgrade
+   *  currency in that span.
+   *
+   *  Deliberately narrow to avoid false positives on legal recipes like
+   *  "Apply Transmutation to your white base, then Greater Essence to the
+   *  magic item" — which spans white and essence but includes Transmutation
+   *  before and routes through "magic". */
+  function essenceDirectlyOnWhite(essencePattern: RegExp): boolean {
+    const essSrc = essencePattern.source;
+
+    // Pattern 1: explicit "to/on (a|the|your) white" right after the essence
+    //   "Apply Greater Essence of Abrasion to a white bow"
+    //   "Use Perfect Essence of Ruin on white"
+    const explicitApply = new RegExp(`\\b(apply|use|slam)\\b[\\s\\S]{0,60}?(${essSrc})[\\s\\S]{0,40}?\\b(to|on)\\b\\s+(a|the|your)?\\s*white\\b`, "i");
+    if (explicitApply.test(md)) return true;
+
+    // Pattern 2: "white" within 120 chars BEFORE the essence in a way that
+    //   implies direct application — but include 80 chars AFTER the essence
+    //   so we catch trailing "to the magic item" qualifiers. Skip if any
+    //   upgrade currency appears EARLIER in the markdown (before this rev
+    //   match) OR the word "magic" appears in the extended span.
+    const revRe = new RegExp(`\\bwhite\\b[\\s\\S]{0,120}?(?:apply|use|slam)\\b[\\s\\S]{0,40}?(${essSrc})[\\s\\S]{0,80}`, "i");
+    const rev = md.match(revRe);
+    if (rev) {
+      const extendedSpan = rev[0];
+      const startIndex = rev.index ?? 0;
+      const earlier = md.slice(0, startIndex);
+      const hasUpgradeBefore = /\b(Orb of Transmutation|Greater Orb of Transmutation|Perfect Orb of Transmutation|Orb of Alchemy|Regal Orb|Greater Regal Orb|Perfect Regal Orb)\b/i.test(earlier);
+      const hasUpgradeIn    = /\b(Orb of Transmutation|Greater Orb of Transmutation|Perfect Orb of Transmutation|Orb of Alchemy|Regal Orb|Greater Regal Orb|Perfect Regal Orb)\b/i.test(extendedSpan);
+      const hasMagicRouting = /\b(to|on)\s+(a|the|your)?\s*magic\b/i.test(extendedSpan);
+      if (!hasUpgradeBefore && !hasUpgradeIn && !hasMagicRouting) return true;
+    }
+    return false;
+  }
+
+  // ❌ Non-Perfect Essence applied directly to a white base
+  if (essenceDirectlyOnWhite(/(?:Lesser|Greater)\s+Essence/)) {
+    issues.push({
+      severity: "critical",
+      field: "currency-flow",
+      message: "Non-Perfect Essences (Lesser/Greater) require a MAGIC item, not white. Add an Orb of Transmutation step first (white → magic), then apply the Essence (magic → rare). Alternative: Orb of Alchemy gives white → rare directly but with no guaranteed mod.",
+    });
+  }
+
+  // ❌ Perfect Essence applied directly to a white base
+  if (essenceDirectlyOnWhite(/Perfect\s+Essence/)) {
+    issues.push({
+      severity: "critical",
+      field: "currency-flow",
+      message: "Perfect Essences require a RARE item (they REPLACE a random affix). Build the rare first (Alchemy, or Trans → Essence), then Perfect-essence over an unwanted affix.",
+    });
+  }
+
+  // ❌ Perfect Essence on magic (no Regal between)
+  const perfectMagicMatch = md.match(/Perfect\s+Essence[\s\S]{0,250}?\bmagic\b|\bmagic\b[\s\S]{0,250}?Perfect\s+Essence/i);
+  if (perfectMagicMatch && !/\b(Regal Orb|Greater Regal Orb|Perfect Regal Orb)\b/i.test(perfectMagicMatch[0])) {
+    issues.push({
+      severity: "critical",
+      field: "currency-flow",
+      message: "Perfect Essences require a RARE item, not magic. The recipe references magic without a Regal Orb step before the Perfect Essence.",
+    });
+  }
+
+  // ❌ "Omen of Crystallisation" used standalone — fabricated; not preceded by Sinistral/Dextral
+  const omenMatches = [...md.matchAll(/(\w+\s+)?Omen\s+of\s+Crystallisation/gi)];
+  for (const m of omenMatches) {
+    const preceding = (m[1] ?? "").trim();
+    if (!/^(Sinistral|Dextral)$/i.test(preceding)) {
+      issues.push({
+        severity: "critical",
+        field: "currency-flow",
+        message: "\"Omen of Crystallisation\" does not exist as a standalone omen. The preview-before-commit tool is Hinekora's Lock. (There ARE Omens of Sinistral/Dextral Crystallisation, but they modify Perfect-Essence prefix/suffix removal — not preview.)",
+      });
+      break;
+    }
+  }
+
+  // ❌ Chaos Orb on white or magic
+  if (/\b(Greater\s+|Perfect\s+)?Chaos\s+Orb\b[\s\S]{0,150}?\b(white|magic)\s+(base|item)\b/i.test(md)) {
+    issues.push({
+      severity: "critical",
+      field: "currency-flow",
+      message: "Chaos Orbs require a RARE item (they remove one affix and add one — net 0). Cannot be applied to white or magic. Upgrade first with Alchemy (white → rare) or Regal (magic → rare).",
+    });
+  }
+
+  return issues;
 }
 
 function normalizeModName(name: string): string {

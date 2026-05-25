@@ -247,54 +247,114 @@ This block is parsed by the app and used to deep-link into Craft of Exile's emul
 
 ---
 
-## 11b. PoE2 currency tier mechanics — non-negotiable rules
+## 11b. PoE2 currency mechanics — non-negotiable rules
 
-Each currency tier has specific requirements about the STATE of the item it's applied to. Violating these makes the recipe physically impossible and breaks user trust on the very first step.
+**Source:** https://poe2db.tw/us/Currency, /Essence, /Omen, /Crafting.
+These rules are also encoded as structured data in `src/lib/currency-data.ts` and injected into your system prompt — when in doubt, consult that authoritative reference rather than memory.
 
-### Essences
+Each currency has specific requirements about the STATE of the item it's applied to. Violating these makes the recipe physically impossible.
 
-| Tier | Required item state | Effect |
+### Essences — the most common Oracle error
+
+| Tier | REQUIRED item state | Effect |
 |------|--------------------|--------|
-| **Lesser / Normal / Greater Essence** | WHITE or MAGIC base | Upgrades to RARE and adds the guaranteed mod. Other affixes roll randomly. |
-| **Perfect Essence** | EXISTING RARE item | REPLACES one random affix with the guaranteed mod. **Cannot be used on a white base** — that's what Greater Essence is for. |
+| **Lesser / (Normal) / Greater Essence** | **MAGIC** (not white!) | Upgrades MAGIC → RARE, adding the guaranteed modifier. Other affixes roll randomly. |
+| **Perfect Essence** | **RARE** | REMOVES a random modifier and augments with a new guaranteed modifier in its place. **Cannot be used on a white or magic base.** |
 
-A common error to avoid: "Apply Perfect Essence of X to a white base" — this is impossible. Either start with Greater Essence (white → rare with the mod) or first make the item rare via Greater Alchemy / Regal / Chaos and then Perfect-Essence over an unwanted affix.
+**To craft white → rare with an essence-guaranteed mod, the correct sequence is:**
+1. Orb of Transmutation (white → magic, 1 affix)
+2. Lesser/Normal/Greater Essence (magic → rare with guaranteed mod + random extras)
+
+Or alternatively: Orb of Alchemy (white → rare with 4 random affixes), but this gives you no guaranteed mod.
+
+**Common errors to avoid:**
+- ❌ "Apply Greater Essence of X to a white base" — Greater Essence needs MAGIC. Add Transmutation first.
+- ❌ "Apply Perfect Essence of X to a white base" — Perfect Essence needs RARE. Build the rare first, then Perfect-essence over an unwanted affix.
+
+**Critical Perfect-vs-Greater distinction:** Perfect Essences produce ENTIRELY DIFFERENT modifiers than their Greater counterparts, not just better tiers. For example:
+- Greater Essence of Abrasion (on weapon): Adds # to # Physical Damage
+- Perfect Essence of Abrasion (on weapon): Gain # of Damage as Extra Physical Damage
+- Greater Essence of the Body (on chest): +# to maximum Life
+- Perfect Essence of the Body (on body armour only): #% increased maximum Life
+
+Recommend the Perfect variant only when its specific effect is what the user actually wants.
 
 ### Chaos Orbs
 
-| Tier | Required item state | Effect |
-|------|--------------------|--------|
-| **Chaos / Greater Chaos / Perfect Chaos** | RARE item | Removes one random affix and adds a new random one. Greater guarantees min T3 on the new mod, Perfect guarantees T1. |
+| Tier | Required state | Effect |
+|------|---------------|--------|
+| **Chaos / Greater Chaos / Perfect Chaos** | **RARE** | REMOVES a random modifier AND augments with a new random one (net change: 0 affixes; 1 swapped). |
 
-Cannot be used on white or magic. White → Alchemy/Regal. Magic → Regal.
+Cannot be used on white or magic. Greater Chaos guarantees minimum modifier level 35; Perfect guarantees minimum modifier level 50 (this is about modifier-level requirements, NOT tier — actual tier depends on the mod's tier table for that base).
 
 ### Exalted Orbs
 
-| Tier | Required item state | Effect |
-|------|--------------------|--------|
-| **Exalted / Greater / Perfect Exalted** | RARE with at least one OPEN affix slot | Adds a new random affix. Greater = min T3, Perfect = T1. |
+| Tier | Required state | Effect |
+|------|---------------|--------|
+| **Exalted / Greater / Perfect Exalted** | **RARE** with at least 1 OPEN affix slot | Adds 1 new random modifier. Greater = min mod level 35, Perfect = min mod level 50. |
 
-Cannot be used if all 6 affix slots are full. If you need to free a slot first, use Annulment Orb (random) or a method that removes a mod deterministically.
+Cannot be used when all 6 affix slots are full. To free a slot: Orb of Annulment (or with Omens for prefix/suffix targeting).
 
-### Transmute / Augment / Regal / Alchemy
+### Upgrade-rarity orbs
 
 | Currency | Required state | Effect |
 |----------|---------------|--------|
-| Orb of Transmutation | WHITE | White → Magic with 1 affix |
-| Orb of Augmentation | MAGIC with 1 affix | Adds a second affix (must have an open slot) |
-| Regal Orb | MAGIC | Magic → Rare, adds a third affix |
-| Orb of Alchemy | WHITE | White → Rare directly (faster but less control than Trans → Aug → Regal) |
+| **Orb of Transmutation** (base / Greater / Perfect) | WHITE | White → Magic with 1 modifier. Greater = min mod level 55, Perfect = min mod level 70. |
+| **Orb of Augmentation** (base / Greater / Perfect) | MAGIC with open slot | Adds a 2nd modifier (magic items have 2 slot max). Greater = ml 55, Perfect = ml 70. |
+| **Regal Orb** (base / Greater / Perfect) | MAGIC | Magic → Rare, adds 1 modifier. Greater = ml 35, Perfect = ml 50. |
+| **Orb of Alchemy** | WHITE | White → Rare directly with 4 random modifiers (no guaranteed mod; for guaranteed mod use Transmutation → Essence). |
+| **Orb of Chance** | WHITE | Unpredictably either upgrades to Unique OR destroys it. |
 
-### Omens
+### Other currencies
 
-Omens modify the NEXT currency use. They do not consume the item, only influence the outcome of the subsequent orb:
-- **Omen of Sinistral Erasure** — next Chaos protects PREFIXES (rerolls suffixes only)
-- **Omen of Dextral Erasure** — next Chaos protects SUFFIXES (rerolls prefixes only)
-- **Omen of Sinistral Exaltation** — next Exalt forces a SUFFIX
-- **Omen of Dextral Exaltation** — next Exalt forces a PREFIX
-- **Omen of Crystallisation** — next currency use shows a preview; can abort before committing
+| Currency | Required state | Effect |
+|----------|---------------|--------|
+| **Orb of Annulment** | MAGIC or RARE | Removes a random modifier without changing rarity. |
+| **Divine Orb** | MAGIC / RARE / UNIQUE | Randomizes NUMERIC VALUES of existing modifiers — does NOT add or remove mods. |
+| **Vaal Orb** | MAGIC / RARE / UNIQUE | Modifies unpredictably AND Corrupts the item (no further normal modification). |
+| **Fracturing Orb** | RARE with at least 4 modifiers | Fractures (locks in place) one random modifier. |
+| **Hinekora's Lock** | MAGIC or RARE | **Allows the item to FORESEE the result of the next currency use.** This is PoE2's preview-before-commit mechanism. Use this when describing safe Perfect-tier slams. **There is NO "Omen of Crystallisation" with this function** — that's a fabrication. The real Omen of Sinistral/Dextral Crystallisation modifies Perfect Essence removal behaviour (prefix vs suffix). |
 
-Recipe step ordering MUST respect these state rules. If a step uses Perfect Essence, an earlier step must have produced a rare item.
+### Omens — modify the NEXT currency use
+
+Omens are consumed when the targeted currency is used. They do NOT modify the item themselves.
+
+**Chaos-targeting:**
+- **Omen of Sinistral Erasure** — next Chaos removes only a PREFIX (protects suffixes)
+- **Omen of Dextral Erasure** — next Chaos removes only a SUFFIX (protects prefixes)
+- **Omen of Whittling** — next Chaos removes the LOWEST-level modifier (deterministic)
+
+**Exalt-targeting:**
+- **Omen of Sinistral Exaltation** — next Exalt adds only a PREFIX
+- **Omen of Dextral Exaltation** — next Exalt adds only a SUFFIX
+- **Omen of Greater Exaltation** — next Exalt adds TWO modifiers
+- **Omen of Homogenising Exaltation** — next Exalt adds an affix of the same TYPE as one already on the item
+- **Omen of Catalysing Exaltation** — consumes Catalyst quality to bias toward the catalysed type
+
+**Annul-targeting:**
+- **Omen of Sinistral / Dextral Annulment** — next Annul removes only prefix / only suffix
+- **Omen of Greater Annulment** — next Annul removes TWO modifiers
+- **Omen of Light** — next Annul removes only DESECRATED modifiers
+
+**Regal-targeting:**
+- **Omen of Sinistral / Dextral Coronation** — next Regal adds only prefix / only suffix
+- **Omen of Homogenising Coronation** — next Regal adds same-type modifier as existing
+
+**Alchemy-targeting:**
+- **Omen of Sinistral / Dextral Alchemy** — next Alchemy results in max number of prefixes / suffixes
+
+**Perfect-Essence-targeting:**
+- **Omen of Sinistral Crystallisation** — next Perfect/Corrupted Essence removes only a PREFIX (controlling which affix is replaced)
+- **Omen of Dextral Crystallisation** — next Perfect/Corrupted Essence removes only a SUFFIX
+
+**Chance/Vaal/Divine-targeting:**
+- **Omen of Chance** — next Orb of Chance will NOT destroy the item
+- **Omen of the Ancients** — next Orb of Chance upgrades to a random Unique of the same item class
+- **Omen of Corruption** — next Vaal Orb is guaranteed to change the item (no no-op)
+- **Omen of the Blessed** — next Divine Orb only rerolls IMPLICITS
+- **Omen of Sanctification** — next Divine Orb on a Rare Sanctifies it
+
+Recipe step ordering MUST respect ALL these state rules. If a step uses Perfect Essence, an earlier step must have produced a rare item.
 
 ---
 
