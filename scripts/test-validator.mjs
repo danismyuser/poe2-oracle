@@ -11,15 +11,37 @@ const root = path.resolve(__dirname, "..");
 const lookupTs = fs.readFileSync(path.join(root, "src/lib/coe-lookup.ts"), "utf-8");
 const weightsTs = fs.readFileSync(path.join(root, "src/lib/mod-weights.ts"), "utf-8");
 
+/** Brace-counting extractor — handles arbitrarily large nested objects.
+ *  The previous regex-only approach silently truncated on large objects
+ *  (COE_BASE_MODS grew big enough to trigger this). Find the `{` after
+ *  `export const NAME ... =` and walk forward counting braces. */
 function extractConst(src, name) {
-  const re = new RegExp(`export const ${name}[^=]*=\\s*(\\{[\\s\\S]*?\\});\\s*(?:export|function|/\\*\\*|interface|$)`, "m");
-  const m = src.match(re);
-  return m ? JSON.parse(m[1]) : null;
+  const startIdx = src.indexOf(`export const ${name}`);
+  if (startIdx < 0) return null;
+  // Skip past the TypeScript type annotation — find the `=` and then the
+  // first `{` after it. (Type literals like `{ b: number }` would otherwise
+  // trip up a naive first-brace search.)
+  const eqIdx = src.indexOf("=", startIdx);
+  if (eqIdx < 0) return null;
+  const objStart = src.indexOf("{", eqIdx);
+  if (objStart < 0) return null;
+  let depth = 0;
+  for (let i = objStart; i < src.length; i++) {
+    if (src[i] === "{") depth++;
+    else if (src[i] === "}") {
+      depth--;
+      if (depth === 0) {
+        return JSON.parse(src.slice(objStart, i + 1));
+      }
+    }
+  }
+  return null;
 }
 
 const COE_BITEMS = extractConst(lookupTs, "COE_BITEMS");
 const COE_BASE_CATEGORIES = extractConst(lookupTs, "COE_BASE_CATEGORIES");
 const COE_ESSENCE_APPLICABILITY = extractConst(lookupTs, "COE_ESSENCE_APPLICABILITY");
+const COE_BASE_MODS = extractConst(lookupTs, "COE_BASE_MODS");
 const MOD_DATA = extractConst(weightsTs, "MOD_DATA");
 
 function lookupCoeBase(name) {
@@ -47,13 +69,26 @@ function validateRecipe(recipe) {
   }
 
   if (baseCategory) {
+    // Mirror production logic: check CoE's per-base authoritative pool first
+    // (COE_BASE_MODS), then fall back to the sheet (MOD_DATA) as a sanity check.
+    const coePool = COE_BASE_MODS?.[baseCategory];
+    const coePrefixNorm = new Set((coePool?.prefixes ?? []).map(normalize));
+    const coeSuffixNorm = new Set((coePool?.suffixes ?? []).map(normalize));
     const sheetKey = baseCategory.toUpperCase();
     const prefixSet = new Set(Object.keys(MOD_DATA?.[sheetKey]?.PREFIX ?? {}).map(normalize));
     const suffixSet = new Set(Object.keys(MOD_DATA?.[sheetKey]?.SUFFIX ?? {}).map(normalize));
     for (const s of recipe.targetAffixes?.prefixes ?? []) {
       if (!s.name) continue;
-      if (!prefixSet.has(normalize(s.name))) {
-        const inSuffixes = suffixSet.has(normalize(s.name));
+      const n = normalize(s.name);
+      // CoE pool is the primary check
+      if (coePrefixNorm.has(n)) continue;
+      if (coeSuffixNorm.has(n)) {
+        issues.push({ severity: "warning", field: "prefix", message: `"${s.name}" listed as PREFIX but is actually a SUFFIX on ${baseCategory} (per CoE) — swap it.` });
+        continue;
+      }
+      // Sheet fallback
+      if (!prefixSet.has(n)) {
+        const inSuffixes = suffixSet.has(n);
         issues.push({
           severity: inSuffixes ? "warning" : "critical",
           field: "prefix",
@@ -65,8 +100,14 @@ function validateRecipe(recipe) {
     }
     for (const s of recipe.targetAffixes?.suffixes ?? []) {
       if (!s.name) continue;
-      if (!suffixSet.has(normalize(s.name))) {
-        const inPrefixes = prefixSet.has(normalize(s.name));
+      const n = normalize(s.name);
+      if (coeSuffixNorm.has(n)) continue;
+      if (coePrefixNorm.has(n)) {
+        issues.push({ severity: "warning", field: "suffix", message: `"${s.name}" listed as SUFFIX but is actually a PREFIX on ${baseCategory} (per CoE) — swap it.` });
+        continue;
+      }
+      if (!suffixSet.has(n)) {
+        const inPrefixes = prefixSet.has(n);
         issues.push({
           severity: inPrefixes ? "warning" : "critical",
           field: "suffix",
